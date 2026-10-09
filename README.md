@@ -1,6 +1,6 @@
 # TGPN — Telegram Web Proxy on Cloudflare Workers
 
-نسخه: **7.0.0**
+نسخه: **8.0.0**
 یک پروکسی وب تلگرام (MTProto) کامل، سبک و رایگان که روی **Cloudflare Workers** اجرا می‌شود. با رابط کاربری ربات تلگرام برای مدیریت آسان.
 
 ---
