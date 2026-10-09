@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>TGProxyNode — نصب خودکار</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌐</text></svg>">
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;900&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
@@ -148,10 +149,14 @@ body { font-family: 'Vazirmatn', sans-serif; }
 
 <script>
 // ══════════════════════════════════════════════════════════
-// CONFIG — این رو از ریپوی خودت لود کن
+// CONFIG
 // ══════════════════════════════════════════════════════════
+
+// مسیر فایل worker.js در ریپوی گیت‌هاب
 const WORKER_JS_URL = "https://raw.githubusercontent.com/NodeOOF/TGPN/main/worker.js";
-const CF_API = "https://api.cloudflare.com/client/v4";
+
+// CORS Proxy آدرس
+const CF_API = "https://tgpn-proxy.hajali2.workers.dev/cf";
 
 // ══════════════════════════════════════════════════════════
 // LOGGER
@@ -244,8 +249,7 @@ async function install() {
       kvId = kv.id;
       log(`✓ KV ساخته شد: ${kvId.slice(0, 20)}...`, "ok");
     } catch (e) {
-      // Already exists? Find it
-      if (e.message.includes("already exists") || e.message.includes("duplicate")) {
+      if (e.message.includes("already exists") || e.message.includes("duplicate") || e.message.includes("You already have")) {
         log("› KV از قبل وجود داره، جستجو...", "warn");
         const list = await cf(`/accounts/${accountId}/storage/kv/namespaces`, "GET", null, token);
         const existing = list.find(k => k.title === `${workerName}-kv`);
@@ -259,7 +263,7 @@ async function install() {
 
     // ── Step 4: Get/Create subdomain ──
     log("› بررسی workers.dev subdomain...", "info");
-    let subdomain;
+    let subdomain = null;
     try {
       const sd = await cf(`/accounts/${accountId}/workers/subdomain`, "GET", null, token);
       subdomain = sd.subdomain;
@@ -269,10 +273,15 @@ async function install() {
 
     if (!subdomain) {
       const randomSub = "tgpn-" + Math.random().toString(36).slice(2, 10);
-      await cf(`/accounts/${accountId}/workers/subdomain`, "PUT", { subdomain: randomSub }, token);
-      await new Promise(r => setTimeout(r, 3000));
-      const sd = await cf(`/accounts/${accountId}/workers/subdomain`, "GET", null, token);
-      subdomain = sd.subdomain;
+      log(`› ساخت subdomain جدید: ${randomSub}`, "warn");
+      try {
+        await cf(`/accounts/${accountId}/workers/subdomain`, "PUT", { subdomain: randomSub }, token);
+        await new Promise(r => setTimeout(r, 3000));
+        const sd = await cf(`/accounts/${accountId}/workers/subdomain`, "GET", null, token);
+        subdomain = sd.subdomain || randomSub;
+      } catch (e) {
+        subdomain = randomSub;
+      }
     }
     log(`✓ Subdomain: ${subdomain}.workers.dev`, "ok");
 
@@ -293,7 +302,6 @@ async function install() {
     // ── Step 7: Deploy worker with bindings ──
     log("› Deploy Worker به Cloudflare...", "info");
 
-    // Metadata for worker upload
     const metadata = {
       main_module: "worker.js",
       compatibility_date: "2025-10-01",
@@ -316,7 +324,6 @@ async function install() {
     formData.append("metadata", new Blob([JSON.stringify(metadata)], { type: "application/json" }));
     formData.append("worker.js", new Blob([workerCode], { type: "application/javascript+module" }), "worker.js");
 
-    // Upload script
     const uploadRes = await fetch(
       `${CF_API}/accounts/${accountId}/workers/scripts/${workerName}`,
       {
@@ -333,18 +340,22 @@ async function install() {
 
     // ── Step 8: Enable workers.dev ──
     log("› فعال‌سازی workers.dev subdomain...", "info");
-    await fetch(
-      `${CF_API}/accounts/${accountId}/workers/scripts/${workerName}/subdomain`,
-      {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ enabled: true, previews_enabled: false }),
-      }
-    );
-    log("✓ workers.dev فعال شد", "ok");
+    try {
+      await fetch(
+        `${CF_API}/accounts/${accountId}/workers/scripts/${workerName}/subdomain`,
+        {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ enabled: true, previews_enabled: false }),
+        }
+      );
+      log("✓ workers.dev فعال شد", "ok");
+    } catch (e) {
+      log(`! فعال‌سازی خودکار ناموفق: ${e.message}`, "warn");
+    }
 
     // ── Step 9: Register Telegram webhook ──
     log("› ثبت Webhook تلگرام...", "info");
@@ -360,7 +371,6 @@ async function install() {
     log("✅ نصب کامل شد!", "ok");
     log("═══════════════════════════════", "ok");
 
-    // Show result
     document.getElementById("resUrl").textContent = `https://${publicHost}`;
     document.getElementById("resUrl").href = `https://${publicHost}`;
     document.getElementById("resBot").textContent = `@${botUsername}`;
@@ -379,7 +389,6 @@ async function install() {
   }
 }
 
-// ══════════════════════════════════════════════════════════
 document.getElementById("installBtn").addEventListener("click", install);
 </script>
 
