@@ -1,5 +1,9 @@
 # TGPN — Telegram Web Proxy on Cloudflare Workers
 
+> **⚡ نصب یک‌کلیک:** [https://nodeoof.github.io/TGPN/](https://nodeoof.github.io/TGPN/) — فقط توکن Cloudflare و اطلاعات بات رو بده، بقیه خودکار انجام می‌شه.
+
+---
+
 نسخه: **8.0.0**
 یک پروکسی وب تلگرام (MTProto) کامل، سبک و رایگان که روی **Cloudflare Workers** اجرا می‌شود. با رابط کاربری ربات تلگرام برای مدیریت آسان.
 
@@ -75,16 +79,15 @@ npm install -g wrangler
 wrangler login
 ```
 
-### 2. ایجادNamespaceهای KV و Durable Object
+### 2. ایجاد Namespaceهای KV و Durable Object
 
 ```bash
 # KV Namespace برای ذخیره پروکسی‌ها و نشست‌ها
 wrangler kv:namespace create PROXY_REGISTRY
 # کپی ID خروجی را در wrangler.toml قرار دهید
 
-# Migration برای Durable Object
-wrangler d1 migrations create proxy-nodeoff-bot create_proxy_sessions
-# یا از فایل wrangler.toml موجود استفاده کنید (migration tag: v1)
+# Migration برای Durable Object (SQLite class)
+# در wrangler.toml موجود است: new_sqlite_classes = ["ProxySession"]
 ```
 
 ### 3. پیکربندی `wrangler.toml`
@@ -193,7 +196,16 @@ TGPN/
 ├── wrangler.toml      # پیکربندی Cloudflare
 ├── .gitignore         # فایل‌های نادیده‌گرفته شده
 ├── .wrangler/         # Cache محلی Wrangler (gitignore)
-└── FILE/              # پوشه داده‌های محلی (gitignore)
+├── index.html         # نصب‌کننده وب (Web Installer)
+├── FILE/              # ماژول‌های داخلی (protocol, session, bridge, ...)
+│   ├── protocol.js
+│   ├── session.js
+│   ├── bridge.js
+│   ├── mtproxy.js
+│   └── index.js
+└── tgpn-proxy/        # CORS Proxy جداگانه برای Cloudflare API
+    ├── cors-proxy.js
+    └── wrangler.toml
 ```
 ---
 
@@ -225,7 +237,7 @@ wrangler tail --search="proxy"
 **Health Check:**
 ```
 GET https://your-domain.workers.dev/healthz
-# Response: {"ok":true,"version":"7.0.0","carrier":"websocket"}
+# Response: {"ok":true,"version":"8.0.0","carrier":"websocket"}
 ```
 
 ---
