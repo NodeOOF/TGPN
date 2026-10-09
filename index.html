@@ -131,7 +131,20 @@ body { font-family: 'Vazirmatn', sans-serif; }
         <span class="text-slate-400">بات:</span>
         <a id="resBot" href="" target="_blank" class="mono text-emerald-400 text-xs"></a>
       </div>
+      <div class="flex justify-between items-center py-2 border-b border-emerald-800/30">
+        <span class="text-slate-400">Webhook Secret:</span>
+        <code id="resSecret" class="mono text-emerald-400 text-[10px] select-all break-all"></code>
+      </div>
+      <div class="flex justify-between items-center py-2 border-b border-emerald-800/30">
+        <span class="text-slate-400">وضعیت Webhook:</span>
+        <span id="resWebhookStatus" class="text-xs"></span>
+      </div>
     </div>
+
+    <button id="retryWebhookBtn" class="hidden w-full mt-4 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold text-sm transition">
+      🔄 تلاش مجدد برای ثبت Webhook
+    </button>
+
     <div class="mt-6 p-4 bg-slate-950 rounded-lg text-xs text-slate-400 leading-relaxed">
       <strong class="text-emerald-400">مرحله بعد:</strong>
       برو در بات، <code class="mono bg-slate-900 px-2 py-0.5 rounded text-indigo-400">/start</code> بزن، بعد <code class="mono bg-slate-900 px-2 py-0.5 rounded text-indigo-400">/new test</code> تا اولین پروکسی ساخته بشه.
@@ -151,11 +164,7 @@ body { font-family: 'Vazirmatn', sans-serif; }
 // ══════════════════════════════════════════════════════════
 // CONFIG
 // ══════════════════════════════════════════════════════════
-
-// مسیر فایل worker.js در ریپوی گیت‌هاب
 const WORKER_JS_URL = "https://raw.githubusercontent.com/NodeOOF/TGPN/main/worker.js";
-
-// CORS Proxy آدرس
 const CF_API = "https://tgpn-proxy.hajali2.workers.dev/cf";
 
 // ══════════════════════════════════════════════════════════
@@ -171,6 +180,23 @@ function log(msg, type = "info") {
   logs.appendChild(div);
   logs.scrollTop = logs.scrollHeight;
   console.log(`[${type}]`, msg);
+}
+
+// ══════════════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════════════
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+// Generate a webhook secret that is 100% Telegram-safe:
+// only [a-zA-Z0-9_-], hex output (only a-f0-9) is always safe.
+function generateWebhookSecret() {
+  const bytes = crypto.getRandomValues(new Uint8Array(32));
+  return Array.from(bytes).map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+// Validate that a string is Telegram-safe
+function isTelegramSafe(s) {
+  return /^[A-Za-z0-9_-]{1,256}$/.test(s);
 }
 
 // ══════════════════════════════════════════════════════════
@@ -193,6 +219,47 @@ async function cf(path, method = "GET", body = null, token = null, isFormData = 
 }
 
 // ══════════════════════════════════════════════════════════
+// WEBHOOK REGISTRATION (with retry)
+// ══════════════════════════════════════════════════════════
+async function registerWebhook(botToken, publicHost, webhookSecret, maxAttempts = 6) {
+  const url = `https://api.telegram.org/bot${botToken}/setWebhook` +
+    `?url=https://${publicHost}/bot/webhook` +
+    `&secret_token=${encodeURIComponent(webhookSecret)}` +
+    `&allowed_updates=%5B%22message%22%2C%22edited_message%22%2C%22callback_query%22%5D`;
+
+  let lastErr = "";
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    log(`› تلاش ${attempt}/${maxAttempts} برای ثبت webhook...`, "info");
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.ok) {
+        log(`✓ Webhook ثبت شد (تلاش ${attempt})`, "ok");
+        return { ok: true, url };
+      }
+      lastErr = data.description || "خطای نامعلوم";
+      log(`! تلاش ${attempt} ناموفق: ${lastErr}`, "warn");
+
+      // "resolve host" or "name resolution" → wait longer for DNS propagation
+      if (/resolve host|name resolution|Temporary failure/i.test(lastErr)) {
+        if (attempt < maxAttempts) {
+          log(`! دامنه هنوز آماده نیست. صبر ۱۵ ثانیه...`, "warn");
+          await sleep(15000);
+        }
+      } else {
+        // Other errors → short wait then retry
+        if (attempt < maxAttempts) await sleep(5000);
+      }
+    } catch (e) {
+      lastErr = String(e.message || e);
+      log(`! تلاش ${attempt} خطای شبکه: ${lastErr}`, "warn");
+      if (attempt < maxAttempts) await sleep(5000);
+    }
+  }
+  return { ok: false, url, error: lastErr };
+}
+
+// ══════════════════════════════════════════════════════════
 // MAIN INSTALL
 // ══════════════════════════════════════════════════════════
 async function install() {
@@ -200,10 +267,12 @@ async function install() {
   const resultDiv = document.getElementById("result");
   const logsWrap = document.getElementById("logsWrap");
   const logs = document.getElementById("logs");
+  const retryBtn = document.getElementById("retryWebhookBtn");
 
   // Reset
   logs.innerHTML = "";
   resultDiv.classList.add("hidden");
+  retryBtn.classList.add("hidden");
   logsWrap.classList.remove("hidden");
   btn.disabled = true;
 
@@ -249,7 +318,7 @@ async function install() {
       kvId = kv.id;
       log(`✓ KV ساخته شد: ${kvId.slice(0, 20)}...`, "ok");
     } catch (e) {
-      if (e.message.includes("already exists") || e.message.includes("duplicate") || e.message.includes("You already have")) {
+      if (/already exists|duplicate|You already have/i.test(e.message)) {
         log("› KV از قبل وجود داره، جستجو...", "warn");
         const list = await cf(`/accounts/${accountId}/storage/kv/namespaces`, "GET", null, token);
         const existing = list.find(k => k.title === `${workerName}-kv`);
@@ -276,7 +345,7 @@ async function install() {
       log(`› ساخت subdomain جدید: ${randomSub}`, "warn");
       try {
         await cf(`/accounts/${accountId}/workers/subdomain`, "PUT", { subdomain: randomSub }, token);
-        await new Promise(r => setTimeout(r, 3000));
+        await sleep(3000);
         const sd = await cf(`/accounts/${accountId}/workers/subdomain`, "GET", null, token);
         subdomain = sd.subdomain || randomSub;
       } catch (e) {
@@ -296,8 +365,11 @@ async function install() {
     log(`✓ worker.js دانلود شد (${(workerCode.length / 1024).toFixed(1)} KB)`, "ok");
 
     // ── Step 6: Generate webhook secret ──
-    const webhookSecret = Array.from(crypto.getRandomValues(new Uint8Array(32)))
-      .map(b => b.toString(16).padStart(2, "0")).join("");
+    const webhookSecret = generateWebhookSecret();
+    if (!isTelegramSafe(webhookSecret)) {
+      throw new Error("Webhook secret نامعتبر تولید شد");
+    }
+    log(`✓ Webhook Secret تولید شد (${webhookSecret.length} کاراکتر hex)`, "ok");
 
     // ── Step 7: Deploy worker with bindings ──
     log("› Deploy Worker به Cloudflare...", "info");
@@ -357,24 +429,45 @@ async function install() {
       log(`! فعال‌سازی خودکار ناموفق: ${e.message}`, "warn");
     }
 
-    // ── Step 9: Register Telegram webhook ──
+    // ── Step 9: Register Telegram webhook (with retry) ──
+    log("", "info");
+    log("› صبر برای propagate شدن دامنه (۵ ثانیه)...", "info");
+    await sleep(5000);
+
     log("› ثبت Webhook تلگرام...", "info");
-    const webhookUrl = `https://api.telegram.org/bot${botToken}/setWebhook?url=https://${publicHost}/bot/webhook&secret_token=${webhookSecret}&allowed_updates=%5B%22message%22%2C%22edited_message%22%2C%22callback_query%22%5D`;
-    const whRes = await fetch(webhookUrl);
-    const whData = await whRes.json();
-    if (!whData.ok) throw new Error("ثبت webhook ناموفق: " + (whData.description || "خطا"));
-    log("✓ Webhook ثبت شد", "ok");
+    const whResult = await registerWebhook(botToken, publicHost, webhookSecret);
 
     // ── Done ──
     log("", "info");
-    log("═══════════════════════════════", "ok");
-    log("✅ نصب کامل شد!", "ok");
-    log("═══════════════════════════════", "ok");
+    if (whResult.ok) {
+      log("═══════════════════════════════", "ok");
+      log("✅ نصب کامل شد!", "ok");
+      log("═══════════════════════════════", "ok");
+    } else {
+      log("═══════════════════════════════", "warn");
+      log("⚠️ نصب انجام شد ولی webhook ثبت نشد", "warn");
+      log("═══════════════════════════════", "warn");
+      log(`› آخرین خطا: ${whResult.error}`, "err");
+      log("› روی دکمه «تلاش مجدد» بزن یا ۲ دقیقه صبر کن و دوباره تلاش کن", "warn");
+    }
 
+    // Show result
     document.getElementById("resUrl").textContent = `https://${publicHost}`;
     document.getElementById("resUrl").href = `https://${publicHost}`;
     document.getElementById("resBot").textContent = `@${botUsername}`;
     document.getElementById("resBot").href = `https://t.me/${botUsername}`;
+    document.getElementById("resSecret").textContent = webhookSecret;
+
+    const whStatus = document.getElementById("resWebhookStatus");
+    if (whResult.ok) {
+      whStatus.textContent = "✅ ثبت شد";
+      whStatus.className = "text-xs text-emerald-400";
+    } else {
+      whStatus.textContent = "❌ ثبت نشد";
+      whStatus.className = "text-xs text-red-400";
+      retryBtn.classList.remove("hidden");
+    }
+
     resultDiv.classList.remove("hidden");
 
     btn.disabled = false;
@@ -389,6 +482,39 @@ async function install() {
   }
 }
 
+// ══════════════════════════════════════════════════════════
+// RETRY WEBHOOK BUTTON
+// ══════════════════════════════════════════════════════════
+document.getElementById("retryWebhookBtn").addEventListener("click", async () => {
+  const btn = document.getElementById("retryWebhookBtn");
+  const botToken = document.getElementById("botToken").value.trim();
+  const publicHost = document.getElementById("resUrl").textContent.replace("https://", "");
+  const webhookSecret = document.getElementById("resSecret").textContent;
+
+  if (!botToken || !publicHost || !webhookSecret) {
+    alert("اطلاعات ناقصه");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "⏳ در حال تلاش...";
+
+  const res = await registerWebhook(botToken, publicHost, webhookSecret, 8);
+
+  const whStatus = document.getElementById("resWebhookStatus");
+  if (res.ok) {
+    whStatus.textContent = "✅ ثبت شد";
+    whStatus.className = "text-xs text-emerald-400";
+    btn.classList.add("hidden");
+  } else {
+    whStatus.textContent = "❌ ثبت نشد";
+    whStatus.className = "text-xs text-red-400";
+    btn.disabled = false;
+    btn.textContent = "🔄 تلاش مجدد";
+  }
+});
+
+// ══════════════════════════════════════════════════════════
 document.getElementById("installBtn").addEventListener("click", install);
 </script>
 
