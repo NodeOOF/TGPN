@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TGProxyNode — نصب خودکار</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;900&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+body { font-family: 'Vazirmatn', sans-serif; }
+.mono { font-family: 'JetBrains Mono', monospace; direction: ltr; }
+.log-line { padding: 6px 12px; border-bottom: 1px solid #1a1f2e; font-size: 12px; }
+.log-ok { color: #4ade80; }
+.log-err { color: #f87171; }
+.log-info { color: #60a5fa; }
+.log-warn { color: #fbbf24; }
+</style>
+</head>
+<body class="bg-[#05080e] text-slate-200 min-h-screen">
+
+<div class="max-w-3xl mx-auto px-4 py-12">
+
+  <!-- Header -->
+  <div class="text-center mb-10">
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold mb-6">
+      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+      v8.0.0 · نصب از مرورگر
+    </div>
+    <h1 class="text-4xl font-black mb-3">🌐 TGProxyNode</h1>
+    <p class="text-slate-400 text-sm">پروکسی تلگرام روی Cloudflare — همه چیز خودکار</p>
+  </div>
+
+  <!-- Warning -->
+  <div class="bg-amber-900/20 border border-amber-800/50 rounded-xl p-4 mb-6 text-xs text-amber-300 leading-relaxed">
+    ⚠️ <strong>توجه:</strong> توکن فقط در مرورگر تو استفاده می‌شه، جایی ذخیره نمی‌شه، به هیچ سروری فرستاده نمی‌شه.
+  </div>
+
+  <!-- Step 1 -->
+  <div id="step1" class="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 mb-6">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-black">1</div>
+      <h2 class="font-bold text-lg">توکن Cloudflare</h2>
+    </div>
+
+    <p class="text-slate-400 text-sm mb-4">
+      روی دکمه زیر بزن، توکن رو بساز و کپی کن:
+    </p>
+
+    <a href="https://dash.cloudflare.com/profile/api-tokens?permissionGroupKeys=%5B%7B%22key%22%3A%22workers_scripts%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22workers_kv_storage%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22account_settings%22%2C%22type%22%3A%22read%22%7D%2C%7B%22key%22%3A%22workers_subdomain%22%2C%22type%22%3A%22edit%22%7D%5D&accountId=*&zoneId=all&name=TGProxyNode-Setup"
+       target="_blank"
+       class="inline-flex items-center gap-2 px-5 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-sm mb-4">
+      🔑 ساخت توکن
+    </a>
+
+    <input id="cfToken" type="password" placeholder="PASTE-TOKEN-HERE"
+           class="mono w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-sm text-slate-200 focus:border-indigo-500 outline-none">
+  </div>
+
+  <!-- Step 2 -->
+  <div id="step2" class="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 mb-6">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-black">2</div>
+      <h2 class="font-bold text-lg">اطلاعات پروژه</h2>
+    </div>
+
+    <div class="space-y-4">
+      <div>
+        <label class="text-xs text-slate-400 mb-1 block">نام Worker</label>
+        <input id="workerName" type="text" value="tgproxynode"
+               class="mono w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm focus:border-indigo-500 outline-none">
+      </div>
+
+      <div>
+        <label class="text-xs text-slate-400 mb-1 block">یوزرنیم بات تلگرام (بدون @)</label>
+        <input id="botUsername" type="text" placeholder="myproxybot"
+               class="mono w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm focus:border-indigo-500 outline-none">
+      </div>
+
+      <div>
+        <label class="text-xs text-slate-400 mb-1 block">
+          آیدی عددی تلگرام
+          <a href="https://t.me/userinfobot" target="_blank" class="text-indigo-400 mr-2">(گرفتن از @userinfobot)</a>
+        </label>
+        <input id="adminId" type="text" placeholder="123456789"
+               class="mono w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm focus:border-indigo-500 outline-none">
+      </div>
+
+      <div>
+        <label class="text-xs text-slate-400 mb-1 block">
+          توکن بات
+          <a href="https://t.me/BotFather" target="_blank" class="text-indigo-400 mr-2">(از @BotFather)</a>
+        </label>
+        <input id="botToken" type="password" placeholder="123456:ABC-DEF..."
+               class="mono w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm focus:border-indigo-500 outline-none">
+      </div>
+    </div>
+  </div>
+
+  <!-- Install button -->
+  <button id="installBtn"
+          class="w-full py-4 bg-gradient-to-l from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl font-black text-base mb-6 transition disabled:opacity-50 disabled:cursor-not-allowed">
+    🚀 نصب و راه‌اندازی
+  </button>
+
+  <!-- Logs -->
+  <div id="logsWrap" class="hidden bg-slate-950 border border-slate-800 rounded-xl overflow-hidden mb-6">
+    <div class="bg-slate-900 px-4 py-2 border-b border-slate-800 flex items-center gap-2">
+      <div class="flex gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+      </div>
+      <span class="text-xs text-slate-500 mono mr-2">install.log</span>
+    </div>
+    <div id="logs" class="max-h-96 overflow-y-auto"></div>
+  </div>
+
+  <!-- Result -->
+  <div id="result" class="hidden bg-emerald-900/20 border border-emerald-800/50 rounded-2xl p-6">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="w-9 h-9 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-black">✓</div>
+      <h2 class="font-bold text-lg text-emerald-400">نصب موفق!</h2>
+    </div>
+    <div class="space-y-2 text-sm">
+      <div class="flex justify-between items-center py-2 border-b border-emerald-800/30">
+        <span class="text-slate-400">آدرس:</span>
+        <a id="resUrl" href="" target="_blank" class="mono text-emerald-400 text-xs"></a>
+      </div>
+      <div class="flex justify-between items-center py-2 border-b border-emerald-800/30">
+        <span class="text-slate-400">بات:</span>
+        <a id="resBot" href="" target="_blank" class="mono text-emerald-400 text-xs"></a>
+      </div>
+    </div>
+    <div class="mt-6 p-4 bg-slate-950 rounded-lg text-xs text-slate-400 leading-relaxed">
+      <strong class="text-emerald-400">مرحله بعد:</strong>
+      برو در بات، <code class="mono bg-slate-900 px-2 py-0.5 rounded text-indigo-400">/start</code> بزن، بعد <code class="mono bg-slate-900 px-2 py-0.5 rounded text-indigo-400">/new test</code> تا اولین پروکسی ساخته بشه.
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="text-center mt-12 text-xs text-slate-500">
+    <a href="https://github.com/NodeOOF/TGPN" class="hover:text-slate-300">GitHub</a>
+    <span class="mx-2">·</span>
+    <span>MIT</span>
+  </div>
+
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// CONFIG — این رو از ریپوی خودت لود کن
+// ══════════════════════════════════════════════════════════
+const WORKER_JS_URL = "https://raw.githubusercontent.com/NodeOOF/TGPN/main/worker.js";
+const CF_API = "https://api.cloudflare.com/client/v4";
+
+// ══════════════════════════════════════════════════════════
+// LOGGER
+// ══════════════════════════════════════════════════════════
+function log(msg, type = "info") {
+  const wrap = document.getElementById("logsWrap");
+  wrap.classList.remove("hidden");
+  const logs = document.getElementById("logs");
+  const div = document.createElement("div");
+  div.className = `log-line log-${type} mono`;
+  div.textContent = msg;
+  logs.appendChild(div);
+  logs.scrollTop = logs.scrollHeight;
+  console.log(`[${type}]`, msg);
+}
+
+// ══════════════════════════════════════════════════════════
+// CLOUDFLARE API HELPERS
+// ══════════════════════════════════════════════════════════
+async function cf(path, method = "GET", body = null, token = null, isFormData = false) {
+  const t = token || document.getElementById("cfToken").value.trim();
+  const headers = { "Authorization": `Bearer ${t}` };
+  if (!isFormData) headers["Content-Type"] = "application/json";
+
+  const opts = { method, headers };
+  if (body) opts.body = isFormData ? body : JSON.stringify(body);
+
+  const res = await fetch(CF_API + path, opts);
+  const data = await res.json();
+  if (!data.success) {
+    throw new Error(data.errors?.[0]?.message || `HTTP ${res.status}`);
+  }
+  return data.result;
+}
+
+// ══════════════════════════════════════════════════════════
+// MAIN INSTALL
+// ══════════════════════════════════════════════════════════
+async function install() {
+  const btn = document.getElementById("installBtn");
+  const resultDiv = document.getElementById("result");
+  const logsWrap = document.getElementById("logsWrap");
+  const logs = document.getElementById("logs");
+
+  // Reset
+  logs.innerHTML = "";
+  resultDiv.classList.add("hidden");
+  logsWrap.classList.remove("hidden");
+  btn.disabled = true;
+
+  try {
+    // ── Read inputs ──
+    const token = document.getElementById("cfToken").value.trim();
+    const workerName = document.getElementById("workerName").value.trim() || "tgproxynode";
+    const botUsername = document.getElementById("botUsername").value.trim().replace(/^@/, "");
+    const adminId = document.getElementById("adminId").value.trim();
+    const botToken = document.getElementById("botToken").value.trim();
+
+    // ── Validate ──
+    if (!token) throw new Error("توکن Cloudflare خالیه");
+    if (!botUsername) throw new Error("یوزرنیم بات خالیه");
+    if (!adminId) throw new Error("آیدی عددی خالیه");
+    if (!botToken) throw new Error("توکن بات خالیه");
+
+    log("› شــروع نصب...", "info");
+    log(`› Worker: ${workerName}`, "info");
+    log(`› Bot: @${botUsername}`, "info");
+    log("", "info");
+
+    // ── Step 1: Verify token ──
+    log("› بررسی توکن Cloudflare...", "info");
+    const verify = await cf("/user/tokens/verify", "GET", null, token);
+    if (verify.status !== "active") throw new Error("توکن غیرفعاله");
+    log("✓ توکن معتبره", "ok");
+
+    // ── Step 2: Get account ──
+    log("› دریافت اطلاعات اکانت...", "info");
+    const accounts = await cf("/accounts", "GET", null, token);
+    const accountId = accounts[0]?.id;
+    if (!accountId) throw new Error("اکانت پیدا نشد");
+    log(`✓ اکانت: ${accounts[0].name}`, "ok");
+
+    // ── Step 3: Create KV ──
+    log("› ساخت KV Namespace...", "info");
+    let kvId;
+    try {
+      const kv = await cf(`/accounts/${accountId}/storage/kv/namespaces`, "POST", {
+        title: `${workerName}-kv`,
+      }, token);
+      kvId = kv.id;
+      log(`✓ KV ساخته شد: ${kvId.slice(0, 20)}...`, "ok");
+    } catch (e) {
+      // Already exists? Find it
+      if (e.message.includes("already exists") || e.message.includes("duplicate")) {
+        log("› KV از قبل وجود داره، جستجو...", "warn");
+        const list = await cf(`/accounts/${accountId}/storage/kv/namespaces`, "GET", null, token);
+        const existing = list.find(k => k.title === `${workerName}-kv`);
+        if (!existing) throw new Error("KV پیدا نشد");
+        kvId = existing.id;
+        log(`✓ KV پیدا شد: ${kvId.slice(0, 20)}...`, "ok");
+      } else {
+        throw e;
+      }
+    }
+
+    // ── Step 4: Get/Create subdomain ──
+    log("› بررسی workers.dev subdomain...", "info");
+    let subdomain;
+    try {
+      const sd = await cf(`/accounts/${accountId}/workers/subdomain`, "GET", null, token);
+      subdomain = sd.subdomain;
+    } catch (e) {
+      subdomain = null;
+    }
+
+    if (!subdomain) {
+      const randomSub = "tgpn-" + Math.random().toString(36).slice(2, 10);
+      await cf(`/accounts/${accountId}/workers/subdomain`, "PUT", { subdomain: randomSub }, token);
+      await new Promise(r => setTimeout(r, 3000));
+      const sd = await cf(`/accounts/${accountId}/workers/subdomain`, "GET", null, token);
+      subdomain = sd.subdomain;
+    }
+    log(`✓ Subdomain: ${subdomain}.workers.dev`, "ok");
+
+    const publicHost = `${workerName}.${subdomain}.workers.dev`;
+    log(`✓ آدرس نهایی: https://${publicHost}`, "ok");
+
+    // ── Step 5: Download worker.js ──
+    log("› دانلود worker.js...", "info");
+    const workerRes = await fetch(WORKER_JS_URL);
+    if (!workerRes.ok) throw new Error("دانلود worker.js ناموفق");
+    const workerCode = await workerRes.text();
+    log(`✓ worker.js دانلود شد (${(workerCode.length / 1024).toFixed(1)} KB)`, "ok");
+
+    // ── Step 6: Generate webhook secret ──
+    const webhookSecret = Array.from(crypto.getRandomValues(new Uint8Array(32)))
+      .map(b => b.toString(16).padStart(2, "0")).join("");
+
+    // ── Step 7: Deploy worker with bindings ──
+    log("› Deploy Worker به Cloudflare...", "info");
+
+    // Metadata for worker upload
+    const metadata = {
+      main_module: "worker.js",
+      compatibility_date: "2025-10-01",
+      compatibility_flags: ["nodejs_compat"],
+      bindings: [
+        { type: "kv_namespace", name: "PROXY_REGISTRY", namespace_id: kvId },
+        { type: "plain_text", name: "PUBLIC_HOSTNAME", text: publicHost },
+        { type: "plain_text", name: "TELEGRAM_BOT_USERNAME", text: botUsername },
+        { type: "plain_text", name: "ADMIN_IDS", text: adminId },
+        { type: "secret_text", name: "TELEGRAM_BOT_TOKEN", text: botToken },
+        { type: "secret_text", name: "TELEGRAM_WEBHOOK_SECRET", text: webhookSecret },
+        { type: "durable_object_namespace", name: "PROXY_SESSIONS", class_name: "ProxySession" },
+      ],
+      migrations: {
+        new_sqlite_classes: ["ProxySession"],
+      },
+    };
+
+    const formData = new FormData();
+    formData.append("metadata", new Blob([JSON.stringify(metadata)], { type: "application/json" }));
+    formData.append("worker.js", new Blob([workerCode], { type: "application/javascript+module" }), "worker.js");
+
+    // Upload script
+    const uploadRes = await fetch(
+      `${CF_API}/accounts/${accountId}/workers/scripts/${workerName}`,
+      {
+        method: "PUT",
+        headers: { "Authorization": `Bearer ${token}` },
+        body: formData,
+      }
+    );
+    const uploadData = await uploadRes.json();
+    if (!uploadData.success) {
+      throw new Error(uploadData.errors?.[0]?.message || "Deploy ناموفق");
+    }
+    log("✓ Worker آپلود شد", "ok");
+
+    // ── Step 8: Enable workers.dev ──
+    log("› فعال‌سازی workers.dev subdomain...", "info");
+    await fetch(
+      `${CF_API}/accounts/${accountId}/workers/scripts/${workerName}/subdomain`,
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ enabled: true, previews_enabled: false }),
+      }
+    );
+    log("✓ workers.dev فعال شد", "ok");
+
+    // ── Step 9: Register Telegram webhook ──
+    log("› ثبت Webhook تلگرام...", "info");
+    const webhookUrl = `https://api.telegram.org/bot${botToken}/setWebhook?url=https://${publicHost}/bot/webhook&secret_token=${webhookSecret}&allowed_updates=%5B%22message%22%2C%22edited_message%22%2C%22callback_query%22%5D`;
+    const whRes = await fetch(webhookUrl);
+    const whData = await whRes.json();
+    if (!whData.ok) throw new Error("ثبت webhook ناموفق: " + (whData.description || "خطا"));
+    log("✓ Webhook ثبت شد", "ok");
+
+    // ── Done ──
+    log("", "info");
+    log("═══════════════════════════════", "ok");
+    log("✅ نصب کامل شد!", "ok");
+    log("═══════════════════════════════", "ok");
+
+    // Show result
+    document.getElementById("resUrl").textContent = `https://${publicHost}`;
+    document.getElementById("resUrl").href = `https://${publicHost}`;
+    document.getElementById("resBot").textContent = `@${botUsername}`;
+    document.getElementById("resBot").href = `https://t.me/${botUsername}`;
+    resultDiv.classList.remove("hidden");
+
+    btn.disabled = false;
+    btn.textContent = "✅ نصب شد";
+
+  } catch (err) {
+    console.error(err);
+    log("", "info");
+    log(`✗ خطا: ${err.message}`, "err");
+    btn.disabled = false;
+    btn.textContent = "🚀 تلاش مجدد";
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+document.getElementById("installBtn").addEventListener("click", install);
+</script>
+
+</body>
+</html>
