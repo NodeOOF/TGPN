@@ -1,7 +1,7 @@
 # TGPN — Telegram Web Proxy on Cloudflare Workers
 
 > **⚡ نصب یک‌کلیک:** [https://nodeoof.github.io/TGPN/](https://nodeoof.github.io/TGPN/) — فقط توکن Cloudflare و اطلاعات بات رو بده، بقیه خودکار انجام می‌شه.
-
+حتما از vpn استفاده کنید چون باید به تلگرام درخواست بفرسته
 ---
 
 نسخه: **8.0.0**
