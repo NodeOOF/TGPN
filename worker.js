@@ -1,17 +1,16 @@
 // ============================================================
-// TGPN-VLESS v9.1.0 "Golden"
-// MTProto (stable) + VLESS + Telegram Bot
-// Zero-crash design. Every async op guarded.
+// TGPN-VLESS v9.3.0 "Definitive"
+// Zero-crash · Explicit routing · Full diagnostics
 // ============================================================
 
 import { connect } from "cloudflare:sockets";
 
-export const VERSION = "9.1.0";
+export const VERSION = "9.3.0";
 export const BRAND = "TGPN-VLESS";
-export const BUILD_TAG = "golden-2026-01";
+export const BUILD_TAG = "definitive-2026";
 
 // ============================================================
-// SECTION 1: Safe helpers (never throw)
+// SECTION 1: Safe helpers
 // ============================================================
 function canonicalHost(v) {
   return String(v || "").trim().toLowerCase().replace(/\.$/, "");
@@ -103,9 +102,15 @@ function toUint8(data) {
 function safeError(e) {
   try { return String(e && (e.stack || e.message) || e); } catch { return "unknown_error"; }
 }
+function log(...args) {
+  try { console.log(`[${BRAND}]`, ...args); } catch {}
+}
+function logErr(...args) {
+  try { console.error(`[${BRAND}]`, ...args); } catch {}
+}
 
 // ============================================================
-// SECTION 2: Frame multiplexer (MTProto, from v8.0.0)
+// SECTION 2: Frame multiplexer (MTProto)
 // ============================================================
 const FRAME = Object.freeze({
   OPEN: 0x01, DATA: 0x02, CLOSE: 0x03, WINDOW: 0x04,
@@ -154,7 +159,7 @@ function u32(v) {
 }
 
 // ============================================================
-// SECTION 3: MTProto crypto (from v8.0.0)
+// SECTION 3: MTProto crypto
 // ============================================================
 const TAGS = new Set([0xefefefef, 0xeeeeeeee, 0xdddddddd]);
 const TELEGRAM_DCS = Object.freeze({
@@ -206,7 +211,7 @@ function parseProxySecret(value) {
   const s = String(value || "").toLowerCase();
   if (/^[0-9a-f]{32}$/.test(s)) return { bridge: hex(s), inner: hex(s), mode: "plain" };
   if (/^dd[0-9a-f]{32}$/.test(s)) return { bridge: hex(s), inner: hex(s.slice(2)), mode: "dd" };
-  throw new Error("PROXY_SECRET must be 32 hex chars, optional dd prefix");
+  throw new Error("PROXY_SECRET must be 32 hex chars");
 }
 async function acceptClientHandshake(packet, secret) {
   if (packet.length !== 64) throw new Error("bad handshake length");
@@ -304,136 +309,239 @@ function parseVlessHeader(buf, expectedUuidBytes) {
 }
 
 // ============================================================
-// SECTION 5: VLESS WS handler — hardened
+// SECTION 5: VLESS path detection
 // ============================================================
-async function handleManagedVlessWS(request, env) {
-  const pair = new WebSocketPair();
-  const client = pair[0], server = pair[1];
+function isVlessPath(path) {
+  const clean = String(path || "").split("?")[0].replace(/\/+$/, "");
+  return clean === "/vless" || clean === "/vl" || clean === "/ws" || clean === "";
+}
 
-  try { server.accept(); }
-  catch (e) {
-    console.error("VLESS_ACCEPT_FAIL", safeError(e));
+// ============================================================
+// SECTION 6: VLESS WebSocket handler — bulletproof
+// ============================================================
+async function handleVlessWS(request, env) {
+  log("VLESS_HANDLER_ENTER");
+
+  // ---- 1. WebSocket pair ----
+  let pair, client, server;
+  try {
+    pair = new WebSocketPair();
+    client = pair[0];
+    server = pair[1];
+  } catch (e) {
+    logErr("VLESS_PAIR_FAIL", safeError(e));
+    return new Response("cannot create websocket pair", { status: 500 });
+  }
+
+  // ---- 2. Accept ----
+  try {
+    server.accept();
+  } catch (e) {
+    logErr("VLESS_ACCEPT_FAIL", safeError(e));
     return new Response("ws accept failed", { status: 500 });
   }
 
-  let socket = null, writer = null, reader = null;
-  let state = "waiting_uuid";
-  let buf = new Uint8Array(0);
-  let closed = false;
+  // ---- 3. State ----
+  const state = {
+    closed: false,
+    socket: null,
+    writer: null,
+    reader: null,
+    headerBuf: new Uint8Array(0),
+    initialized: false,
+  };
 
   const defaultHost = String(env?.VLESS_TARGET_HOST || "www.cloudflare.com").trim() || "www.cloudflare.com";
   const defaultPort = parseInt(env?.VLESS_TARGET_PORT || "443", 10) || 443;
 
-  const shutdown = (code, reason) => {
-    if (closed) return;
-    closed = true;
-    state = "closed";
-    try { server.close(code || 1000, reason || "closed"); } catch {}
-    try { writer?.releaseLock?.(); } catch {}
-    try { writer?.close?.(); } catch {}
-    try { reader?.releaseLock?.(); } catch {}
-    try { socket?.close?.(); } catch {}
+  const shutdown = (code = 1000, reason = "closed") => {
+    if (state.closed) return;
+    state.closed = true;
+    log("VLESS_SHUTDOWN", code, reason);
+    try { server.close(code, reason); } catch {}
+    try { state.writer?.releaseLock?.(); } catch {}
+    try { state.writer?.close?.(); } catch {}
+    try { state.reader?.releaseLock?.(); } catch {}
+    try { state.reader?.cancel?.(); } catch {}
+    try { state.socket?.close?.(); } catch {}
   };
 
-  // Safety: close stale connections after 30s
+  // ---- 4. Timeout for uninitialized state ----
   const idleTimer = setTimeout(() => {
-    if (state === "waiting_uuid") shutdown(1002, "handshake_timeout");
+    if (!state.initialized && !state.closed) {
+      logErr("VLESS_HANDSHAKE_TIMEOUT");
+      shutdown(1002, "handshake_timeout");
+    }
   }, 30000);
 
-  // Guard: bindings must exist
-  if (!env?.PROXY_REGISTRY || typeof env.PROXY_REGISTRY.get !== "function") {
-    clearTimeout(idleTimer);
-    shutdown(1011, "kv_not_bound");
-    return new Response(null, { status: 101, webSocket: client });
-  }
-
+  // ---- 5. Message handler ----
   server.addEventListener("message", async (event) => {
-    if (closed) return;
+    if (state.closed) return;
     try {
       const chunk = toUint8(event.data);
       if (!chunk.length) return;
 
-      if (state === "connected") {
-        if (!writer) return shutdown(1011, "no_writer");
-        await writer.write(chunk);
+      // Connected: just forward
+      if (state.initialized) {
+        if (!state.writer) {
+          logErr("VLESS_NO_WRITER");
+          shutdown(1011, "no_writer");
+          return;
+        }
+        await state.writer.write(chunk);
         return;
       }
 
-      if (state !== "waiting_uuid") return;
+      // ---- VLESS header phase ----
+      state.headerBuf = concat(state.headerBuf, chunk);
+      if (state.headerBuf.length < 17) return; // need at least version + UUID
 
-      buf = concat(buf, chunk);
-      if (buf.length < 17) return;
+      if (state.headerBuf[0] !== VLESS_VERSION) {
+        logErr("VLESS_BAD_VERSION", state.headerBuf[0]);
+        shutdown(1002, "bad_version");
+        return;
+      }
 
-      if (buf[0] !== VLESS_VERSION) { shutdown(1002, "vless_bad_version"); return; }
+      const uuid = bytesToUuid(state.headerBuf.subarray(1, 17));
+      log("VLESS_UUID", uuid.slice(0, 8));
 
-      const uuid = bytesToUuid(buf.subarray(1, 17));
-
+      // KV lookup
       let proxyId = null;
       try {
+        if (!env?.PROXY_REGISTRY) throw new Error("KV not bound");
         proxyId = await env.PROXY_REGISTRY.get(`vless-uuid:${uuid}`, "text");
       } catch (e) {
-        console.error("VLESS_KV_ERR", safeError(e));
+        logErr("VLESS_KV_ERR", safeError(e));
         shutdown(1011, "kv_error");
         return;
       }
-      if (!proxyId) { shutdown(1002, "unknown_uuid"); return; }
+      if (!proxyId) {
+        logErr("VLESS_UNKNOWN_UUID", uuid);
+        shutdown(1002, "unknown_uuid");
+        return;
+      }
 
       let meta = null;
       try {
         meta = await env.PROXY_REGISTRY.get(`vless:${proxyId}`, "json");
       } catch (e) {
-        console.error("VLESS_KV_META_ERR", safeError(e));
+        logErr("VLESS_KV_META_ERR", safeError(e));
         shutdown(1011, "kv_error");
         return;
       }
-      if (!meta || !meta.enabled) { shutdown(1002, "proxy_disabled"); return; }
+      if (!meta || !meta.enabled) {
+        logErr("VLESS_PROXY_DISABLED", proxyId);
+        shutdown(1002, "proxy_disabled");
+        return;
+      }
 
+      // Parse full header
       const uuidBytes = uuidToBytes(uuid);
-      const parsed = parseVlessHeader(buf, uuidBytes);
-      if (parsed.need) return;
-      if (parsed.error) { shutdown(1002, "vless_" + parsed.error); return; }
-      if (parsed.cmd === VLESS_CMD_UDP) { shutdown(1002, "udp_unsupported"); return; }
+      const parsed = parseVlessHeader(state.headerBuf, uuidBytes);
+      if (parsed.need) {
+        log("VLESS_NEED_MORE", parsed.need, "have", state.headerBuf.length);
+        return;
+      }
+      if (parsed.error) {
+        logErr("VLESS_PARSE_ERR", parsed.error);
+        shutdown(1002, "parse_" + parsed.error);
+        return;
+      }
+      if (parsed.cmd === VLESS_CMD_UDP) {
+        logErr("VLESS_UDP_UNSUPPORTED");
+        shutdown(1002, "udp_unsupported");
+        return;
+      }
 
       const target = parsed.hostname || meta.targetHost || defaultHost;
       const port = parsed.port || meta.targetPort || defaultPort;
+      log("VLESS_CONNECT", target + ":" + port);
 
+      // Connect
       try {
-        socket = connect({ hostname: target, port });
-        await socket.opened;
-        writer = socket.writable.getWriter();
+        state.socket = connect({ hostname: target, port });
+        await state.socket.opened;
+        state.writer = state.socket.writable.getWriter();
+        log("VLESS_CONNECTED", target + ":" + port);
       } catch (e) {
-        console.error("VLESS_CONNECT_FAIL", target, port, safeError(e));
+        logErr("VLESS_CONNECT_FAIL", target + ":" + port, safeError(e));
         shutdown(1011, "connect_failed");
         return;
       }
 
-      // VLESS response: [0x00, 0x00]
-      try { server.send(new Uint8Array([0x00, 0x00])); }
-      catch (e) { shutdown(1011, "send_failed"); return; }
-
-      if (parsed.payload.length > 0) {
-        try { await writer.write(parsed.payload); }
-        catch (e) { shutdown(1011, "write_failed"); return; }
+      // Send VLESS response [0x00, 0x00]
+      try {
+        server.send(new Uint8Array([0x00, 0x00]));
+      } catch (e) {
+        logErr("VLESS_SEND_FAIL", safeError(e));
+        shutdown(1011, "send_failed");
+        return;
       }
 
-      try { reader = socket.readable.getReader(); }
-      catch (e) { shutdown(1011, "reader_failed"); return; }
+      // Flush pipelined payload
+      if (parsed.payload.length > 0) {
+        try { await state.writer.write(parsed.payload); }
+        catch (e) {
+          logErr("VLESS_WRITE_FAIL", safeError(e));
+          shutdown(1011, "write_failed");
+          return;
+        }
+      }
 
-      pumpVlessUpstream(reader, server, shutdown);
+      // Start upstream reader
+      try {
+        state.reader = state.socket.readable.getReader();
+      } catch (e) {
+        logErr("VLESS_READER_FAIL", safeError(e));
+        shutdown(1011, "reader_failed");
+        return;
+      }
 
-      buf = new Uint8Array(0);
-      state = "connected";
+      pumpVlessUpstream(state.reader, server, shutdown);
+
+      state.headerBuf = new Uint8Array(0);
+      state.initialized = true;
       clearTimeout(idleTimer);
+      log("VLESS_INITIALIZED");
     } catch (e) {
-      console.error("VLESS_MSG_ERR", safeError(e));
+      logErr("VLESS_MSG_ERR", safeError(e));
       shutdown(1011, "handler_error");
     }
   });
 
-  server.addEventListener("close", () => { clearTimeout(idleTimer); shutdown(1000, "client_closed"); });
-  server.addEventListener("error", () => { clearTimeout(idleTimer); shutdown(1011, "ws_error"); });
+  server.addEventListener("close", () => {
+    clearTimeout(idleTimer);
+    shutdown(1000, "client_closed");
+  });
+  server.addEventListener("error", (e) => {
+    clearTimeout(idleTimer);
+    logErr("VLESS_WS_ERR", safeError(e));
+    shutdown(1011, "ws_error");
+  });
 
-  return new Response(null, { status: 101, webSocket: client });
+  // ---- 6. Return 101 ----
+  // Echo back any vless subprotocol (some clients require it)
+  const headers = {};
+  const subproto = (request.headers.get("Sec-WebSocket-Protocol") || "").trim();
+  if (subproto) {
+    // Echo the first protocol requested
+    const first = subproto.split(",")[0].trim();
+    if (first && /^[A-Za-z0-9._-]+$/.test(first)) {
+      headers["Sec-WebSocket-Protocol"] = first;
+    }
+  }
+
+  try {
+    return new Response(null, {
+      status: 101,
+      webSocket: client,
+      headers,
+    });
+  } catch (e) {
+    logErr("VLESS_RESPONSE_FAIL", safeError(e));
+    try { server.close(1011, "response_failed"); } catch {}
+    return new Response("ws response failed", { status: 500 });
+  }
 }
 
 async function pumpVlessUpstream(reader, ws, shutdown) {
@@ -453,7 +561,7 @@ async function pumpVlessUpstream(reader, ws, shutdown) {
 }
 
 // ============================================================
-// SECTION 6: MTProto RelaySession (from v8.0.0, unchanged)
+// SECTION 7: MTProto RelaySession
 // ============================================================
 const LIMITS = Object.freeze({
   itemCost: 256,
@@ -487,7 +595,6 @@ class RelaySession {
   async fetch(request) {
     try {
       const url = new URL(request.url);
-
       if (this.closed) return new Response("session closed", { status: 404 });
 
       if (!this.proxyId) {
@@ -547,7 +654,7 @@ class RelaySession {
 
       return new Response("not found", { status: 404 });
     } catch (e) {
-      console.error("RELAY_FETCH_ERR", safeError(e));
+      logErr("RELAY_FETCH_ERR", safeError(e));
       return new Response("relay error", { status: 500 });
     }
   }
@@ -565,10 +672,10 @@ class RelaySession {
       this.ingressItems++;
       this.messageChain = this.messageChain
         .then(() => this.onMessage(data))
-        .catch((e) => { console.error("RELAY_MSG_ERR", safeError(e)); this.protocolError("message_handler_failed"); })
+        .catch((e) => { logErr("RELAY_MSG_ERR", safeError(e)); this.protocolError("message_handler_failed"); })
         .finally(() => { this.ingressBytes -= cost; this.ingressItems--; });
       this.ctx.waitUntil(this.messageChain);
-    } catch (e) { console.error("RELAY_ENQ_ERR", safeError(e)); }
+    } catch (e) { logErr("RELAY_ENQ_ERR", safeError(e)); }
   }
 
   async onMessage(data) {
@@ -670,7 +777,7 @@ class RelaySession {
         }
       }
     } catch (e) {
-      console.error("RELAY_DRAIN_ERR", safeError(e));
+      logErr("RELAY_DRAIN_ERR", safeError(e));
       this.closeStream(stream.id, true);
     } finally {
       stream.draining = false;
@@ -906,7 +1013,7 @@ export class ProxySession extends RelaySession {
 }
 
 // ============================================================
-// SECTION 7: Bridge page (from v8.0.0, unchanged)
+// SECTION 8: Bridge page (MTProto)
 // ============================================================
 function bridgePage(host, bootstrap) {
   const scriptNonce = randomId(24);
@@ -1000,7 +1107,7 @@ addEventListener('pagehide',()=>close(true),{once:true});
     headers: {
       "Content-Type": "text/html; charset=utf-8",
       "Cache-Control": "no-store",
-      "Content-Security-Policy": `default-src 'none'; script-src 'nonce-${scriptNonce}'; connect-src https://${host} wss://${host}; style-src 'none'; img-src 'none'; object-src 'none'; worker-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors http://127.0.0.1:*; sandbox allow-same-origin allow-scripts`,
+      "Content-Security-Policy": `default-src 'none'; script-src 'nonce-${scriptNonce}'; connect-src https://${host} wss://${host}; style-src 'none'; img-src 'none'; object-src 'none'; worker-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors *; sandbox allow-same-origin allow-scripts`,
       "Referrer-Policy": "no-referrer",
       "X-Content-Type-Options": "nosniff",
       "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
@@ -1009,7 +1116,7 @@ addEventListener('pagehide',()=>close(true),{once:true});
 }
 
 // ============================================================
-// SECTION 8: Bootstrap / HMAC
+// SECTION 9: Bootstrap
 // ============================================================
 async function createBootstrap(env, proxyId) {
   const ttl = clampInt(env?.SESSION_TTL_SECONDS, 30, 600, 300);
@@ -1042,7 +1149,6 @@ async function hmac(keyBytes, data) {
   );
   return new Uint8Array(await crypto.subtle.sign("HMAC", key, data));
 }
-
 async function readHello(request) {
   if (!request.body) return new Uint8Array();
   const reader = request.body.getReader();
@@ -1070,7 +1176,7 @@ function isHello(bytes) {
 }
 
 // ============================================================
-// SECTION 9: Telegram Bot
+// SECTION 10: Telegram Bot
 // ============================================================
 const TG_API = "https://api.telegram.org/bot";
 const USER_STATE = new Map();
@@ -1093,7 +1199,7 @@ async function handleTelegramWebhook(request, env, ctx) {
     if (update.callback_query) {
       const cq = update.callback_query;
       ctx.waitUntil(answerCallback(env, cq.id, "").catch(() => {}));
-      ctx.waitUntil(handleCallback(env, cq).catch((e) => console.error("CB_ERR", safeError(e))));
+      ctx.waitUntil(handleCallback(env, cq).catch((e) => logErr("CB_ERR", safeError(e))));
       return new Response("OK");
     }
 
@@ -1112,14 +1218,14 @@ async function handleTelegramWebhook(request, env, ctx) {
     }
 
     ctx.waitUntil(handleMessage(env, chatId, userId, text).catch((e) => {
-      console.error("MSG_ERR", safeError(e));
+      logErr("MSG_ERR", safeError(e));
       return sendTelegram(env, chatId,
         `❌ خطا: <code>${escapeHtml(String(e.message || e))}</code>`,
         { parse_mode: "HTML" });
     }));
     return new Response("OK");
   } catch (e) {
-    console.error("WEBHOOK_ERR", safeError(e));
+    logErr("WEBHOOK_ERR", safeError(e));
     return new Response("OK");
   }
 }
@@ -1174,7 +1280,7 @@ async function handleMessage(env, chatId, userId, text) {
     case "/myid":
       return sendTelegram(env, chatId, `🆔 <code>${userId}</code>`, { parse_mode: "HTML" });
     case "/version":
-      return sendTelegram(env, chatId, `🌐 <b>${BRAND}</b> v${VERSION}`, { parse_mode: "HTML" });
+      return sendTelegram(env, chatId, `🌐 <b>${BRAND}</b> v${VERSION}\n🏷 ${BUILD_TAG}`, { parse_mode: "HTML" });
     default:
       if (text.startsWith("/")) return sendTelegram(env, chatId, "❓ دستور ناشناخته. /help");
       return new Response("OK");
@@ -1226,12 +1332,10 @@ async function editMainMenu(env, chatId, msgId, userId) {
 async function showHelp(env, chatId, edit = null) {
   const text = `📚 <b>راهنمای ${BRAND}</b>\n\n` +
     `<b>📱 MTProto (تلگرام):</b>\n` +
-    `برای اتصال به تلگرام (Desktop/Android/iOS)\n` +
     `۱. ساخت MTProto را بزن\n` +
     `۲. نام وارد کن\n` +
     `۳. دکمهٔ «باز کردن در تلگرام» را بزن\n\n` +
     `<b>🔗 VLESS (v2rayNG/Hiddify/NekoBox):</b>\n` +
-    `برای همه ترافیک، مرورگر، اپ‌ها\n` +
     `۱. ساخت VLESS را بزن\n` +
     `۲. نام وارد کن\n` +
     `۳. لینک را کپی کن در کلاینت Import کن\n\n` +
@@ -1364,7 +1468,7 @@ async function showVlessInfo(env, chatId, userId, proxyId, edit = null) {
   if (!m) return fail(`❌ پروکسی پیدا نشد.`);
   if (m.ownerTelegramId !== userId && !isAdmin(env, userId)) return fail(`⛔️ این پروکسی مال شما نیست.`);
   const host = canonicalHost(env?.PUBLIC_HOSTNAME || "");
-  const link = vlessLinkFor(host, m.uuid, m.name);
+  const link = vlessLinkFor(env, host, m.uuid, m.name);
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(link)}`;
   const text = `🔗 <b>${escapeHtml(m.name)}</b>\n\n🆔 <code>${m.id}</code>\n${m.enabled ? "🟢 فعال" : "🔴 غیرفعال"}\n\n` +
     `🆔 UUID:\n<code>${m.uuid}</code>\n\n` +
@@ -1384,7 +1488,8 @@ async function showVlessInfo(env, chatId, userId, proxyId, edit = null) {
   return sendTelegram(env, chatId, text, { parse_mode: "HTML", reply_markup: keyboard });
 }
 
-function vlessLinkFor(host, uuid, name) {
+// ---------- VLESS link builder (NO ed=2560!) ----------
+function vlessLinkFor(env, host, uuid, name) {
   const qs = new URLSearchParams({
     encryption: "none",
     security: "tls",
@@ -1394,7 +1499,7 @@ function vlessLinkFor(host, uuid, name) {
     host: host,
     path: "/vless",
   });
-  const tag = encodeURIComponent(`VLESS-${name || host}`);
+  const tag = encodeURIComponent(`${name || host}`);
   return `vless://${uuid}@${host}:443?${qs.toString()}#${tag}`;
 }
 
@@ -1425,7 +1530,7 @@ async function createVlessFlow(env, chatId, userId, rawName) {
   await env.PROXY_REGISTRY.put(allKey, JSON.stringify(all));
 
   const host = canonicalHost(env?.PUBLIC_HOSTNAME || "");
-  const link = vlessLinkFor(host, uuid, name);
+  const link = vlessLinkFor(env, host, uuid, name);
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(link)}`;
   const text = `✅ <b>پروکسی VLESS ساخته شد</b>\n\n📛 <b>${escapeHtml(name)}</b>\n🆔 <code>${proxyId}</code>\n🆔 UUID:\n<code>${uuid}</code>\n\n` +
     `👇 لینک را در v2rayNG / NekoBox / Hiddify / Karing وارد کن`;
@@ -1528,7 +1633,7 @@ async function handleCallback(env, cq) {
         const m = await safeKvJson(env, `vless:${proxyId}`, null);
         if (!m) return;
         const host = canonicalHost(env?.PUBLIC_HOSTNAME || "");
-        const link = vlessLinkFor(host, m.uuid, m.name);
+        const link = vlessLinkFor(env, host, m.uuid, m.name);
         await sendTelegram(env, chatId, `📋 <b>لینک VLESS:</b>\n\n<code>${escapeHtml(link)}</code>`, { parse_mode: "HTML" });
         return answerCallback(env, cq.id, "✓");
       }
@@ -1559,7 +1664,7 @@ async function handleCallback(env, cq) {
       return;
     }
   } catch (e) {
-    console.error("CB_HANDLE_ERR", safeError(e));
+    logErr("CB_HANDLE_ERR", safeError(e));
     return answerCallback(env, cq.id, "❌", true);
   }
 }
@@ -1616,14 +1721,14 @@ async function safeKvText(env, key, fallback) {
 }
 
 // ============================================================
-// SECTION 10: Worker entry (ZERO-CRASH)
+// SECTION 11: Worker entry
 // ============================================================
 export default {
   async fetch(request, env, ctx) {
     try {
       return await route(request, env, ctx);
     } catch (error) {
-      console.error("FATAL", safeError(error));
+      logErr("FATAL", safeError(error));
       return new Response("internal error", {
         status: 500,
         headers: { "Content-Type": "text/plain; charset=utf-8", ...noStore() },
@@ -1632,37 +1737,33 @@ export default {
   },
   async scheduled(event, env, ctx) {
     try {
-      // Light cleanup tick
-      ctx.waitUntil((async () => {
-        try {
-          // Nothing to do by default; placeholder for future cron
-        } catch {}
-      })());
+      ctx.waitUntil((async () => { /* placeholder */ })());
     } catch (e) {
-      console.error("CRON_ERR", safeError(e));
+      logErr("CRON_ERR", safeError(e));
     }
   },
 };
 
-// ---------- Router ----------
 async function route(request, env, ctx) {
-  let url, path, upgrade;
+  let url, path, method, upgrade;
   try {
     url = new URL(request.url);
     path = url.pathname;
+    method = request.method;
     upgrade = (request.headers.get("Upgrade") || "").toLowerCase();
   } catch (e) {
     return new Response("bad request", { status: 400 });
   }
 
-  // 1. Health — always safe
+  const isWS = upgrade === "websocket";
+
+  // 1. Health
   if (path === "/healthz") {
     return jsonSafe({
       ok: true,
       version: VERSION,
       brand: BRAND,
       build: BUILD_TAG,
-      carrier: "unified-vless-mtproto",
       bindings: {
         kv: !!(env && env.PROXY_REGISTRY),
         do: !!(env && env.PROXY_SESSIONS),
@@ -1677,66 +1778,71 @@ async function route(request, env, ctx) {
     });
   }
 
-  // 2. Debug — safe diagnostics
-  if (path === "/debug") {
-    return await debugPage(env, url);
-  }
+  // 2. Debug
+  if (path === "/debug") return await debugPage(env, url);
 
-  // 3. WebSocket routing (EXPLICIT — no fallthrough)
-  if (upgrade === "websocket") {
-    if (path === "/vless" || path === "/vless/" || path === "/vl" || path === "/vl/") {
-      try {
-        return await handleManagedVlessWS(request, env);
-      } catch (e) {
-        console.error("VLESS_FATAL", safeError(e));
-        return new Response("vless error", { status: 500 });
-      }
-    }
+  // 3. WebSocket routing — EXPLICIT, no fallthrough
+  if (isWS) {
+    // MTProto
     if (path === "/api/v1/ws") {
-      try {
-        return await relayWebSocket(request, env);
-      } catch (e) {
-        console.error("MT_RELAY_FATAL", safeError(e));
+      log("ROUTE_MT_WS");
+      try { return await relayWebSocket(request, env); }
+      catch (e) {
+        logErr("MT_RELAY_FATAL", safeError(e));
         return new Response("relay error", { status: 500 });
       }
     }
-    // Unknown WS path → 404, never crash
-    return notFound();
+    // VLESS — explicit paths
+    if (isVlessPath(path)) {
+      log("ROUTE_VLESS_WS", path);
+      try { return await handleVlessWS(request, env); }
+      catch (e) {
+        logErr("VLESS_FATAL", safeError(e));
+        return new Response("vless error", { status: 500 });
+      }
+    }
+    // Unknown WS path
+    log("ROUTE_UNKNOWN_WS", path);
+    return new Response("ws not found", { status: 404 });
   }
 
-  // 4. Telegram webhook
-  if (path === "/bot/webhook" && request.method === "POST") {
-    try {
-      return await handleTelegramWebhook(request, env, ctx);
-    } catch (e) {
-      console.error("WEBHOOK_FATAL", safeError(e));
+  // 4. Non-WS GET /vless → help page (no crash)
+  if ((path === "/vless" || path === "/vl" || path === "/ws") && method === "GET") {
+    return vlessHelpPage(env);
+  }
+
+  // 5. Telegram webhook
+  if (path === "/bot/webhook" && method === "POST") {
+    try { return await handleTelegramWebhook(request, env, ctx); }
+    catch (e) {
+      logErr("WEBHOOK_FATAL", safeError(e));
       return new Response("OK");
     }
   }
 
-  // 5. MTProto session API
+  // 6. MTProto session API
   if (path === "/api/v1/session") {
     try {
       if (request.headers.has("Cookie")) return notFound();
-      if (request.method === "DELETE") return await closeSession(request, env);
-      if (request.method !== "POST" || !isBinary(request.headers.get("Content-Type"))) return notFound();
+      if (method === "DELETE") return await closeSession(request, env);
+      if (method !== "POST" || !isBinary(request.headers.get("Content-Type"))) return notFound();
       return await createSession(request, env);
     } catch (e) {
-      console.error("SESSION_FATAL", safeError(e));
+      logErr("SESSION_FATAL", safeError(e));
       return notFound();
     }
   }
 
-  // 6. Setup page
-  if (path === "/setup" && request.method === "GET") {
+  // 7. Setup
+  if (path === "/setup" && method === "GET") {
     try { return setupPage(env); } catch (e) { return notFound(); }
   }
 
-  // 7. Root / bridge / landing
-  if (path === "/" && request.method === "GET") {
+  // 8. Root
+  if (path === "/" && method === "GET") {
     try { return await handleRoot(url, env); }
     catch (e) {
-      console.error("ROOT_FATAL", safeError(e));
+      logErr("ROOT_FATAL", safeError(e));
       try { return publicPage(env); } catch { return notFound(); }
     }
   }
@@ -1748,6 +1854,39 @@ function jsonSafe(obj) {
   return new Response(JSON.stringify(obj, null, 2), {
     status: 200,
     headers: { "Content-Type": "application/json;charset=utf-8", ...noStore() },
+  });
+}
+
+// ---------- VLESS help page ----------
+function vlessHelpPage(env) {
+  const bot = env?.TELEGRAM_BOT_USERNAME || "your_bot";
+  const host = canonicalHost(env?.PUBLIC_HOSTNAME || "");
+  const html = `<!doctype html><html lang="fa" dir="rtl"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VLESS Endpoint</title>
+<style>
+body{margin:0;min-height:100vh;background:#0b0e13;color:#e7edf4;
+ font:14px/1.6 ui-monospace,Menlo,monospace;display:grid;place-items:center;padding:16px}
+.card{max-width:560px;width:100%;padding:28px;background:#141a22;
+ border:1px solid #29323e;border-radius:12px;text-align:center}
+h1{margin:0 0 8px;font-size:22px}
+p{color:#8a96a5;margin:8px 0;line-height:1.7}
+code{background:#0b0e13;padding:3px 8px;border-radius:6px;color:#4d9fff;direction:ltr;display:inline-block}
+a{color:#4d9fff;text-decoration:none}
+</style></head><body>
+<div class="card">
+  <h1>🔗 VLESS Endpoint</h1>
+  <p>این مسیر فقط برای اتصال <b>WebSocket</b> است.</p>
+  <p>برای دریافت لینک VLESS، از ربات تلگرام استفاده کن:</p>
+  <p><a href="https://t.me/${escapeHtml(bot)}">@${escapeHtml(bot)}</a></p>
+  <p style="margin-top:18px">Host: <code>${escapeHtml(host)}</code></p>
+  <p style="font-size:11px;color:#5f6b79;margin-top:20px">
+    ${BRAND} v${VERSION} · ${BUILD_TAG}
+  </p>
+</div></body></html>`;
+  return new Response(html, {
+    status: 200,
+    headers: { "Content-Type": "text/html; charset=utf-8", ...noStore() },
   });
 }
 
@@ -1778,11 +1917,13 @@ async function debugPage(env, url) {
           id: m.id, name: m.name, enabled: m.enabled,
           uuidPrefix: String(m.uuid || "").slice(0, 8),
           uuidMappingOk: uuidCheck === m.id,
+          link: vlessLinkFor(env, canonicalHost(env?.PUBLIC_HOSTNAME || ""), m.uuid, m.name),
         });
       }
     }
     return jsonSafe({
       version: VERSION,
+      build: BUILD_TAG,
       bindings: { kv: !!(env && env.PROXY_REGISTRY), do: !!(env && env.PROXY_SESSIONS) },
       env: {
         publicHostname: env?.PUBLIC_HOSTNAME || null,
@@ -1798,7 +1939,7 @@ async function debugPage(env, url) {
   }
 }
 
-// ---------- MTProto session creation ----------
+// ---------- MTProto session ----------
 async function createSession(request, env) {
   const bootstrap = bearer(request);
   if (!bootstrap) return notFound();
@@ -1817,7 +1958,7 @@ async function createSession(request, env) {
       JSON.stringify({ proxyId, exp: Date.now() + 10 * 60 * 1000 }),
       { expirationTtl: 900 }
     );
-  } catch (e) { console.error("SESSION_KV_PUT_ERR", safeError(e)); return notFound(); }
+  } catch (e) { logErr("SESSION_KV_PUT_ERR", safeError(e)); return notFound(); }
 
   const doId = env.PROXY_SESSIONS.idFromName(`s:${sessionToken}`);
   const stub = env.PROXY_SESSIONS.get(doId);
@@ -1937,7 +2078,7 @@ function hexToBytes(h) {
 }
 
 // ============================================================
-// SECTION 11: Public pages
+// SECTION 12: Public pages
 // ============================================================
 function publicPage(env) {
   const bot = env?.TELEGRAM_BOT_USERNAME ? `https://t.me/${env.TELEGRAM_BOT_USERNAME}` : null;
@@ -2001,7 +2142,7 @@ h1{font-size:20px}code{background:#0b0e13;border:1px solid #29323e;border-radius
 <div class="row"><span>VLESS_TARGET_HOST</span><span class="ok">${escapeHtml(env?.VLESS_TARGET_HOST || "www.cloudflare.com (default)")}</span></div>
 <div class="row"><span>VLESS_TARGET_PORT</span><span class="ok">${escapeHtml(String(env?.VLESS_TARGET_PORT || "443 (default)"))}</span></div>
 <p style="margin-top:20px;color:#8a96a5">
-VLESS UUID‌ها به‌صورت خودکار ساخته می‌شوند. نیازی به تنظیم دستی <code>VLESS_UUID</code> نیست.
+VLESS UUID‌ها به‌صورت خودکار ساخته می‌شوند.
 </p>
 <p>Bot: <a style="color:#4d9fff" href="${bot}">${bot}</a></p>
 </div></body></html>`;
