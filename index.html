@@ -165,6 +165,8 @@ body { font-family: 'Vazirmatn', sans-serif; }
 // CONFIG
 // ══════════════════════════════════════════════════════════
 const WORKER_JS_URL = "https://raw.githubusercontent.com/NodeOOF/TGPN/main/worker_decode.js";
+
+// ✅ FIXED: single slash (was "//cf" before)
 const CF_API = "https://sdfsdf.supernet3.workers.dev/cf";
 
 // ══════════════════════════════════════════════════════════
@@ -187,14 +189,11 @@ function log(msg, type = "info") {
 // ══════════════════════════════════════════════════════════
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
-// Generate a webhook secret that is 100% Telegram-safe:
-// only [a-zA-Z0-9_-], hex output (only a-f0-9) is always safe.
 function generateWebhookSecret() {
   const bytes = crypto.getRandomValues(new Uint8Array(32));
   return Array.from(bytes).map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
-// Validate that a string is Telegram-safe
 function isTelegramSafe(s) {
   return /^[A-Za-z0-9_-]{1,256}$/.test(s);
 }
@@ -240,14 +239,12 @@ async function registerWebhook(botToken, publicHost, webhookSecret, maxAttempts 
       lastErr = data.description || "خطای نامعلوم";
       log(`! تلاش ${attempt} ناموفق: ${lastErr}`, "warn");
 
-      // "resolve host" or "name resolution" → wait longer for DNS propagation
       if (/resolve host|name resolution|Temporary failure/i.test(lastErr)) {
         if (attempt < maxAttempts) {
           log(`! دامنه هنوز آماده نیست. صبر ۱۵ ثانیه...`, "warn");
           await sleep(15000);
         }
       } else {
-        // Other errors → short wait then retry
         if (attempt < maxAttempts) await sleep(5000);
       }
     } catch (e) {
@@ -269,7 +266,6 @@ async function install() {
   const logs = document.getElementById("logs");
   const retryBtn = document.getElementById("retryWebhookBtn");
 
-  // Reset
   logs.innerHTML = "";
   resultDiv.classList.add("hidden");
   retryBtn.classList.add("hidden");
@@ -277,14 +273,12 @@ async function install() {
   btn.disabled = true;
 
   try {
-    // ── Read inputs ──
     const token = document.getElementById("cfToken").value.trim();
     const workerName = document.getElementById("workerName").value.trim() || "tgproxynode";
     const botUsername = document.getElementById("botUsername").value.trim().replace(/^@/, "");
     const adminId = document.getElementById("adminId").value.trim();
     const botToken = document.getElementById("botToken").value.trim();
 
-    // ── Validate ──
     if (!token) throw new Error("توکن Cloudflare خالیه");
     if (!botUsername) throw new Error("یوزرنیم بات خالیه");
     if (!adminId) throw new Error("آیدی عددی خالیه");
@@ -295,20 +289,20 @@ async function install() {
     log(`› Bot: @${botUsername}`, "info");
     log("", "info");
 
-    // ── Step 1: Verify token ──
+    // Step 1: Verify token
     log("› بررسی توکن Cloudflare...", "info");
     const verify = await cf("/user/tokens/verify", "GET", null, token);
     if (verify.status !== "active") throw new Error("توکن غیرفعاله");
     log("✓ توکن معتبره", "ok");
 
-    // ── Step 2: Get account ──
+    // Step 2: Get account
     log("› دریافت اطلاعات اکانت...", "info");
     const accounts = await cf("/accounts", "GET", null, token);
     const accountId = accounts[0]?.id;
     if (!accountId) throw new Error("اکانت پیدا نشد");
     log(`✓ اکانت: ${accounts[0].name}`, "ok");
 
-    // ── Step 3: Create KV ──
+    // Step 3: Create KV
     log("› ساخت KV Namespace...", "info");
     let kvId;
     try {
@@ -330,7 +324,7 @@ async function install() {
       }
     }
 
-    // ── Step 4: Get/Create subdomain ──
+    // Step 4: Get/Create subdomain
     log("› بررسی workers.dev subdomain...", "info");
     let subdomain = null;
     try {
@@ -357,21 +351,22 @@ async function install() {
     const publicHost = `${workerName}.${subdomain}.workers.dev`;
     log(`✓ آدرس نهایی: https://${publicHost}`, "ok");
 
-    // ── Step 5: Download worker.js ──
+    // Step 5: Download worker.js
     log("› دانلود worker.js...", "info");
     const workerRes = await fetch(WORKER_JS_URL);
-    if (!workerRes.ok) throw new Error("دانلود worker.js ناموفق");
+    if (!workerRes.ok) throw new Error(`دانلود worker.js ناموفق (HTTP ${workerRes.status})`);
     const workerCode = await workerRes.text();
+    if (workerCode.length < 5000) throw new Error("worker.js خیلی کوتاهه، احتمالاً دانلود ناقصه");
     log(`✓ worker.js دانلود شد (${(workerCode.length / 1024).toFixed(1)} KB)`, "ok");
 
-    // ── Step 6: Generate webhook secret ──
+    // Step 6: Generate webhook secret
     const webhookSecret = generateWebhookSecret();
     if (!isTelegramSafe(webhookSecret)) {
       throw new Error("Webhook secret نامعتبر تولید شد");
     }
     log(`✓ Webhook Secret تولید شد (${webhookSecret.length} کاراکتر hex)`, "ok");
 
-    // ── Step 7: Deploy worker with bindings ──
+    // Step 7: Deploy worker with bindings
     log("› Deploy Worker به Cloudflare...", "info");
 
     const metadata = {
@@ -410,7 +405,7 @@ async function install() {
     }
     log("✓ Worker آپلود شد", "ok");
 
-    // ── Step 8: Enable workers.dev ──
+    // Step 8: Enable workers.dev
     log("› فعال‌سازی workers.dev subdomain...", "info");
     try {
       await fetch(
@@ -429,7 +424,7 @@ async function install() {
       log(`! فعال‌سازی خودکار ناموفق: ${e.message}`, "warn");
     }
 
-    // ── Step 9: Register Telegram webhook (with retry) ──
+    // Step 9: Register Telegram webhook
     log("", "info");
     log("› صبر برای propagate شدن دامنه (۵ ثانیه)...", "info");
     await sleep(5000);
@@ -437,7 +432,6 @@ async function install() {
     log("› ثبت Webhook تلگرام...", "info");
     const whResult = await registerWebhook(botToken, publicHost, webhookSecret);
 
-    // ── Done ──
     log("", "info");
     if (whResult.ok) {
       log("═══════════════════════════════", "ok");
@@ -451,7 +445,6 @@ async function install() {
       log("› روی دکمه «تلاش مجدد» بزن یا ۲ دقیقه صبر کن و دوباره تلاش کن", "warn");
     }
 
-    // Show result
     document.getElementById("resUrl").textContent = `https://${publicHost}`;
     document.getElementById("resUrl").href = `https://${publicHost}`;
     document.getElementById("resBot").textContent = `@${botUsername}`;
