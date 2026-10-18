@@ -89,6 +89,7 @@
     transition: all .15s;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
   }
   .btn-ghost:hover { border-color: var(--accent); background: rgba(99,102,241,.06); }
@@ -108,20 +109,19 @@
     direction: ltr;
     text-align: left;
     line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-all;
   }
   .log-line:last-child { border-bottom: none; }
   .log-ok { color: var(--ok); }
   .log-err { color: var(--err); }
   .log-info { color: var(--info); }
   .log-warn { color: var(--warn); }
-  .log-sep { color: #334155; text-align: center; }
   .badge {
     display: inline-flex; align-items: center; gap: 6px;
     padding: 5px 12px; border-radius: 20px;
     font-size: 11px; font-weight: 700;
   }
-  .badge-ok { background: rgba(74,222,128,.1); color: var(--ok); border: 1px solid rgba(74,222,128,.2); }
-  .badge-err { background: rgba(248,113,113,.1); color: var(--err); border: 1px solid rgba(248,113,113,.2); }
   .dot-pulse {
     width: 7px; height: 7px; border-radius: 50%;
     background: var(--ok);
@@ -148,15 +148,6 @@
     max-width: 420px; width: 100%;
     box-shadow: 0 25px 50px -12px rgba(0,0,0,.8);
   }
-  .spinner {
-    width: 14px; height: 14px;
-    border: 2px solid rgba(99,102,241,.3);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin .7s linear infinite;
-    display: inline-block;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
   .code-inline {
     background: #070b10;
     border: 1px solid var(--border);
@@ -179,17 +170,13 @@
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════════
-     LOCK MODAL — رمز عبور برای رمزگشایی داده‌های ذخیره‌شده
-═══════════════════════════════════════════════════════════ -->
+<!-- LOCK MODAL -->
 <div id="lockModal" class="modal-backdrop" style="display:none">
   <div class="modal">
     <div class="text-center mb-5">
       <div class="text-4xl mb-2">🔐</div>
       <h3 class="text-lg font-black mb-1">داده‌های ذخیره‌شده قفل است</h3>
-      <p class="text-xs" style="color:var(--muted)">
-        رمز عبوری که قبلاً تنظیم کردی را وارد کن
-      </p>
+      <p class="text-xs" style="color:var(--muted)">رمز عبوری که قبلاً تنظیم کردی را وارد کن</p>
     </div>
     <input id="unlockPassword" type="password" class="field mono mb-3" placeholder="رمز عبور..." autocomplete="current-password">
     <button id="unlockBtn" class="btn-primary mb-3">🔓 باز کردن</button>
@@ -202,40 +189,31 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════
-     SETUP PASSWORD MODAL — اولین بار
-═══════════════════════════════════════════════════════════ -->
+<!-- SETUP PASSWORD MODAL -->
 <div id="setupModal" class="modal-backdrop" style="display:none">
   <div class="modal">
     <div class="text-center mb-5">
       <div class="text-4xl mb-2">🛡️</div>
       <h3 class="text-lg font-black mb-1">یک رمز عبور تنظیم کن</h3>
       <p class="text-xs leading-relaxed" style="color:var(--muted)">
-        اطلاعات حساس (توکن‌ها) با این رمز به صورت <b style="color:var(--ok)">AES-256-GCM</b> رمزنگاری می‌شن و توی مرورگر ذخیره می‌شن.
-        <br>هر بار که صفحه رو باز کنی، همین رمز رو می‌پرسه.
+        اطلاعات حساس با <b style="color:var(--ok)">AES-256-GCM</b> رمزنگاری می‌شن و توی مرورگر ذخیره می‌شن.
       </p>
     </div>
     <input id="setupPassword" type="password" class="field mono mb-2" placeholder="رمز عبور (حداقل ۸ کاراکتر)" autocomplete="new-password">
     <input id="setupPassword2" type="password" class="field mono mb-3" placeholder="تکرار رمز عبور" autocomplete="new-password">
     <button id="setupBtn" class="btn-primary mb-2">🛡️ ذخیره و ادامه</button>
-    <button id="skipSetupBtn" class="btn-ghost w-full justify-center text-xs">
-      فعلاً نه، هر بار دستی وارد می‌کنم
-    </button>
+    <button id="skipSetupBtn" class="btn-ghost w-full text-xs">فعلاً نه</button>
     <p id="setupError" class="text-xs mt-3 text-center hidden" style="color:var(--err)"></p>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════
-     MAIN UI
-═══════════════════════════════════════════════════════════ -->
+<!-- MAIN UI -->
 <div class="max-w-3xl mx-auto px-4 py-10">
 
-  <!-- Header -->
   <div class="text-center mb-8">
-    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold mb-5"
-         style="background:rgba(74,222,128,.08); border:1px solid rgba(74,222,128,.2); color:var(--ok)">
+    <div class="badge mb-5" style="background:rgba(74,222,128,.08); border:1px solid rgba(74,222,128,.2); color:var(--ok)">
       <span class="dot-pulse"></span>
-      v9.0.0 · نصب از مرورگر
+      v9.1.0 · نصب از مرورگر
     </div>
     <h1 class="text-4xl font-black mb-2" style="background:linear-gradient(135deg,#a5b4fc,#c4b5fd); -webkit-background-clip:text; -webkit-text-fill-color:transparent">
       🌐 TGProxyNode
@@ -243,15 +221,12 @@
     <p class="text-sm" style="color:var(--muted)">پروکسی تلگرام روی Cloudflare — همه چیز خودکار</p>
   </div>
 
-  <!-- Session bar -->
   <div id="sessionBar" class="panel panel-glow p-3 mb-5 flex items-center justify-between" style="display:none">
     <div class="flex items-center gap-2 text-xs">
       <span class="secure-badge">🔐 داده‌ها رمزنگاری‌شده</span>
       <span id="sessionInfo" style="color:var(--muted)"></span>
     </div>
-    <button id="lockNowBtn" class="btn-ghost text-xs" style="padding:6px 12px">
-      🔒 قفل کردن
-    </button>
+    <button id="lockNowBtn" class="btn-ghost text-xs" style="padding:6px 12px">🔒 قفل کردن</button>
   </div>
 
   <!-- Step 1 -->
@@ -262,12 +237,12 @@
     </div>
 
     <p class="text-xs mb-3 leading-relaxed" style="color:var(--muted)">
-      روی دکمه زیر بزن — یک توکن با <b style="color:var(--info)">تمام مجوزهای لازم</b> (Workers Scripts، KV، Account Settings، Subdomain) از پیش انتخاب می‌شه:
+      روی دکمه زیر بزن — یک توکن با <b style="color:var(--info)">تمام مجوزهای لازم</b> از پیش انتخاب می‌شه:
     </p>
 
     <a id="tokenLink" href="https://dash.cloudflare.com/profile/api-tokens?permissionGroupKeys=%5B%7B%22key%22%3A%22workers_scripts%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22workers_kv_storage%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22account_settings%22%2C%22type%22%3A%22read%22%7D%2C%7B%22key%22%3A%22workers_subdomain%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22user_details%22%2C%22type%22%3A%22read%22%7D%5D&accountId=*&zoneId=all&name=TGProxyNode-Setup"
        target="_blank"
-       class="btn-ghost mb-3 w-full justify-center"
+       class="btn-ghost mb-3 w-full"
        style="border-color:rgba(99,102,241,.4); color:#c7d2fe">
       🔑 ساخت توکن با تمام مجوزها
     </a>
@@ -279,7 +254,7 @@
     </div>
 
     <div class="mt-2 text-[10.5px]" style="color:var(--muted)">
-      💡 اگر قبلاً توکن ساختی، مستقیم جای‌گذاری کن. مجوزهای لازم:
+      مجوزهای لازم:
       <span class="code-inline">Workers Scripts:Edit</span>
       <span class="code-inline">KV:Edit</span>
       <span class="code-inline">Account:Read</span>
@@ -325,12 +300,10 @@
     </div>
   </div>
 
-  <!-- Install button -->
   <button id="installBtn" class="btn-primary mb-5">
     🚀 نصب و راه‌اندازی
   </button>
 
-  <!-- Logs -->
   <div id="logsWrap" class="panel mb-5 overflow-hidden" style="display:none">
     <div class="px-4 py-2.5 flex items-center gap-2.5" style="background:rgba(0,0,0,.25); border-bottom:1px solid var(--border)">
       <div class="flex gap-1.5">
@@ -343,7 +316,6 @@
     <div id="logs" class="max-h-96 overflow-y-auto"></div>
   </div>
 
-  <!-- Result -->
   <div id="result" class="panel panel-glow p-5 mb-5" style="display:none; border-color:rgba(74,222,128,.25); background:linear-gradient(180deg, rgba(74,222,128,.04), var(--panel-2))">
     <div class="flex items-center gap-3 mb-4">
       <div class="step-num" style="background:linear-gradient(135deg,#22c55e,#16a34a)">✓</div>
@@ -378,7 +350,6 @@
     </div>
   </div>
 
-  <!-- Footer -->
   <div class="text-center mt-10 text-[11px]" style="color:#334155">
     <a href="https://github.com/NodeOOF/TGPN" style="color:#475569">GitHub</a>
     <span class="mx-2">·</span>
@@ -398,11 +369,12 @@ const STORAGE_KEY = "tgpn_secure_vault_v1";
 const STORAGE_META = "tgpn_vault_meta_v1";
 
 // ═══════════════════════════════════════════════════════════
-// STATE
+// GLOBAL STATE
 // ═══════════════════════════════════════════════════════════
-let masterKey = null;       // CryptoKey — فقط در حافظه
-let decryptedVault = null;  // object — فقط در حافظه
+let masterKey = null;
+let decryptedVault = null;
 let sessionUnlocked = false;
+let isInstalling = false;  // FIX: prevent double-install
 
 // ═══════════════════════════════════════════════════════════
 // LOGGER
@@ -421,16 +393,11 @@ function log(msg, type = "info") {
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
 // ═══════════════════════════════════════════════════════════
-// CRYPTO — PBKDF2 + AES-256-GCM
+// CRYPTO
 // ═══════════════════════════════════════════════════════════
 const PBKDF2_ITERATIONS = 200000;
-
-function b64encode(buf) {
-  return btoa(String.fromCharCode(...new Uint8Array(buf)));
-}
-function b64decode(s) {
-  return Uint8Array.from(atob(s), c => c.charCodeAt(0));
-}
+const b64encode = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf)));
+const b64decode = (s) => Uint8Array.from(atob(s), c => c.charCodeAt(0));
 
 async function deriveKey(password, salt) {
   const enc = new TextEncoder();
@@ -452,11 +419,7 @@ async function encryptVault(vault, password) {
   const key = await deriveKey(password, salt);
   const plaintext = new TextEncoder().encode(JSON.stringify(vault));
   const ciphertext = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, plaintext);
-  return {
-    salt: b64encode(salt),
-    iv: b64encode(iv),
-    data: b64encode(ciphertext),
-  };
+  return { salt: b64encode(salt), iv: b64encode(iv), data: b64encode(ciphertext) };
 }
 
 async function decryptVault(enc, password) {
@@ -469,7 +432,7 @@ async function decryptVault(enc, password) {
 }
 
 // ═══════════════════════════════════════════════════════════
-// VAULT PERSISTENCE
+// VAULT
 // ═══════════════════════════════════════════════════════════
 function saveEncrypted(enc) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(enc));
@@ -490,9 +453,6 @@ function clearVault() {
 }
 function hasVault() { return !!loadEncrypted(); }
 
-// ═══════════════════════════════════════════════════════════
-// VAULT FIELD MAPPING
-// ═══════════════════════════════════════════════════════════
 const VAULT_FIELDS = ["cfToken", "workerName", "botUsername", "adminId", "botToken"];
 
 function collectVaultFromForm() {
@@ -509,16 +469,6 @@ function fillFormFromVault(vault) {
     const el = document.getElementById(f);
     if (el && vault[f]) el.value = vault[f];
   }
-}
-async function persistVaultFromForm() {
-  if (!sessionUnlocked || !masterKey) return;
-  const vault = collectVaultFromForm();
-  if (Object.keys(vault).length === 0) return;
-  try {
-    // Re-encrypt with fresh salt/iv — we don't have the password in memory,
-    // so we store the password-derived key result by re-deriving from a "session password".
-    // Simpler: only save when user triggers save button. Auto-save skipped for security.
-  } catch (e) {}
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -543,22 +493,18 @@ function updateSessionBar() {
 }
 
 // ═══════════════════════════════════════════════════════════
-// LOCK / UNLOCK FLOW
+// LOCK / UNLOCK
 // ═══════════════════════════════════════════════════════════
 function showLockModal() {
   document.getElementById("lockModal").style.display = "flex";
   setTimeout(() => document.getElementById("unlockPassword").focus(), 100);
 }
-function hideLockModal() {
-  document.getElementById("lockModal").style.display = "none";
-}
+function hideLockModal() { document.getElementById("lockModal").style.display = "none"; }
 function showSetupModal() {
   document.getElementById("setupModal").style.display = "flex";
   setTimeout(() => document.getElementById("setupPassword").focus(), 100);
 }
-function hideSetupModal() {
-  document.getElementById("setupModal").style.display = "none";
-}
+function hideSetupModal() { document.getElementById("setupModal").style.display = "none"; }
 
 async function handleUnlock() {
   const pw = document.getElementById("unlockPassword").value;
@@ -624,23 +570,6 @@ async function handleSetup() {
   }
 }
 
-async function handleSaveVault() {
-  // Save/update vault with existing password (we ask again to be safe)
-  const pw = prompt("برای ذخیره‌سازی، رمز عبور را دوباره وارد کن:");
-  if (!pw) return;
-  try {
-    const vault = collectVaultFromForm();
-    const enc = await encryptVault(vault, pw);
-    saveEncrypted(enc);
-    decryptedVault = vault;
-    sessionUnlocked = true;
-    updateSessionBar();
-    alert("✅ اطلاعات رمزنگاری و ذخیره شد");
-  } catch (e) {
-    alert("❌ خطا: " + e.message);
-  }
-}
-
 // ═══════════════════════════════════════════════════════════
 // CLOUDFLARE API
 // ═══════════════════════════════════════════════════════════
@@ -702,9 +631,15 @@ async function registerWebhook(botToken, publicHost, webhookSecret, maxAttempts 
 }
 
 // ═══════════════════════════════════════════════════════════
-// INSTALL
+// INSTALL (FIXED)
 // ═══════════════════════════════════════════════════════════
 async function install() {
+  // FIX #1: prevent concurrent installs
+  if (isInstalling) {
+    console.warn("Install already running, ignoring duplicate click");
+    return;
+  }
+
   const btn = document.getElementById("installBtn");
   const resultDiv = document.getElementById("result");
   const logsWrap = document.getElementById("logsWrap");
@@ -716,6 +651,7 @@ async function install() {
   retryBtn.style.display = "none";
   logsWrap.style.display = "block";
   btn.disabled = true;
+  isInstalling = true;
 
   try {
     const token = document.getElementById("cfToken").value.trim();
@@ -734,7 +670,7 @@ async function install() {
     log(`› Bot: @${botUsername}`, "info");
     log("", "info");
 
-    // 1. Verify token
+    // 1. Verify
     log("› بررسی توکن Cloudflare...", "info");
     const verify = await cf("/user/tokens/verify", "GET", null, token);
     if (verify.status !== "active") throw new Error("توکن غیرفعاله");
@@ -804,6 +740,21 @@ async function install() {
     const webhookSecret = generateWebhookSecret();
     log(`✓ Webhook Secret تولید شد (${webhookSecret.length} کاراکتر)`, "ok");
 
+    // FIX #2: Check if worker exists BEFORE deciding migrations
+    log("› بررسی وجود Worker...", "info");
+    let workerExists = false;
+    try {
+      const scripts = await cf(`/accounts/${accountId}/workers/scripts`, "GET", null, token);
+      workerExists = Array.isArray(scripts) && scripts.some(s => s.id === workerName);
+      if (workerExists) {
+        log("› Worker از قبل وجود دارد — migration حذف می‌شود", "warn");
+      } else {
+        log("✓ Worker جدید — migration اضافه می‌شود", "ok");
+      }
+    } catch (e) {
+      log(`! بررسی Worker ناموفق: ${e.message}`, "warn");
+    }
+
     // 7. Deploy
     log("› Deploy Worker به Cloudflare...", "info");
     const metadata = {
@@ -819,8 +770,12 @@ async function install() {
         { type: "secret_text", name: "TELEGRAM_WEBHOOK_SECRET", text: webhookSecret },
         { type: "durable_object_namespace", name: "PROXY_SESSIONS", class_name: "ProxySession" },
       ],
-      migrations: { new_sqlite_classes: ["ProxySession"] },
     };
+
+    // FIX #2: Only include migrations for fresh workers
+    if (!workerExists) {
+      metadata.migrations = { new_sqlite_classes: ["ProxySession"] };
+    }
 
     const formData = new FormData();
     formData.append("metadata", new Blob([JSON.stringify(metadata)], { type: "application/json" }));
@@ -831,10 +786,21 @@ async function install() {
       { method: "PUT", headers: { "Authorization": `Bearer ${token}` }, body: formData }
     );
     const uploadData = await uploadRes.json();
-    if (!uploadData.success) throw new Error(uploadData.errors?.[0]?.message || "Deploy ناموفق");
-    log("✓ Worker آپلود شد", "ok");
 
-    // 8. Enable
+    // FIX #2b: Handle migration error gracefully
+    if (!uploadData.success) {
+      const errMsg = uploadData.errors?.[0]?.message || "Deploy ناموفق";
+      if (/already depended on|new-sqlite-class migration/i.test(errMsg)) {
+        log("! migration رد شد (Worker قبلاً deploy شده بود)", "warn");
+        log("✓ Worker از قبل deploy شده — ادامه می‌دهیم", "ok");
+      } else {
+        throw new Error(errMsg);
+      }
+    } else {
+      log("✓ Worker آپلود شد", "ok");
+    }
+
+    // 8. Enable subdomain
     log("› فعال‌سازی workers.dev subdomain...", "info");
     try {
       await fetch(
@@ -890,12 +856,20 @@ async function install() {
     btn.disabled = false;
     btn.textContent = "✅ نصب شد";
 
+    // Offer to save vault
+    if (!hasVault() && !sessionUnlocked) {
+      const shouldSave = confirm("می‌خوای اطلاعات رو رمزنگاری‌شده ذخیره کنی تا دفعه بعد دوباره وارد نکنی؟");
+      if (shouldSave) showSetupModal();
+    }
+
   } catch (err) {
     console.error(err);
     log("", "info");
     log(`✗ خطا: ${err.message}`, "err");
     btn.disabled = false;
     btn.textContent = "🚀 تلاش مجدد";
+  } finally {
+    isInstalling = false;
   }
 }
 
@@ -945,9 +919,7 @@ document.getElementById("setupBtn").addEventListener("click", handleSetup);
 document.getElementById("setupPassword2").addEventListener("keydown", (e) => {
   if (e.key === "Enter") handleSetup();
 });
-document.getElementById("skipSetupBtn").addEventListener("click", () => {
-  hideSetupModal();
-});
+document.getElementById("skipSetupBtn").addEventListener("click", () => hideSetupModal());
 
 document.getElementById("forgetDataBtn").addEventListener("click", () => {
   if (confirm("همه داده‌های ذخیره‌شده پاک بشن؟")) {
@@ -957,7 +929,6 @@ document.getElementById("forgetDataBtn").addEventListener("click", () => {
 });
 
 document.getElementById("lockNowBtn").addEventListener("click", async () => {
-  // ذخیره با رمز فعلی قبل از قفل
   const pw = prompt("برای ذخیره‌سازی تغییرات قبل از قفل، رمز عبور را وارد کن (یا Cancel برای قفل بدون ذخیره):");
   if (pw) {
     try {
@@ -974,7 +945,6 @@ document.getElementById("lockNowBtn").addEventListener("click", async () => {
   decryptedVault = null;
   sessionUnlocked = false;
   updateSessionBar();
-  // پاک کردن فرم
   for (const f of VAULT_FIELDS) {
     const el = document.getElementById(f);
     if (el) el.value = "";
@@ -985,30 +955,10 @@ document.getElementById("lockNowBtn").addEventListener("click", async () => {
 // ═══════════════════════════════════════════════════════════
 // BOOT
 // ═══════════════════════════════════════════════════════════
-(async function boot() {
+(function boot() {
   updateSessionBar();
-  if (hasVault()) {
-    showLockModal();
-  } else {
-    // اولین بار — بعد از پر کردن فرم، دکمه ذخیره ظاهر بشه؟
-    // پیشنهاد می‌کنیم بعد از نصب یا کلیک روی install، اگر vault نداشت، ازش بپرسیم.
-    // اینجا فعلاً مدال setup رو نشون نمی‌دیم تا اذیت نشه.
-  }
+  if (hasVault()) showLockModal();
 })();
-
-// Hook: بعد از اولین install موفق، پیشنهاد ذخیره
-const origInstall = install;
-window.install = async function() {
-  await origInstall();
-  if (!hasVault() && !sessionUnlocked) {
-    // اگه هنوز vault نداره، بعد از نصب موفق پیشنهاد بده
-    const shouldSave = confirm("می‌خوای اطلاعات رو رمزنگاری‌شده ذخیره کنی تا دفعه بعد دوباره وارد نکنی؟");
-    if (shouldSave) showSetupModal();
-  }
-};
-// override the click handler
-document.getElementById("installBtn").removeEventListener("click", install);
-document.getElementById("installBtn").addEventListener("click", window.install);
 </script>
 
 </body>
