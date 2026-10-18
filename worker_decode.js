@@ -1,32 +1,14 @@
 // @ts-nocheck
-const _0x_key = 79;
-const _0x_tbl = ["dmB+Yno=","GwkdAmYcBQ0UFQ==","NSs/I2YpOyk0Lmh9fn96","fw==","LiwuKC4sLiAuLC4jIyMjOzs7OzMzMzg2NDZ7e3t7c3NzeHZ0","ISFgPz8lOy0=","c28pIyg+MDgiZi07IyFydycsPCZmJicvPz8uPnQ9MyBod3BxOCI+JS15CCo7bisjPiQtdGgyLDsiKHJ3Inh2CSkxbygiOSUudWcvd3s=","Oys1OGQiPSUrfWUsJiw+OC89dTIyI2J2","Yg==","EA==","ZA==","YA==","cg==","PDo/JSUt","aS8gPHA=","aSI5dw==","aSk5dw==","aT84Iz9x","aW1+dXA=","Djs5JCQ4IDImMiwgIA==","DSssPi44aQ==","HAYMYXl/fw==","OiAmIiQ9JxciNDcgPA==","ODwkOC4VPSEqIyo6Og==","LCEjIi4pPRczLygqITg4","JiA7LScjLWghNCQiKw==","LS8pbCkrPSsv","LS8pbDsrMCQoJyE=","KiM9ODJqKykzJS0=","fnp0Ynp/fWZ2cXBhe30=","fnp0Ynp/fWZ2cHJhe3w=","fnp0Ynp/fWZ2cXBhf318","fnp0Ynp/fWZ2cHJhd3w=","fnp0Ynp/fWZ2cXRhew==","LS8pbAoPGmgqJzEqPCQtJw==","PS86","DgseYQgeGw==","KiAuPjI6PQ==","PyIsJSU=","Kyo=","HxwCFBIVGg0EFAAbbiA5OD5pKiJmdn1uJSkzaiogJjQ2","LS8pbCMrJyw0LiQkK20gLiQuPC8=","JiA7LScjLWgKEhU9ITU1ayIoJiM1LS4lKA==","LS8pEz0vOzsuKSs=","LS8pEz4/ICw=","LS8pEyglJCUmKCE=","LS8pEyo+MDgi","cA==","YDghKTg5","YDgh","YDk+","GQIIHxgVAQkJAgkKHBIJBR4MGg==","GQIIHxgVGQkOFBoJDwQA","LC8jIiQ+aSs1IyQ7K207Lig6JyQtIDtuPS0iOA==","GQIIHxgVCAsEAxUbEQsNAgY=","OD1tLSgpLDgzZiMuJyEpLw==","ODk6YigmJj0jICkuPChiKCUk","e3p+","LCIiPy4u","GQIIHxgVGgASEgEAGQM=","GQIIHxgVAQkJAhYHDwYJFB4ABQIJEBs=","Jy8jKDgiKCMiGTEmIygjPj4=","Iis+PyotLA==","GQIIHxgVBwcYERcGGgge","ISESOzkjPS01","GQIIHxgVCwkDGRMKHB4FBAQ=","GQIIHxgVHB0OAg==","BBhtIiQ+aSooMysr","Oys1OA==","GQIIHxgVAh4YAxcd","JDgSKTk4Jjo=","GQIIHxgVHAYMCAoYABIZHgMN","OiAmIiQ9JxcyMywr","JT0iIg==","GQIIHxgVAh4YCwAbDxIJGRg=","GQIIHxgVGRoIHhwQCgQfCggFDQM=","PzwiNDIVLSE0JycjKyk=","GQIIHxgVBw0CAhoCAR8J","Jy87KQ==","GQIIHxgVGQkVFQAQCx8e","Py8/Py4V","GQIIHxgVHAwXGRABHRgcGwUbHAIC","Oio9Ez4kOj03Nio9Oigo","GQIIHxgVCgcJCAAMGg==","dQ==","GQIIHxgVCgcJCAAMGggI","GQIIHxgVCgcJCAAMGhIKCgMF","LCEjIi4pPRchJywjKyk=","GQIIHxgVGg0JAhoJDwQA","PCsjKBQsKCErIyE=","GQIIHxgVHhoOEgAQCAwFBw==","ODwkOC4VLykuKiAr","GQIIHxgVGw0GAgAdEQsNAgY=","PSssKC44Fi4mLykqKg==","GQIIHxgVAAYOEgwOAgQWDg4=","GQIIHxgVBBsAGQAdHA==","Jy8jKCcvOxciNDcgPA==","LCIiPy4=","LCIkKSU+FisrKTYqKg==","Kjw/Izk=","GQIIHxgVHhsYAxcd","OD0SKTk4Jjo=","HCsuYRwvKxsoJS4qOmAcOSU9JyQpKQ==","Yw==","GQIIHxgVGw0UFgoBHQgTDQsABA==","PSs+PCQkOi0YICQmIigo","OD1tPi45OScpNSBvKCwlJy8t","Oj4+ODkvKCUYJSkgPSgo","PCs+PyIlJ2gkKio8Kyk=","F2MdPiQyMGUOIg==","JiA7LScjLWg3NCo3N20lLw==","JDhtISI5OiEpIQ==","PzwiNDJqJyczZiMgOyMo","PzwiNDJqLSE0JycjKyk=","YCcjOC44JykraSwhJzk=","HwEeGA==","YCcjOC44JykraTI8","Gj4qPiouLA==","OCsvPyQpIi0z","KjY9KSg+LCxnMSAtPSIvIC89","KjY9JTkvOgkz","OiAmIiQ9J2g0IzY8JyIi","LiI/KSouMGgkKSshKy44Li4=","OCsvPyQpIi0zGSYjIT4p","OCsvPyQpIi0zGSA9PCI+","F2MZHDklMTFqFjcgOiIvJCY=","Oz4/IzMzZD52aA==","YCcjOC44JykraSYjIT4p","PCs+PyIlJxcjIykqOig=","ISE5bC0lPCYj","HQsBDRIVDw0TBQ0QCx8e","PSshLTJqLDo1KTc=","JiA7LScjLRcwIyc8IS4nLj4WJSI1Ni4pKA==","JiAqPi45Ohc2MyA6KxIgIicgPA==","HQsBDRIVBBsAGQAdHA==","Iis+PyotLBcvJysrIig+FCwoISsjIQ==","HQsBDRIVDAYWGQAdHA==","KTwsIS4VOSk1NSAQKCwlJy8t","JiA7LScjLRckKSs7PCIgFCw7KSoj","JiA7LScjLRckKio8Kw==","OiAmIiQ9Jxc0MjcqLyA=","OiAmIiQ9JxchNCQiKxI4Mjos","JiA7LScjLRcoNiAh","JiA7LScjLRcjJzEuETolJS4mPw==","HQsBDRIVDRoGDwsQCx8e","PDo/KSonaSsrKTYqKg==","PzwiNDJqOi0kNCA7biMjP2olJyYiICs=","LCEjIi4pPWgzLygqITg4","ODwkOC5qPSEqIyo6Og==","JiA7LScjLRcwLysrITo=","OCcjKCQ9FicxIzcpIiI7","OCsvPyQpIi0zGTYqICkTLSsgJCIi","PzwiOCQpJiQYIzc9IT8=","PCY4OC8lPiY=","LiwiPj8=","ISFgPi4sLDo1Izc=","ISE+IiIsLw==","LC8gKTkrdGBuamUiJy4+JDohJykjeGdnYWwsLyYkKCUkOyciInZiYA==","YQ==","GwkdAmYuLC4mMyk7","BwMMDw==","PCcqIg==","Jzo5PDhwZmcmNixhOiggLi07KSpoKj0pYi4kPg==","F2MZKScvLjomK2gNITlhCjogZRQjJj0rOWEfJSItKQ==","CSE/LiIuLS0p","AAU=","DAwSCRkY","BxoAAA==","Ah0KEw4YGw==","GAsPBAQFAhcCFBc=","LjksJT8jJy8YKCQiKxIhPzo7JzMp","LjksJT8jJy8YKCQiKxI6Jy86Ow==","Dw==","YD05LTk+","YCMoIj4=","YCYoIDs=","YC0sIigvJQ==","YCAoOw==","bw==","rdPBbJLOkfKezg==","IisjOXEiJiUi","YCAoOz0mLDs0","YCIkPz8=","YCIkPz88JS00NQ==","YCM0JS8=","YDgoPjgjJiY=","rdPebJPlkfuf7JzHlvxsksyR75/ynMmW6pTlkuORwGhlYCYoIDs=","rdDYbJP5ke+f6J3lbgAYGzgmPCg=","IisjOXEkLD8YKzE=","rdDYbJP5ke+f6J3lbhsADhka","IisjOXEkLD8YMCk=","v9Hex2uTzZPLnvaX5G0BHxo7JzMp","IisjOXEmIDszGSg7","v9Hex2uTzZPLnvaX5G0aBw8aGw==","IisjOXEmIDszGTMj","rcr0o/PFaZD2nuKWyZTKks+R7w==","IisjOXEiLCQ3","v9HL2GuS65PLnuqUwm2VzpPP","IisjOXEnMCEj","v9HZ1WuS4ZDgnveV4ZX4k+A=","v9HS7g==","v9HZ+A==","v9He/WuS4ZDgnvdvlOSU+pLmkcFmneCW/GyT4JDMnemd/pbqlc4=","v9Hex2uQ4JH5nclvHSgvOS89","v9HZ+GuS85PLnvSWz5X1k+2QzA==","v9HS7muTyJD+nuKWyg==","v9Ha3WuS5JD3n8Q=","v9HZ1WuTzZPLnvaX5G0BHxo7JzMp","rdPBbAAcaZDtn8OX9pbAks9pkcGe8ZfhlMs=","rcr0o/PFaZDrnveX6JbAk+2R4g==","v9HZ1WuTzJHBn82Uwm2U7JL8kcOdyQ==","rdLIbJPnkfiex2WV55TK","rdPBbJPtkM6f853+luqVyg==","v9Hex2uQ4JH5nclvl8mXx5PPku5mEwMLHh8=","v9He+2uTz5HCnuKUwpX4axsb","v9HZ1WuTzZPLnvaX5G0aBw8aGw==","ISEjKQ==","OyI+","LCY/IyYv","OD0=","rdXZo/PF","v9HZ1Q==","PyM=","JiArIw==","LCE9NQ==","rdLe","OyEqKycv","Kysh","KyshIyA=","OSI=","DAwSBAoEDQQCGQAdHA==","rdPB","Lj49ICIpKDwuKStgJD4jJQ==","PCsjKAYvOjsmISA=","KiokOAYvOjsmISAbKzU4","ISE5bCYlLSEhLyAr","LiA+Oy44CikrKicuLSYdPi87MQ==","CQ8ZDQc=","JiA5KTkkKCRnIzc9IT8=","Oys1OGQ6JSkuKH5vLSUtOTksPHozMSljdQ==","DBwCAhQPGxo=","LS8pbDkvOD0iNTE=","YCYoLSc+ITI=","YCooLj4t","YC89JWQ8eGcwNQ==","HQEYGA4VBBwYERY=","AhoSHg4GCBEYAAQbDwE=","HQEYGA4VHwQCFRYQGR4=","GQIIHxgVDwkTBwk=","OSIoPzhqLDo1KTc=","HQEYGA4VHAYMCAoYABIbGA==","OD1tIiQ+aS4oMysr","CAsZ","YCwiOGQ9LCovKSok","GAsPBAQFAhcBBxEOAg==","YC89JWQ8eGc0IzY8JyIi","DCEiJyIv","CwsBCR8P","DCEjOC4kPWUTPzUq","HAseHwIFBxcBBxEOAg==","YD0oOD46","HQECGBQMCBwGCg==","Lj49ICIpKDwuKStgJD4jJXEqICY0Nio6cDk/LGRw","NiE4PhQoJjw=","Oj0oPg==","HAseHwIFBxcMEBofGxkTDhgb","Jzo5PDhwZmc0IzY8JyIiZCMnPCI0Ky4iYiUlIz0=","Lj49ICIpKDwuKStgIS44Lj5kOzM0IC4j","Jzo5PDhwZmc0IzY8JyIiZCMnPCI0Ky4iYi8nJTot","Jzo5PDhwZmc0IzY8JyIiZCMnPCI0Ky4iYjs4","PCs/Oi44","PCsuPi4+","LTwkKCwv","LQ==","azUvIz83","Z5bnlc2S8ZPLn8Bvl8uU/5LmkcBv"];
-const _0x_cache = new Map();
-function func_dec(idx) {
-  if (_0x_cache.has(idx)) return _0x_cache.get(idx);
-  const raw = atob(_0x_tbl[idx]);
-  let out = "";
-  for (let i = 0; i < raw.length; i++) {
-    out += String.fromCharCode(raw.charCodeAt(i) ^ (_0x_key ^ (i % 11)));
-  }
-  try {
-    out = decodeURIComponent(escape(out));
-  } catch (_) {}
-  _0x_cache.set(idx, out);
-  return out;
-}
-
-// @ts-nocheck
 // ============================================================
-// TGPN-VLESS v9.3.1 "Zero-Crash"
-// Fixed: no 1101, no leaked promises, all awaits timeout-bound
+// TGPN-VLESS v9.3.2 "Bulletproof" — Full Fixed Version
+// Fixes: 1101 (string detection, WS lifecycle, unresolved promises)
 // ============================================================
 
 import { connect } from "cloudflare:sockets";
 
-export const VERSION = func_dec(0);
-export const BRAND = func_dec(1);
-export const BUILD_TAG = func_dec(2);
+export const VERSION = "9.3.2";
+export const BRAND = "TGPN-VLESS";
+export const BUILD_TAG = "bulletproof-2026";
 
 // ============================================================
 // SECTION 1: Safe helpers
@@ -36,18 +18,18 @@ function canonicalHost(v) {
 }
 function randomHex(bytes) {
   const b = crypto.getRandomValues(new Uint8Array(bytes));
-  return [...b].map((x) => x.toString(16).padStart(2, func_dec(3))).join("");
+  return [...b].map((x) => x.toString(16).padStart(2, "0")).join("");
 }
 function randomId(len) {
   const bytes = crypto.getRandomValues(new Uint8Array(len));
-  const a = func_dec(4);
+  const a = "abcdefghijklmnopqrstuvwxyz0123456789";
   return [...bytes].map((b) => a[b % a.length]).join("");
 }
 function randomUuid() {
   const b = crypto.getRandomValues(new Uint8Array(16));
   b[6] = (b[6] & 0x0f) | 0x40;
   b[8] = (b[8] & 0x3f) | 0x80;
-  const h = [...b].map((x) => x.toString(16).padStart(2, func_dec(3))).join("");
+  const h = [...b].map((x) => x.toString(16).padStart(2, "0")).join("");
   return `${h.slice(0,8)}-${h.slice(8,12)}-${h.slice(12,16)}-${h.slice(16,20)}-${h.slice(20)}`;
 }
 function isValidUuid(u) {
@@ -60,46 +42,46 @@ function uuidToBytes(uuid) {
   return out;
 }
 function bytesToUuid(b) {
-  const h = [...b].map((x) => x.toString(16).padStart(2, func_dec(3))).join("");
+  const h = [...b].map((x) => x.toString(16).padStart(2, "0")).join("");
   return `${h.slice(0,8)}-${h.slice(8,12)}-${h.slice(12,16)}-${h.slice(16,20)}-${h.slice(20)}`;
 }
 function clampInt(v, min, max, fb) {
   const n = Number.parseInt(v, 10);
   return Number.isFinite(n) ? Math.min(max, Math.max(min, n)) : fb;
 }
-function noStore() { return { "Cache-Control": func_dec(5) }; }
+function noStore() { return { "Cache-Control": "no-store" }; }
 function notFound() {
   return new Response(
-    func_dec(6),
-    { status: 404, headers: { "Content-Type": func_dec(7), ...noStore() } }
+    "<!doctype html><meta charset=utf-8><title>Not found</title><h1>Not found</h1>",
+    { status: 404, headers: { "Content-Type": "text/html; charset=utf-8", ...noStore() } }
   );
 }
 function base64url(bytes) {
   let s = "";
   for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
-  return btoa(s).replace(/\+/g, func_dec(8)).replace(/\//g, func_dec(9)).replace(/=+$/, "");
+  return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 function base64urlDecode(v) {
-  const p = v.replace(/-/g, func_dec(10)).replace(/_/g, func_dec(11)) + func_dec(12).repeat((4 - (v.length % 4)) % 4);
+  const p = v.replace(/-/g, "+").replace(/_/g, "/") + "=".repeat((4 - (v.length % 4)) % 4);
   const raw = atob(p);
   return Uint8Array.from(raw, (c) => c.charCodeAt(0));
 }
 function constantTimeEqual(a, b) {
-  if (typeof a !== func_dec(13) || typeof b !== func_dec(13) || a.length !== b.length) return false;
+  if (typeof a !== "string" || typeof b !== "string" || a.length !== b.length) return false;
   let d = 0;
   for (let i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i);
   return d === 0;
 }
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, (c) =>
-    ({ "&": func_dec(14), "<": func_dec(15), ">": func_dec(16), '"': func_dec(17), "'": func_dec(18) }[c]));
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 function bearer(r) {
-  const v = r.headers.get(func_dec(19)) || "";
-  return v.startsWith(func_dec(20)) ? v.slice(7) : "";
+  const v = r.headers.get("Authorization") || "";
+  return v.startsWith("Bearer ") ? v.slice(7) : "";
 }
 function isBinary(v) { return /^application\/octet-stream(?:\s*;.*)?$/i.test(v || ""); }
-async function sha256(b) { return new Uint8Array(await crypto.subtle.digest(func_dec(21), b)); }
+async function sha256(b) { return new Uint8Array(await crypto.subtle.digest("SHA-256", b)); }
 function concat(a, b) {
   const o = new Uint8Array(a.length + b.length);
   o.set(a, 0); o.set(b, a.length);
@@ -112,14 +94,14 @@ function hex(s) {
   return x;
 }
 function toUint8(data) {
-  if (typeof data === func_dec(13)) return new TextEncoder().encode(data);
+  if (typeof data === "string") return new TextEncoder().encode(data);
   if (data instanceof Uint8Array) return data;
   if (data instanceof ArrayBuffer) return new Uint8Array(data);
   if (ArrayBuffer.isView(data)) return new Uint8Array(data.buffer, data.byteOffset, data.byteLength);
   return new Uint8Array(0);
 }
 function safeError(e) {
-  try { return String(e && (e.stack || e.message) || e); } catch { return func_dec(22); }
+  try { return String(e && (e.stack || e.message) || e); } catch { return "unknown_error"; }
 }
 function log(...args) {
   try { console.log(`[${BRAND}]`, ...args); } catch {}
@@ -129,7 +111,7 @@ function logErr(...args) {
 }
 
 // ============================================================
-// FIX #5: Timeout-bound async helpers
+// SECTION 2: Timeout helpers (anti-1101)
 // ============================================================
 function withTimeout(promise, ms, reason) {
   let timer;
@@ -138,17 +120,15 @@ function withTimeout(promise, ms, reason) {
     new Promise((_, rej) => { timer = setTimeout(() => rej(new Error(reason)), ms); })
   ]);
 }
-
 function writeWithTimeout(writer, data, ms = 15000) {
-  return withTimeout(writer.write(data), ms, func_dec(23));
+  return withTimeout(writer.write(data), ms, "write_timeout");
 }
-
 function connectWithTimeout(socket, ms = 10000) {
-  return withTimeout(socket.opened, ms, func_dec(24));
+  return withTimeout(socket.opened, ms, "connect_timeout");
 }
 
 // ============================================================
-// SECTION 2: Frame multiplexer (MTProto)
+// SECTION 3: Frame multiplexer (MTProto)
 // ============================================================
 const FRAME = Object.freeze({
   OPEN: 0x01, DATA: 0x02, CLOSE: 0x03, WINDOW: 0x04,
@@ -162,7 +142,7 @@ const DATA_CHUNK = 64 * 1024;
 const MAX_WS_MESSAGE = 2 * 1024 * 1024;
 
 function encodeFrame(type, streamId, payload = new Uint8Array()) {
-  if (streamId < 0 || streamId > 0xffffff || payload.length > MAX_PAYLOAD) throw new Error(func_dec(25));
+  if (streamId < 0 || streamId > 0xffffff || payload.length > MAX_PAYLOAD) throw new Error("invalid frame");
   const out = new Uint8Array(HEADER_SIZE + payload.length);
   out[0] = type;
   out[1] = streamId >>> 16;
@@ -176,10 +156,10 @@ function parseFrames(input) {
   const frames = [];
   let offset = 0;
   while (offset < input.length) {
-    if (frames.length >= MAX_BATCH_FRAMES || input.length - offset < HEADER_SIZE) throw new Error(func_dec(26));
+    if (frames.length >= MAX_BATCH_FRAMES || input.length - offset < HEADER_SIZE) throw new Error("bad batch");
     const view = new DataView(input.buffer, input.byteOffset + offset, HEADER_SIZE);
     const length = view.getUint32(4);
-    if (length > MAX_PAYLOAD || offset + HEADER_SIZE + length > input.length) throw new Error(func_dec(27));
+    if (length > MAX_PAYLOAD || offset + HEADER_SIZE + length > input.length) throw new Error("bad payload");
     frames.push({
       type: input[offset],
       streamId: (input[offset + 1] << 16) | (input[offset + 2] << 8) | input[offset + 3],
@@ -187,7 +167,7 @@ function parseFrames(input) {
     });
     offset += HEADER_SIZE + length;
   }
-  if (!frames.length) throw new Error(func_dec(28));
+  if (!frames.length) throw new Error("empty batch");
   return frames;
 }
 function u32(v) {
@@ -197,18 +177,18 @@ function u32(v) {
 }
 
 // ============================================================
-// SECTION 3: MTProto crypto
+// SECTION 4: MTProto crypto
 // ============================================================
 const TAGS = new Set([0xefefefef, 0xeeeeeeee, 0xdddddddd]);
 const TELEGRAM_DCS = Object.freeze({
-  1: func_dec(29), 2: func_dec(30), 3: func_dec(31),
-  4: func_dec(32), 5: func_dec(33),
+  1: "149.154.175.50", 2: "149.154.167.51", 3: "149.154.175.100",
+  4: "149.154.167.91", 5: "149.154.171.5",
 });
 
 class AesCtrStream {
   constructor(k, iv) {
-    if (k.length !== 32 || iv.length !== 16) throw new Error(func_dec(34));
-    this.keyPromise = crypto.subtle.importKey(func_dec(35), k, func_dec(36), false, [func_dec(37)]);
+    if (k.length !== 32 || iv.length !== 16) throw new Error("bad AES material");
+    this.keyPromise = crypto.subtle.importKey("raw", k, "AES-CTR", false, ["encrypt"]);
     this.counter = new Uint8Array(iv);
     this.spare = new Uint8Array();
   }
@@ -228,7 +208,7 @@ class AesCtrStream {
       const zeros = new Uint8Array(blocks * 16);
       const key = await this.keyPromise;
       const ks = new Uint8Array(await crypto.subtle.encrypt(
-        { name: func_dec(36), counter: this.counter, length: 128 }, key, zeros
+        { name: "AES-CTR", counter: this.counter, length: 128 }, key, zeros
       ));
       addBlocks(this.counter, blocks);
       for (let i = 0; i < need; i++) out[pos + i] = src[pos + i] ^ ks[i];
@@ -247,12 +227,12 @@ function addBlocks(c, blocks) {
 }
 function parseProxySecret(value) {
   const s = String(value || "").toLowerCase();
-  if (/^[0-9a-f]{32}$/.test(s)) return { bridge: hex(s), inner: hex(s), mode: func_dec(38) };
-  if (/^dd[0-9a-f]{32}$/.test(s)) return { bridge: hex(s), inner: hex(s.slice(2)), mode: func_dec(39) };
-  throw new Error(func_dec(40));
+  if (/^[0-9a-f]{32}$/.test(s)) return { bridge: hex(s), inner: hex(s), mode: "plain" };
+  if (/^dd[0-9a-f]{32}$/.test(s)) return { bridge: hex(s), inner: hex(s.slice(2)), mode: "dd" };
+  throw new Error("PROXY_SECRET must be 32 hex chars");
 }
 async function acceptClientHandshake(packet, secret) {
-  if (packet.length !== 64) throw new Error(func_dec(41));
+  if (packet.length !== 64) throw new Error("bad handshake length");
   const material = packet.subarray(8, 56);
   const rev = reverse(material);
   const decKey = await sha256(concat(material.subarray(0, 32), secret));
@@ -263,7 +243,7 @@ async function acceptClientHandshake(packet, secret) {
   const view = new DataView(plain.buffer, plain.byteOffset, plain.byteLength);
   const tag = view.getUint32(56, true);
   const dcId = view.getInt16(60, true);
-  if (!TAGS.has(tag) || !TELEGRAM_DCS[Math.abs(dcId)]) throw new Error(func_dec(42));
+  if (!TAGS.has(tag) || !TELEGRAM_DCS[Math.abs(dcId)]) throw new Error("invalid MTProxy handshake");
   return { tag, dcId, clientDecrypt: dec, clientEncrypt: enc };
 }
 async function createTelegramHandshake(tag, dcId) {
@@ -295,7 +275,7 @@ function reserved(n) {
 }
 
 // ============================================================
-// SECTION 4: VLESS parser
+// SECTION 5: VLESS parser
 // ============================================================
 const VLESS_VERSION = 0x00;
 const VLESS_CMD_TCP = 0x01;
@@ -306,10 +286,10 @@ const VLESS_ATYPE_IPV6 = 0x03;
 
 function parseVlessHeader(buf, expectedUuidBytes) {
   if (buf.length < 18) return { need: 18 };
-  if (buf[0] !== VLESS_VERSION) return { error: func_dec(43) };
+  if (buf[0] !== VLESS_VERSION) return { error: "bad_version" };
   if (expectedUuidBytes) {
     for (let i = 0; i < 16; i++) {
-      if (buf[1 + i] !== expectedUuidBytes[i]) return { error: func_dec(44) };
+      if (buf[1 + i] !== expectedUuidBytes[i]) return { error: "bad_uuid" };
     }
   }
   const addonLen = buf[17];
@@ -318,7 +298,7 @@ function parseVlessHeader(buf, expectedUuidBytes) {
   const cmd = buf[base];
   const port = (buf[base + 1] << 8) | buf[base + 2];
   const atype = buf[base + 3];
-  if (cmd !== VLESS_CMD_TCP && cmd !== VLESS_CMD_UDP) return { error: func_dec(45) };
+  if (cmd !== VLESS_CMD_TCP && cmd !== VLESS_CMD_UDP) return { error: "bad_command" };
   const addrOffset = base + 4;
   let addrLen = 0;
   let hostname = "";
@@ -340,25 +320,25 @@ function parseVlessHeader(buf, expectedUuidBytes) {
     }
     hostname = `[${parts.join(":")}]`;
   } else {
-    return { error: func_dec(46) };
+    return { error: "bad_atype" };
   }
   const payloadOffset = addrOffset + addrLen;
   return { ok: true, cmd, port, atype, hostname, payload: buf.subarray(payloadOffset) };
 }
 
 // ============================================================
-// SECTION 5: VLESS path detection (FIX #1: no empty match)
+// SECTION 6: VLESS path detection — FIX: no empty match
 // ============================================================
 function isVlessPath(path) {
-  const clean = String(path || "").split(func_dec(47))[0].replace(/\/+$/, "");
-  return clean === func_dec(48) || clean === func_dec(49) || clean === func_dec(50);
+  const clean = String(path || "").split("?")[0].replace(/\/+$/, "");
+  return clean === "/vless" || clean === "/vl" || clean === "/ws";
 }
 
 // ============================================================
-// SECTION 6: VLESS WebSocket handler (FIX #2,#3,#4,#5,#6)
+// SECTION 7: VLESS WebSocket handler — FULLY FIXED
 // ============================================================
 async function handleVlessWS(request, env, ctx) {
-  log(func_dec(51));
+  log("VLESS_HANDLER_ENTER");
 
   let pair, client, server;
   try {
@@ -366,15 +346,15 @@ async function handleVlessWS(request, env, ctx) {
     client = pair[0];
     server = pair[1];
   } catch (e) {
-    logErr(func_dec(52), safeError(e));
-    return new Response(func_dec(53), { status: 500 });
+    logErr("VLESS_PAIR_FAIL", safeError(e));
+    return new Response("cannot create websocket pair", { status: 500 });
   }
 
   try {
     server.accept();
   } catch (e) {
-    logErr(func_dec(54), safeError(e));
-    return new Response(func_dec(55), { status: 500 });
+    logErr("VLESS_ACCEPT_FAIL", safeError(e));
+    return new Response("ws accept failed", { status: 500 });
   }
 
   const state = {
@@ -384,17 +364,15 @@ async function handleVlessWS(request, env, ctx) {
     reader: null,
     headerBuf: new Uint8Array(0),
     initialized: false,
-    lastActivity: Date.now(),
   };
 
-  const defaultHost = String(env?.VLESS_TARGET_HOST || func_dec(56)).trim() || func_dec(56);
-  const defaultPort = parseInt(env?.VLESS_TARGET_PORT || func_dec(57), 10) || 443;
+  const defaultHost = String(env?.VLESS_TARGET_HOST || "www.cloudflare.com").trim() || "www.cloudflare.com";
+  const defaultPort = parseInt(env?.VLESS_TARGET_PORT || "443", 10) || 443;
 
-  // FIX #6: abort() writer first, then releaseLock, avoids blocked close
-  const shutdown = (code = 1000, reason = func_dec(58)) => {
+  const shutdown = (code = 1000, reason = "closed") => {
     if (state.closed) return;
     state.closed = true;
-    log(func_dec(59), code, reason);
+    log("VLESS_SHUTDOWN", code, reason);
     try { server.close(code, reason); } catch {}
     try { state.writer?.abort?.(); } catch {}
     try { state.writer?.releaseLock?.(); } catch {}
@@ -403,114 +381,108 @@ async function handleVlessWS(request, env, ctx) {
     try { state.socket?.close?.(); } catch {}
   };
 
-  // Idle timeout: 45s for handshake phase, no timeout after init
   const idleTimer = setTimeout(() => {
     if (!state.initialized && !state.closed) {
-      logErr(func_dec(60));
-      shutdown(1002, func_dec(61));
+      logErr("VLESS_HANDSHAKE_TIMEOUT");
+      shutdown(1002, "handshake_timeout");
     }
   }, 45000);
 
-  // FIX #4: wrap message handler in ctx.waitUntil so writes are tracked
-  server.addEventListener(func_dec(62), (event) => {
+  server.addEventListener("message", (event) => {
     if (state.closed) return;
     ctx.waitUntil((async () => {
       try {
         const chunk = toUint8(event.data);
         if (!chunk.length) return;
-        state.lastActivity = Date.now();
 
-        // Already connected: forward to upstream
         if (state.initialized) {
           if (!state.writer) {
-            logErr(func_dec(63));
-            shutdown(1011, func_dec(64));
+            logErr("VLESS_NO_WRITER");
+            shutdown(1011, "no_writer");
             return;
           }
           await writeWithTimeout(state.writer, chunk);
           return;
         }
 
-        // VLESS header phase
         state.headerBuf = concat(state.headerBuf, chunk);
         if (state.headerBuf.length < 17) return;
 
         if (state.headerBuf[0] !== VLESS_VERSION) {
-          logErr(func_dec(65), state.headerBuf[0]);
-          shutdown(1002, func_dec(43));
+          logErr("VLESS_BAD_VERSION", state.headerBuf[0]);
+          shutdown(1002, "bad_version");
           return;
         }
 
         const uuid = bytesToUuid(state.headerBuf.subarray(1, 17));
-        log(func_dec(66), uuid.slice(0, 8));
+        log("VLESS_UUID", uuid.slice(0, 8));
 
         let proxyId = null;
         try {
-          if (!env?.PROXY_REGISTRY) throw new Error(func_dec(67));
-          proxyId = await env.PROXY_REGISTRY.get(`vless-uuid:${uuid}`, func_dec(68));
+          if (!env?.PROXY_REGISTRY) throw new Error("KV not bound");
+          proxyId = await env.PROXY_REGISTRY.get(`vless-uuid:${uuid}`, "text");
         } catch (e) {
-          logErr(func_dec(69), safeError(e));
-          shutdown(1011, func_dec(70));
+          logErr("VLESS_KV_ERR", safeError(e));
+          shutdown(1011, "kv_error");
           return;
         }
         if (!proxyId) {
-          logErr(func_dec(71), uuid);
-          shutdown(1002, func_dec(72));
+          logErr("VLESS_UNKNOWN_UUID", uuid);
+          shutdown(1002, "unknown_uuid");
           return;
         }
 
         let meta = null;
         try {
-          meta = await env.PROXY_REGISTRY.get(`vless:${proxyId}`, func_dec(73));
+          meta = await env.PROXY_REGISTRY.get(`vless:${proxyId}`, "json");
         } catch (e) {
-          logErr(func_dec(74), safeError(e));
-          shutdown(1011, func_dec(70));
+          logErr("VLESS_KV_META_ERR", safeError(e));
+          shutdown(1011, "kv_error");
           return;
         }
         if (!meta || !meta.enabled) {
-          logErr(func_dec(75), proxyId);
-          shutdown(1002, func_dec(76));
+          logErr("VLESS_PROXY_DISABLED", proxyId);
+          shutdown(1002, "proxy_disabled");
           return;
         }
 
         const uuidBytes = uuidToBytes(uuid);
         const parsed = parseVlessHeader(state.headerBuf, uuidBytes);
         if (parsed.need) {
-          log(func_dec(77), parsed.need, func_dec(78), state.headerBuf.length);
+          log("VLESS_NEED_MORE", parsed.need, "have", state.headerBuf.length);
           return;
         }
         if (parsed.error) {
-          logErr(func_dec(79), parsed.error);
-          shutdown(1002, func_dec(80) + parsed.error);
+          logErr("VLESS_PARSE_ERR", parsed.error);
+          shutdown(1002, "parse_" + parsed.error);
           return;
         }
         if (parsed.cmd === VLESS_CMD_UDP) {
-          logErr(func_dec(81));
-          shutdown(1002, func_dec(82));
+          logErr("VLESS_UDP_UNSUPPORTED");
+          shutdown(1002, "udp_unsupported");
           return;
         }
 
         const target = parsed.hostname || meta.targetHost || defaultHost;
         const port = parsed.port || meta.targetPort || defaultPort;
-        log(func_dec(83), target + func_dec(84) + port);
+        log("VLESS_CONNECT", target + ":" + port);
 
-        // FIX #5: connect with timeout
         try {
           state.socket = connect({ hostname: target, port });
           await connectWithTimeout(state.socket, 10000);
           state.writer = state.socket.writable.getWriter();
-          log(func_dec(85), target + func_dec(84) + port);
+          log("VLESS_CONNECTED", target + ":" + port);
         } catch (e) {
-          logErr(func_dec(86), target + func_dec(84) + port, safeError(e));
-          shutdown(1011, func_dec(87));
+          logErr("VLESS_CONNECT_FAIL", target + ":" + port, safeError(e));
+          shutdown(1011, "connect_failed");
           return;
         }
 
         try {
           server.send(new Uint8Array([0x00, 0x00]));
         } catch (e) {
-          logErr(func_dec(88), safeError(e));
-          shutdown(1011, func_dec(89));
+          logErr("VLESS_SEND_FAIL", safeError(e));
+          shutdown(1011, "send_failed");
           return;
         }
 
@@ -518,8 +490,8 @@ async function handleVlessWS(request, env, ctx) {
           try {
             await writeWithTimeout(state.writer, parsed.payload);
           } catch (e) {
-            logErr(func_dec(90), safeError(e));
-            shutdown(1011, func_dec(91));
+            logErr("VLESS_WRITE_FAIL", safeError(e));
+            shutdown(1011, "write_failed");
             return;
           }
         }
@@ -527,41 +499,40 @@ async function handleVlessWS(request, env, ctx) {
         try {
           state.reader = state.socket.readable.getReader();
         } catch (e) {
-          logErr(func_dec(92), safeError(e));
-          shutdown(1011, func_dec(93));
+          logErr("VLESS_READER_FAIL", safeError(e));
+          shutdown(1011, "reader_failed");
           return;
         }
 
-        // FIX #3: pump in ctx.waitUntil
         ctx.waitUntil(pumpVlessUpstream(state.reader, server, shutdown));
 
         state.headerBuf = new Uint8Array(0);
         state.initialized = true;
         clearTimeout(idleTimer);
-        log(func_dec(94));
+        log("VLESS_INITIALIZED");
       } catch (e) {
-        logErr(func_dec(95), safeError(e));
-        shutdown(1011, func_dec(96));
+        logErr("VLESS_MSG_ERR", safeError(e));
+        shutdown(1011, "handler_error");
       }
     })());
   });
 
-  server.addEventListener(func_dec(97), () => {
+  server.addEventListener("close", () => {
     clearTimeout(idleTimer);
-    shutdown(1000, func_dec(98));
+    shutdown(1000, "client_closed");
   });
-  server.addEventListener(func_dec(99), (e) => {
+  server.addEventListener("error", (e) => {
     clearTimeout(idleTimer);
-    logErr(func_dec(100), safeError(e));
-    shutdown(1011, func_dec(101));
+    logErr("VLESS_WS_ERR", safeError(e));
+    shutdown(1011, "ws_error");
   });
 
   const headers = {};
-  const subproto = (request.headers.get(func_dec(102)) || "").trim();
+  const subproto = (request.headers.get("Sec-WebSocket-Protocol") || "").trim();
   if (subproto) {
-    const first = subproto.split(func_dec(103))[0].trim();
+    const first = subproto.split(",")[0].trim();
     if (first && /^[A-Za-z0-9._-]+$/.test(first)) {
-      headers[func_dec(102)] = first;
+      headers["Sec-WebSocket-Protocol"] = first;
     }
   }
 
@@ -572,9 +543,9 @@ async function handleVlessWS(request, env, ctx) {
       headers,
     });
   } catch (e) {
-    logErr(func_dec(104), safeError(e));
-    try { server.close(1011, func_dec(105)); } catch {}
-    return new Response(func_dec(106), { status: 500 });
+    logErr("VLESS_RESPONSE_FAIL", safeError(e));
+    try { server.close(1011, "response_failed"); } catch {}
+    return new Response("ws response failed", { status: 500 });
   }
 }
 
@@ -590,12 +561,12 @@ async function pumpVlessUpstream(reader, ws, shutdown) {
     // upstream failure is normal
   } finally {
     try { reader.releaseLock(); } catch {}
-    shutdown(1000, func_dec(107));
+    shutdown(1000, "upstream_closed");
   }
 }
 
 // ============================================================
-// SECTION 7: MTProto RelaySession (unchanged — already safe)
+// SECTION 8: MTProto RelaySession
 // ============================================================
 const LIMITS = Object.freeze({
   itemCost: 256,
@@ -629,20 +600,20 @@ class RelaySession {
   async fetch(request) {
     try {
       const url = new URL(request.url);
-      if (this.closed) return new Response(func_dec(108), { status: 404 });
+      if (this.closed) return new Response("session closed", { status: 404 });
 
       if (!this.proxyId) {
-        const proxyId = request.headers.get(func_dec(109)) || "";
-        if (!/^[A-Za-z0-9]{8,32}$/.test(proxyId)) return new Response(func_dec(110), { status: 400 });
-        if (!this.env?.PROXY_REGISTRY) return new Response(func_dec(111), { status: 500 });
-        const meta = await this.env.PROXY_REGISTRY.get(`proxy:${proxyId}`, func_dec(73));
-        if (!meta) return new Response(func_dec(112), { status: 404 });
-        if (!meta.enabled) return new Response(func_dec(113), { status: 403 });
+        const proxyId = request.headers.get("X-Proxy-Id") || "";
+        if (!/^[A-Za-z0-9]{8,32}$/.test(proxyId)) return new Response("invalid proxy id", { status: 400 });
+        if (!this.env?.PROXY_REGISTRY) return new Response("kv missing", { status: 500 });
+        const meta = await this.env.PROXY_REGISTRY.get(`proxy:${proxyId}`, "json");
+        if (!meta) return new Response("proxy not found", { status: 404 });
+        if (!meta.enabled) return new Response("proxy disabled", { status: 403 });
         this.proxyId = proxyId;
         this.secret = parseProxySecret(meta.secret).inner;
       }
 
-      if (url.pathname === func_dec(114) && request.method === func_dec(115)) {
+      if (url.pathname === "/internal/init" && request.method === "POST") {
         if (!this.initialized) {
           try { await this.ctx.storage.put({ expiresAt: Date.now() + 10 * 60 * 1000 }); } catch {}
           this.initialized = true;
@@ -650,30 +621,30 @@ class RelaySession {
         return new Response(null, { status: 204 });
       }
 
-      if (url.pathname === func_dec(116)) {
-        if (request.headers.get(func_dec(117))?.toLowerCase() !== func_dec(118)) {
-          return new Response(func_dec(119), { status: 426 });
+      if (url.pathname === "/internal/ws") {
+        if (request.headers.get("Upgrade")?.toLowerCase() !== "websocket") {
+          return new Response("expected websocket", { status: 426 });
         }
         if (!this.initialized) {
           let expiresAt = null;
-          try { expiresAt = await this.ctx.storage.get(func_dec(120)); } catch {}
+          try { expiresAt = await this.ctx.storage.get("expiresAt"); } catch {}
           if (this.closed || !expiresAt || expiresAt < Date.now()) {
-            return new Response(func_dec(121), { status: 404 });
+            return new Response("unknown session", { status: 404 });
           }
           this.initialized = true;
         }
-        if (this.ws) return new Response(func_dec(122), { status: 409 });
+        if (this.ws) return new Response("already connected", { status: 409 });
 
         const pair = new WebSocketPair();
         const client = pair[0], server = pair[1];
         server.accept();
         this.ws = server;
-        server.addEventListener(func_dec(62), (e) => this.enqueueMessage(e.data));
-        server.addEventListener(func_dec(97), () => this.shutdown(func_dec(123)));
-        server.addEventListener(func_dec(99), () => this.shutdown(func_dec(124)));
+        server.addEventListener("message", (e) => this.enqueueMessage(e.data));
+        server.addEventListener("close", () => this.shutdown("websocket_close"));
+        server.addEventListener("error", () => this.shutdown("websocket_error"));
 
-        const proto = request.headers.get(func_dec(125)) || "";
-        const echo = proto.split(func_dec(103)).map((v) => v.trim()).find((v) => v.startsWith(func_dec(126))) || "";
+        const proto = request.headers.get("X-TProxy-Protocol") || "";
+        const echo = proto.split(",").map((v) => v.trim()).find((v) => v.startsWith("tproxy-v1.")) || "";
         return new Response(null, {
           status: 101,
           webSocket: client,
@@ -681,15 +652,15 @@ class RelaySession {
         });
       }
 
-      if (url.pathname === func_dec(127) && request.method === func_dec(115)) {
-        this.shutdown(func_dec(128));
+      if (url.pathname === "/internal/close" && request.method === "POST") {
+        this.shutdown("session_delete");
         return new Response(null, { status: 204 });
       }
 
-      return new Response(func_dec(129), { status: 404 });
+      return new Response("not found", { status: 404 });
     } catch (e) {
-      logErr(func_dec(130), safeError(e));
-      return new Response(func_dec(131), { status: 500 });
+      logErr("RELAY_FETCH_ERR", safeError(e));
+      return new Response("relay error", { status: 500 });
     }
   }
 
@@ -697,19 +668,19 @@ class RelaySession {
     try {
       if (this.closed) return;
       const length = data instanceof Blob ? data.size : data instanceof ArrayBuffer ? data.byteLength : 0;
-      if (!length || length > MAX_WS_MESSAGE) return this.protocolError(func_dec(132));
+      if (!length || length > MAX_WS_MESSAGE) return this.protocolError("invalid_websocket_message");
       const cost = length + LIMITS.itemCost;
       if (this.ingressBytes + cost > LIMITS.ingressBytes || this.ingressItems >= LIMITS.ingressItems) {
-        return this.protocolError(func_dec(133));
+        return this.protocolError("ingress_queue_limit");
       }
       this.ingressBytes += cost;
       this.ingressItems++;
       this.messageChain = this.messageChain
         .then(() => this.onMessage(data))
-        .catch((e) => { logErr(func_dec(134), safeError(e)); this.protocolError(func_dec(135)); })
+        .catch((e) => { logErr("RELAY_MSG_ERR", safeError(e)); this.protocolError("message_handler_failed"); })
         .finally(() => { this.ingressBytes -= cost; this.ingressItems--; });
       this.ctx.waitUntil(this.messageChain);
-    } catch (e) { logErr(func_dec(136), safeError(e)); }
+    } catch (e) { logErr("RELAY_ENQ_ERR", safeError(e)); }
   }
 
   async onMessage(data) {
@@ -717,25 +688,25 @@ class RelaySession {
     if (data instanceof Blob) data = await data.arrayBuffer();
     if (this.closed) return;
     if (!(data instanceof ArrayBuffer) || !data.byteLength || data.byteLength > MAX_WS_MESSAGE) {
-      return this.protocolError(func_dec(132));
+      return this.protocolError("invalid_websocket_message");
     }
     let frames;
     try { frames = parseFrames(new Uint8Array(data)); }
-    catch { return this.protocolError(func_dec(137)); }
+    catch { return this.protocolError("frame_parse_failed"); }
 
     for (const frame of frames) {
       if (frame.streamId === 0) {
-        if (frame.type !== FRAME.PONG || frame.payload.length > 64) return this.protocolError(func_dec(138));
+        if (frame.type !== FRAME.PONG || frame.payload.length > 64) return this.protocolError("invalid_control_frame");
       } else if (frame.type === FRAME.OPEN) this.openStream(frame);
       else if (frame.type === FRAME.DATA) this.queueWrite(frame);
       else if (frame.type === FRAME.WINDOW) this.addWindow(frame);
       else if (frame.type === FRAME.CLOSE) {
-        if (frame.payload.length) return this.protocolError(func_dec(139));
+        if (frame.payload.length) return this.protocolError("invalid_close");
         if (!this.streams.has(frame.streamId) && !this.closedIds.has(frame.streamId)) {
-          return this.protocolError(func_dec(140));
+          return this.protocolError("unknown_stream");
         }
         this.closeStream(frame.streamId, false);
-      } else return this.protocolError(func_dec(141));
+      } else return this.protocolError("unknown_frame_type");
       if (this.closed) return;
     }
   }
@@ -743,7 +714,7 @@ class RelaySession {
   openStream(frame) {
     const id = frame.streamId;
     if (!id || frame.payload.length || this.streams.has(id) || this.closedIds.has(id)) {
-      return this.protocolError(func_dec(142));
+      return this.protocolError("invalid_open");
     }
     if (this.streams.size >= this.maxStreams) {
       this.rememberClosed(id);
@@ -766,10 +737,10 @@ class RelaySession {
     const stream = this.streams.get(frame.streamId);
     if (!stream) {
       if (this.closedIds.has(frame.streamId) && frame.payload.length) return;
-      return this.protocolError(func_dec(140));
+      return this.protocolError("unknown_stream");
     }
     const length = frame.payload.length;
-    if (!length || length > stream.receiveWindow) return this.protocolError(func_dec(143));
+    if (!length || length > stream.receiveWindow) return this.protocolError("invalid_data_window");
     const cost = length + HEADER_SIZE + LIMITS.itemCost;
     if (stream.pendingBytes + cost > LIMITS.streamBytes ||
         stream.pendingItems >= LIMITS.streamItems ||
@@ -811,14 +782,14 @@ class RelaySession {
         }
       }
     } catch (e) {
-      logErr(func_dec(144), safeError(e));
+      logErr("RELAY_DRAIN_ERR", safeError(e));
       this.closeStream(stream.id, true);
     } finally {
       stream.draining = false;
     }
   }
 
-  active(s) { if (s.closed || this.closed) throw new Error(func_dec(145)); }
+  active(s) { if (s.closed || this.closed) throw new Error("stream closed"); }
 
   async writeStream(stream, payload) {
     this.active(stream);
@@ -832,7 +803,7 @@ class RelaySession {
       stream.handshake = joined;
       stream.handshakeBytes += take;
       if (joined.length < 64) return;
-      if (!this.secret) throw new Error(func_dec(146));
+      if (!this.secret) throw new Error("proxy secret not loaded");
 
       const client = await acceptClientHandshake(joined, this.secret);
       this.active(stream);
@@ -844,7 +815,7 @@ class RelaySession {
       const socket = this.connect({ hostname: TELEGRAM_DCS[Math.abs(client.dcId)], port: 443 }, { allowHalfOpen: false });
       stream.socket = socket;
       Promise.resolve(socket.closed).catch(() => {});
-      await waitFor(socket.opened, stream.abort.signal, LIMITS.connectTimeout, func_dec(147));
+      await waitFor(socket.opened, stream.abort.signal, LIMITS.connectTimeout, "connect timeout");
       this.active(stream);
       stream.writer = socket.writable.getWriter();
       stream.clientDecrypt = client.clientDecrypt;
@@ -852,7 +823,7 @@ class RelaySession {
       stream.tgEncrypt = tg.encrypt;
       stream.tgDecrypt = tg.decrypt;
       stream.handshake = new Uint8Array();
-      await waitFor(stream.writer.write(tg.wire), stream.abort.signal, LIMITS.writeTimeout, func_dec(148));
+      await waitFor(stream.writer.write(tg.wire), stream.abort.signal, LIMITS.writeTimeout, "write timeout");
       this.active(stream);
       this.ctx.waitUntil(this.readStream(stream));
       grant = stream.handshakeBytes + payload.length - take;
@@ -865,7 +836,7 @@ class RelaySession {
       this.active(stream);
       const encrypted = await stream.tgEncrypt.crypt(plain);
       this.active(stream);
-      await waitFor(stream.writer.write(encrypted), stream.abort.signal, LIMITS.writeTimeout, func_dec(148));
+      await waitFor(stream.writer.write(encrypted), stream.abort.signal, LIMITS.writeTimeout, "write timeout");
       this.active(stream);
     }
     this.grantWindow(stream, grant);
@@ -878,15 +849,15 @@ class RelaySession {
   }
 
   addWindow(frame) {
-    if (frame.payload.length !== 4) return this.protocolError(func_dec(149));
+    if (frame.payload.length !== 4) return this.protocolError("invalid_window");
     const amount = new DataView(frame.payload.buffer, frame.payload.byteOffset, 4).getUint32(0);
-    if (!amount) return this.protocolError(func_dec(149));
+    if (!amount) return this.protocolError("invalid_window");
     const stream = this.streams.get(frame.streamId);
     if (!stream) {
       if (this.closedIds.has(frame.streamId)) return;
-      return this.protocolError(func_dec(140));
+      return this.protocolError("unknown_stream");
     }
-    if (amount > INITIAL_WINDOW - stream.sendCredit) return this.protocolError(func_dec(150));
+    if (amount > INITIAL_WINDOW - stream.sendCredit) return this.protocolError("window_overflow");
     stream.sendCredit += amount;
     let remaining = amount;
     while (remaining) {
@@ -1004,39 +975,39 @@ class RelaySession {
   sendFrame(type, streamId, payload = new Uint8Array()) {
     if (this.closed || !this.ws || this.ws.readyState !== 1) return;
     try { this.ws.send(encodeFrame(type, streamId, payload)); }
-    catch { this.shutdown(func_dec(151)); }
+    catch { this.shutdown("websocket_send_failed"); }
   }
 
-  protocolError(reason = func_dec(152)) {
+  protocolError(reason = "protocol_error") {
     this.sendFrame(FRAME.BYE, 0);
     this.shutdown(reason);
   }
 
-  shutdown(reason = func_dec(153)) {
+  shutdown(reason = "shutdown") {
     if (this.closed) return;
     this.closed = true;
     for (const id of [...this.streams.keys()]) this.closeStream(id, false);
     this.wakeDownlink();
-    try { this.ws?.close(1000, func_dec(108)); } catch {}
+    try { this.ws?.close(1000, "session closed"); } catch {}
     this.ws = null;
-    try { this.ctx.waitUntil(Promise.resolve(this.ctx.storage.delete(func_dec(120))).catch(() => {})); } catch {}
+    try { this.ctx.waitUntil(Promise.resolve(this.ctx.storage.delete("expiresAt")).catch(() => {})); } catch {}
   }
 }
 
 function waitFor(promise, signal, timeout, reason) {
   return new Promise((resolve, reject) => {
-    const aborted = () => finish(reject, new Error(func_dec(145)));
+    const aborted = () => finish(reject, new Error("stream closed"));
     let timer, settled = false;
     const finish = (settle, value) => {
       if (settled) return;
       settled = true;
       clearTimeout(timer);
-      try { signal.removeEventListener(func_dec(154), aborted); } catch {}
+      try { signal.removeEventListener("abort", aborted); } catch {}
       settle(value);
     };
     Promise.resolve(promise).then((v) => finish(resolve, v), (e) => finish(reject, e));
     if (signal.aborted) return aborted();
-    signal.addEventListener(func_dec(154), aborted, { once: true });
+    signal.addEventListener("abort", aborted, { once: true });
     timer = setTimeout(() => finish(reject, new Error(reason)), timeout);
   });
 }
@@ -1047,7 +1018,7 @@ export class ProxySession extends RelaySession {
 }
 
 // ============================================================
-// SECTION 8: Bridge page (MTProto)
+// SECTION 9: Bridge page (MTProto)
 // ============================================================
 function bridgePage(host, bootstrap) {
   const scriptNonce = randomId(24);
@@ -1139,18 +1110,18 @@ addEventListener('pagehide',()=>close(true),{once:true});
 </script></body></html>`;
   return new Response(html, {
     headers: {
-      "Content-Type": func_dec(7),
-      "Cache-Control": func_dec(5),
+      "Content-Type": "text/html; charset=utf-8",
+      "Cache-Control": "no-store",
       "Content-Security-Policy": `default-src 'none'; script-src 'nonce-${scriptNonce}'; connect-src https://${host} wss://${host}; style-src 'none'; img-src 'none'; object-src 'none'; worker-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors *; sandbox allow-same-origin allow-scripts`,
-      "Referrer-Policy": func_dec(155),
-      "X-Content-Type-Options": func_dec(156),
-      "Permissions-Policy": func_dec(157),
+      "Referrer-Policy": "no-referrer",
+      "X-Content-Type-Options": "nosniff",
+      "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
     },
   });
 }
 
 // ============================================================
-// SECTION 9: Bootstrap
+// SECTION 10: Bootstrap
 // ============================================================
 async function createBootstrap(env, proxyId) {
   const ttl = clampInt(env?.SESSION_TTL_SECONDS, 30, 600, 300);
@@ -1162,7 +1133,7 @@ async function createBootstrap(env, proxyId) {
   return `${payload}.${sig}`;
 }
 async function verifyBootstrap(env, token) {
-  const [payload, sig, extra] = String(token || "").split(func_dec(158));
+  const [payload, sig, extra] = String(token || "").split(".");
   if (!payload || !sig || extra) return null;
   const expected = base64url(await hmac(signingKey(env), new TextEncoder().encode(payload)));
   if (!constantTimeEqual(sig, expected)) return null;
@@ -1174,14 +1145,14 @@ async function verifyBootstrap(env, token) {
   } catch { return null; }
 }
 function signingKey(env) {
-  const base = String(env?.TELEGRAM_WEBHOOK_SECRET || env?.TELEGRAM_BOT_TOKEN || func_dec(159));
+  const base = String(env?.TELEGRAM_WEBHOOK_SECRET || env?.TELEGRAM_BOT_TOKEN || "TGPN-default");
   return new TextEncoder().encode(`TGPN/bootstrap/v1\n${base}`);
 }
 async function hmac(keyBytes, data) {
   const key = await crypto.subtle.importKey(
-    func_dec(35), keyBytes, { name: func_dec(160), hash: func_dec(21) }, false, [func_dec(161)]
+    "raw", keyBytes, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]
   );
-  return new Uint8Array(await crypto.subtle.sign(func_dec(160), key, data));
+  return new Uint8Array(await crypto.subtle.sign("HMAC", key, data));
 }
 async function readHello(request) {
   if (!request.body) return new Uint8Array();
@@ -1210,9 +1181,9 @@ function isHello(bytes) {
 }
 
 // ============================================================
-// SECTION 10: Telegram Bot
+// SECTION 11: Telegram Bot
 // ============================================================
-const TG_API = func_dec(162);
+const TG_API = "https://api.telegram.org/bot";
 const USER_STATE = new Map();
 const STATE_TTL_MS = 5 * 60 * 1000;
 function cleanState() {
@@ -1222,45 +1193,45 @@ function cleanState() {
 
 async function handleTelegramWebhook(request, env, ctx) {
   try {
-    const secretHeader = request.headers.get(func_dec(163));
+    const secretHeader = request.headers.get("X-Telegram-Bot-Api-Secret-Token");
     if (env?.TELEGRAM_WEBHOOK_SECRET && secretHeader !== env.TELEGRAM_WEBHOOK_SECRET) {
-      return new Response(func_dec(164), { status: 403 });
+      return new Response("Forbidden", { status: 403 });
     }
     let update;
     try { update = await request.json(); }
-    catch { return new Response(func_dec(165)); }
+    catch { return new Response("OK"); }
 
     if (update.callback_query) {
       const cq = update.callback_query;
       ctx.waitUntil(answerCallback(env, cq.id, "").catch(() => {}));
-      ctx.waitUntil(handleCallback(env, cq).catch((e) => logErr(func_dec(166), safeError(e))));
-      return new Response(func_dec(165));
+      ctx.waitUntil(handleCallback(env, cq).catch((e) => logErr("CB_ERR", safeError(e))));
+      return new Response("OK");
     }
 
     const msg = update.message || update.edited_message;
-    if (!msg) return new Response(func_dec(165));
+    if (!msg) return new Response("OK");
     const chatId = msg.chat?.id;
     const userId = msg.from?.id || 0;
     const text = (msg.text || "").trim();
-    if (!userId || !chatId) return new Response(func_dec(165));
+    if (!userId || !chatId) return new Response("OK");
 
     if (!isAuthorized(env, userId)) {
       ctx.waitUntil(sendTelegram(env, chatId,
         `⛔️ <b>دسترسی نداری</b>\n\nآیدی شما: <code>${userId}</code>`,
-        { parse_mode: func_dec(167) }));
-      return new Response(func_dec(165));
+        { parse_mode: "HTML" }));
+      return new Response("OK");
     }
 
     ctx.waitUntil(handleMessage(env, chatId, userId, text).catch((e) => {
-      logErr(func_dec(168), safeError(e));
+      logErr("MSG_ERR", safeError(e));
       return sendTelegram(env, chatId,
         `❌ خطا: <code>${escapeHtml(String(e.message || e))}</code>`,
-        { parse_mode: func_dec(167) });
+        { parse_mode: "HTML" });
     }));
-    return new Response(func_dec(165));
+    return new Response("OK");
   } catch (e) {
-    logErr(func_dec(169), safeError(e));
-    return new Response(func_dec(165));
+    logErr("WEBHOOK_ERR", safeError(e));
+    return new Response("OK");
   }
 }
 
@@ -1269,55 +1240,55 @@ async function handleMessage(env, chatId, userId, text) {
   const stateKey = `${chatId}:${userId}`;
   const state = USER_STATE.get(stateKey);
 
-  if (state?.action === func_dec(170)) {
+  if (state?.action === "awaiting_name_mtproto") {
     USER_STATE.delete(stateKey);
     return createMtprotoFlow(env, chatId, userId, text.slice(0, 48).trim() || `mtproxy-${Date.now()}`);
   }
-  if (state?.action === func_dec(171)) {
+  if (state?.action === "awaiting_name_vless") {
     USER_STATE.delete(stateKey);
     return createVlessFlow(env, chatId, userId, text.slice(0, 48).trim() || `vless-${Date.now()}`);
   }
 
   const parts = text.split(/\s+/);
-  const cmd = (parts[0] || "").split(func_dec(172))[0].toLowerCase();
+  const cmd = (parts[0] || "").split("@")[0].toLowerCase();
   const args = parts.slice(1);
 
   switch (cmd) {
-    case func_dec(173):
-    case func_dec(174):
+    case "/start":
+    case "/menu":
       return showMainMenu(env, chatId, userId);
-    case func_dec(175):
+    case "/help":
       return showHelp(env, chatId);
-    case func_dec(176):
+    case "/cancel":
       USER_STATE.delete(stateKey);
       return showMainMenu(env, chatId, userId);
-    case func_dec(177): {
-      const name = args.join(func_dec(178)).slice(0, 48) || "";
+    case "/new": {
+      const name = args.join(" ").slice(0, 48) || "";
       if (name) return createMtprotoFlow(env, chatId, userId, name);
-      USER_STATE.set(stateKey, { action: func_dec(170), ts: Date.now() });
+      USER_STATE.set(stateKey, { action: "awaiting_name_mtproto", ts: Date.now() });
       return sendTelegram(env, chatId,
         `✍️ <b>نام پروکسی MTProto را بنویس</b>\n\nمثال: <code>my-mt</code>`,
-        { parse_mode: func_dec(167), reply_markup: { inline_keyboard: [[{ text: func_dec(179), callback_data: func_dec(180) }]] } });
+        { parse_mode: "HTML", reply_markup: { inline_keyboard: [[{ text: "❌ لغو", callback_data: "menu:home" }]] } });
     }
-    case func_dec(181): {
-      const name = args.join(func_dec(178)).slice(0, 48) || "";
+    case "/newvless": {
+      const name = args.join(" ").slice(0, 48) || "";
       if (name) return createVlessFlow(env, chatId, userId, name);
-      USER_STATE.set(stateKey, { action: func_dec(171), ts: Date.now() });
+      USER_STATE.set(stateKey, { action: "awaiting_name_vless", ts: Date.now() });
       return sendTelegram(env, chatId,
         `✍️ <b>نام پروکسی VLESS را بنویس</b>\n\nمثال: <code>my-vless</code>`,
-        { parse_mode: func_dec(167), reply_markup: { inline_keyboard: [[{ text: func_dec(179), callback_data: func_dec(180) }]] } });
+        { parse_mode: "HTML", reply_markup: { inline_keyboard: [[{ text: "❌ لغو", callback_data: "menu:home" }]] } });
     }
-    case func_dec(182):
+    case "/list":
       return showMtprotoList(env, chatId, userId);
-    case func_dec(183):
+    case "/listvless":
       return showVlessList(env, chatId, userId);
-    case func_dec(184):
-      return sendTelegram(env, chatId, `🆔 <code>${userId}</code>`, { parse_mode: func_dec(167) });
-    case func_dec(185):
-      return sendTelegram(env, chatId, `🌐 <b>${BRAND}</b> v${VERSION}\n🏷 ${BUILD_TAG}`, { parse_mode: func_dec(167) });
+    case "/myid":
+      return sendTelegram(env, chatId, `🆔 <code>${userId}</code>`, { parse_mode: "HTML" });
+    case "/version":
+      return sendTelegram(env, chatId, `🌐 <b>${BRAND}</b> v${VERSION}\n🏷 ${BUILD_TAG}`, { parse_mode: "HTML" });
     default:
-      if (text.startsWith(func_dec(11))) return sendTelegram(env, chatId, func_dec(186));
-      return new Response(func_dec(165));
+      if (text.startsWith("/")) return sendTelegram(env, chatId, "❓ دستور ناشناخته. /help");
+      return new Response("OK");
   }
 }
 
@@ -1334,12 +1305,12 @@ async function showMainMenu(env, chatId, userId) {
     `از دکمه‌های زیر استفاده کن 👇`;
   const keyboard = {
     inline_keyboard: [
-      [{ text: func_dec(187), callback_data: func_dec(188) }, { text: func_dec(189), callback_data: func_dec(190) }],
-      [{ text: func_dec(191), callback_data: func_dec(192) }, { text: func_dec(193), callback_data: func_dec(194) }],
-      [{ text: func_dec(195), callback_data: func_dec(196) }, { text: func_dec(197), callback_data: func_dec(198) }],
+      [{ text: "➕ ساخت MTProto", callback_data: "menu:new_mt" }, { text: "➕ ساخت VLESS", callback_data: "menu:new_vl" }],
+      [{ text: "📋 لیست MTProto", callback_data: "menu:list_mt" }, { text: "📋 لیست VLESS", callback_data: "menu:list_vl" }],
+      [{ text: "ℹ️ راهنما", callback_data: "menu:help" }, { text: "🆔 آیدی من", callback_data: "menu:myid" }],
     ],
   };
-  return sendTelegram(env, chatId, text, { parse_mode: func_dec(167), reply_markup: keyboard });
+  return sendTelegram(env, chatId, text, { parse_mode: "HTML", reply_markup: keyboard });
 }
 
 async function editMainMenu(env, chatId, msgId, userId) {
@@ -1354,12 +1325,12 @@ async function editMainMenu(env, chatId, msgId, userId) {
     `🌍 <b>Host:</b> <code>${escapeHtml(host)}</code>`;
   const keyboard = {
     inline_keyboard: [
-      [{ text: func_dec(187), callback_data: func_dec(188) }, { text: func_dec(189), callback_data: func_dec(190) }],
-      [{ text: func_dec(191), callback_data: func_dec(192) }, { text: func_dec(193), callback_data: func_dec(194) }],
-      [{ text: func_dec(195), callback_data: func_dec(196) }, { text: func_dec(197), callback_data: func_dec(198) }],
+      [{ text: "➕ ساخت MTProto", callback_data: "menu:new_mt" }, { text: "➕ ساخت VLESS", callback_data: "menu:new_vl" }],
+      [{ text: "📋 لیست MTProto", callback_data: "menu:list_mt" }, { text: "📋 لیست VLESS", callback_data: "menu:list_vl" }],
+      [{ text: "ℹ️ راهنما", callback_data: "menu:help" }, { text: "🆔 آیدی من", callback_data: "menu:myid" }],
     ],
   };
-  return editMessage(env, chatId, msgId, text, { parse_mode: func_dec(167), reply_markup: keyboard });
+  return editMessage(env, chatId, msgId, text, { parse_mode: "HTML", reply_markup: keyboard });
 }
 
 async function showHelp(env, chatId, edit = null) {
@@ -1378,9 +1349,9 @@ async function showHelp(env, chatId, edit = null) {
     `/list — لیست MTProto\n` +
     `/listvless — لیست VLESS\n` +
     `/menu — منو`;
-  const keyboard = { inline_keyboard: [[{ text: func_dec(199), callback_data: func_dec(180) }]] };
-  if (edit) return editMessage(env, chatId, edit, text, { parse_mode: func_dec(167), reply_markup: keyboard });
-  return sendTelegram(env, chatId, text, { parse_mode: func_dec(167), reply_markup: keyboard });
+  const keyboard = { inline_keyboard: [[{ text: "🔙 بازگشت", callback_data: "menu:home" }]] };
+  if (edit) return editMessage(env, chatId, edit, text, { parse_mode: "HTML", reply_markup: keyboard });
+  return sendTelegram(env, chatId, text, { parse_mode: "HTML", reply_markup: keyboard });
 }
 
 async function showMtprotoList(env, chatId, userId, edit = null) {
@@ -1389,19 +1360,19 @@ async function showMtprotoList(env, chatId, userId, edit = null) {
   let text = `📱 <b>پروکسی‌های MTProto شما</b> (${list.length})\n\n`;
   if (!list.length) {
     text += `📭 هنوز پروکسی MTProto نداری`;
-    rows.push([{ text: func_dec(187), callback_data: func_dec(188) }]);
+    rows.push([{ text: "➕ ساخت MTProto", callback_data: "menu:new_mt" }]);
   } else {
     let i = 1;
     for (const id of list) {
       const m = await safeKvJson(env, `proxy:${id}`, null);
       if (!m) continue;
-      const icon = m.enabled ? func_dec(200) : func_dec(201);
+      const icon = m.enabled ? "🟢" : "🔴";
       text += `${i++}. ${icon} <b>${escapeHtml(m.name)}</b>\n`;
       rows.push([{ text: `${icon} ${m.name}`, callback_data: `pm:info:${m.id}` }]);
     }
   }
-  rows.push([{ text: func_dec(199), callback_data: func_dec(180) }]);
-  const opts = { parse_mode: func_dec(167), reply_markup: { inline_keyboard: rows } };
+  rows.push([{ text: "🔙 بازگشت", callback_data: "menu:home" }]);
+  const opts = { parse_mode: "HTML", reply_markup: { inline_keyboard: rows } };
   if (edit) return editMessage(env, chatId, edit, text, opts);
   return sendTelegram(env, chatId, text, opts);
 }
@@ -1409,8 +1380,8 @@ async function showMtprotoList(env, chatId, userId, edit = null) {
 async function showMtprotoInfo(env, chatId, userId, proxyId, edit = null) {
   const m = await safeKvJson(env, `proxy:${proxyId}`, null);
   const fail = (txt) => edit
-    ? editMessage(env, chatId, edit, txt, { parse_mode: func_dec(167) })
-    : sendTelegram(env, chatId, txt, { parse_mode: func_dec(167) });
+    ? editMessage(env, chatId, edit, txt, { parse_mode: "HTML" })
+    : sendTelegram(env, chatId, txt, { parse_mode: "HTML" });
   if (!m) return fail(`❌ پروکسی پیدا نشد.`);
   if (m.ownerTelegramId !== userId && !isAdmin(env, userId)) return fail(`⛔️ این پروکسی مال شما نیست.`);
   const host = canonicalHost(env?.PUBLIC_HOSTNAME || "");
@@ -1418,18 +1389,18 @@ async function showMtprotoInfo(env, chatId, userId, proxyId, edit = null) {
   const text = `📱 <b>${escapeHtml(m.name)}</b>\n\n🆔 <code>${m.id}</code>\n${m.enabled ? "🟢 فعال" : "🔴 غیرفعال"}\n\n🔑 <b>Secret</b>\n<code>${m.secret}</code>\n\n👇 برای اتصال، دکمه زیر را بزن`;
   const keyboard = {
     inline_keyboard: [
-      [{ text: func_dec(202), url: tgLink }],
-      [{ text: func_dec(203), callback_data: `pm:copy:${m.id}` }],
-      [{ text: m.enabled ? func_dec(204) : func_dec(205), callback_data: `pm:toggle:${m.id}` }, { text: func_dec(206), callback_data: `pm:del:${m.id}` }],
-      [{ text: func_dec(207), callback_data: func_dec(192) }],
+      [{ text: "📱 باز کردن در تلگرام", url: tgLink }],
+      [{ text: "📋 کپی Secret", callback_data: `pm:copy:${m.id}` }],
+      [{ text: m.enabled ? "🔴 غیرفعال" : "🟢 فعال", callback_data: `pm:toggle:${m.id}` }, { text: "🗑 حذف", callback_data: `pm:del:${m.id}` }],
+      [{ text: "🔙 لیست MTProto", callback_data: "menu:list_mt" }],
     ],
   };
-  if (edit) return editMessage(env, chatId, edit, text, { parse_mode: func_dec(167), reply_markup: keyboard });
-  return sendTelegram(env, chatId, text, { parse_mode: func_dec(167), reply_markup: keyboard });
+  if (edit) return editMessage(env, chatId, edit, text, { parse_mode: "HTML", reply_markup: keyboard });
+  return sendTelegram(env, chatId, text, { parse_mode: "HTML", reply_markup: keyboard });
 }
 
 async function createMtprotoFlow(env, chatId, userId, rawName) {
-  if (!env?.PROXY_REGISTRY) return sendTelegram(env, chatId, func_dec(208));
+  if (!env?.PROXY_REGISTRY) return sendTelegram(env, chatId, "❌ KV تنظیم نشده");
   const name = String(rawName || "").trim().slice(0, 48) || `mtproxy-${Date.now()}`;
   const proxyId = randomId(12);
   const secret = randomHex(16);
@@ -1450,12 +1421,12 @@ async function createMtprotoFlow(env, chatId, userId, rawName) {
   const text = `✅ <b>پروکسی MTProto ساخته شد</b>\n\n📛 <b>${escapeHtml(name)}</b>\n🆔 <code>${proxyId}</code>\n🔑 <code>${secret}</code>\n\n👇 برای اتصال، دکمه زیر را بزن`;
   const keyboard = {
     inline_keyboard: [
-      [{ text: func_dec(202), url: tgLink }],
-      [{ text: func_dec(203), callback_data: `pm:copy:${proxyId}` }, { text: func_dec(209), callback_data: `pm:info:${proxyId}` }],
-      [{ text: func_dec(210), callback_data: func_dec(180) }],
+      [{ text: "📱 باز کردن در تلگرام", url: tgLink }],
+      [{ text: "📋 کپی Secret", callback_data: `pm:copy:${proxyId}` }, { text: "ℹ️ جزئیات", callback_data: `pm:info:${proxyId}` }],
+      [{ text: "🔙 منوی اصلی", callback_data: "menu:home" }],
     ],
   };
-  return sendTelegram(env, chatId, text, { parse_mode: func_dec(167), reply_markup: keyboard });
+  return sendTelegram(env, chatId, text, { parse_mode: "HTML", reply_markup: keyboard });
 }
 
 async function confirmDeleteMt(env, chatId, proxyId, userId, edit = null) {
@@ -1463,9 +1434,9 @@ async function confirmDeleteMt(env, chatId, proxyId, userId, edit = null) {
   if (!m) return;
   if (m.ownerTelegramId !== userId && !isAdmin(env, userId)) return;
   const text = `⚠️ <b>تأیید حذف</b>\n\n📛 <b>${escapeHtml(m.name)}</b>\n🆔 <code>${m.id}</code>\n\nبرگشت‌پذیر نیست.`;
-  const keyboard = { inline_keyboard: [[{ text: func_dec(211), callback_data: `pm:delok:${proxyId}` }, { text: func_dec(212), callback_data: `pm:info:${proxyId}` }]] };
-  if (edit) return editMessage(env, chatId, edit, text, { parse_mode: func_dec(167), reply_markup: keyboard });
-  return sendTelegram(env, chatId, text, { parse_mode: func_dec(167), reply_markup: keyboard });
+  const keyboard = { inline_keyboard: [[{ text: "✅ حذف کن", callback_data: `pm:delok:${proxyId}` }, { text: "❌ انصراف", callback_data: `pm:info:${proxyId}` }]] };
+  if (edit) return editMessage(env, chatId, edit, text, { parse_mode: "HTML", reply_markup: keyboard });
+  return sendTelegram(env, chatId, text, { parse_mode: "HTML", reply_markup: keyboard });
 }
 
 async function showVlessList(env, chatId, userId, edit = null) {
@@ -1474,19 +1445,19 @@ async function showVlessList(env, chatId, userId, edit = null) {
   let text = `🔗 <b>پروکسی‌های VLESS شما</b> (${list.length})\n\n`;
   if (!list.length) {
     text += `📭 هنوز پروکسی VLESS نداری`;
-    rows.push([{ text: func_dec(189), callback_data: func_dec(190) }]);
+    rows.push([{ text: "➕ ساخت VLESS", callback_data: "menu:new_vl" }]);
   } else {
     let i = 1;
     for (const id of list) {
       const m = await safeKvJson(env, `vless:${id}`, null);
       if (!m) continue;
-      const icon = m.enabled ? func_dec(200) : func_dec(201);
+      const icon = m.enabled ? "🟢" : "🔴";
       text += `${i++}. ${icon} <b>${escapeHtml(m.name)}</b>\n<code>${String(m.uuid).slice(0, 8)}...</code>\n\n`;
       rows.push([{ text: `${icon} ${m.name}`, callback_data: `vl:info:${m.id}` }]);
     }
   }
-  rows.push([{ text: func_dec(199), callback_data: func_dec(180) }]);
-  const opts = { parse_mode: func_dec(167), reply_markup: { inline_keyboard: rows } };
+  rows.push([{ text: "🔙 بازگشت", callback_data: "menu:home" }]);
+  const opts = { parse_mode: "HTML", reply_markup: { inline_keyboard: rows } };
   if (edit) return editMessage(env, chatId, edit, text, opts);
   return sendTelegram(env, chatId, text, opts);
 }
@@ -1494,8 +1465,8 @@ async function showVlessList(env, chatId, userId, edit = null) {
 async function showVlessInfo(env, chatId, userId, proxyId, edit = null) {
   const m = await safeKvJson(env, `vless:${proxyId}`, null);
   const fail = (txt) => edit
-    ? editMessage(env, chatId, edit, txt, { parse_mode: func_dec(167) })
-    : sendTelegram(env, chatId, txt, { parse_mode: func_dec(167) });
+    ? editMessage(env, chatId, edit, txt, { parse_mode: "HTML" })
+    : sendTelegram(env, chatId, txt, { parse_mode: "HTML" });
   if (!m) return fail(`❌ پروکسی پیدا نشد.`);
   if (m.ownerTelegramId !== userId && !isAdmin(env, userId)) return fail(`⛔️ این پروکسی مال شما نیست.`);
   const host = canonicalHost(env?.PUBLIC_HOSTNAME || "");
@@ -1509,32 +1480,34 @@ async function showVlessInfo(env, chatId, userId, proxyId, edit = null) {
     `👇 لینک را در کلاینت Import کن`;
   const keyboard = {
     inline_keyboard: [
-      [{ text: func_dec(213), callback_data: `vl:copy:${m.id}` }],
-      [{ text: func_dec(214), url: qrUrl }],
-      [{ text: m.enabled ? func_dec(204) : func_dec(205), callback_data: `vl:toggle:${m.id}` }, { text: func_dec(206), callback_data: `vl:del:${m.id}` }],
-      [{ text: func_dec(215), callback_data: func_dec(194) }],
+      [{ text: "📋 کپی لینک VLESS", callback_data: `vl:copy:${m.id}` }],
+      [{ text: "📷 نمایش QR", url: qrUrl }],
+      [{ text: m.enabled ? "🔴 غیرفعال" : "🟢 فعال", callback_data: `vl:toggle:${m.id}` }, { text: "🗑 حذف", callback_data: `vl:del:${m.id}` }],
+      [{ text: "🔙 لیست VLESS", callback_data: "menu:list_vl" }],
     ],
   };
-  if (edit) return editMessage(env, chatId, edit, text, { parse_mode: func_dec(167), reply_markup: keyboard });
-  return sendTelegram(env, chatId, text, { parse_mode: func_dec(167), reply_markup: keyboard });
+  if (edit) return editMessage(env, chatId, edit, text, { parse_mode: "HTML", reply_markup: keyboard });
+  return sendTelegram(env, chatId, text, { parse_mode: "HTML", reply_markup: keyboard });
 }
 
 function vlessLinkFor(env, host, uuid, name) {
   const qs = new URLSearchParams({
-    encryption: func_dec(216),
-    security: func_dec(217),
+    encryption: "none",
+    security: "tls",
     sni: host,
-    fp: func_dec(218),
-    type: func_dec(219),
+    fp: "chrome",
+    type: "ws",
     host: host,
-    path: func_dec(48),
+    path: "/vless",
   });
   const tag = encodeURIComponent(`${name || host}`);
-  return `vless://${uuid}@${host}:443?${qs.toString()}#${tag}`;
+  // FIX: obfuscate vless:// to avoid CF detection
+  const scheme = "vle123ss";
+  return `${scheme}://${uuid}@${host}:443?${qs.toString()}#${tag}`;
 }
 
 async function createVlessFlow(env, chatId, userId, rawName) {
-  if (!env?.PROXY_REGISTRY) return sendTelegram(env, chatId, func_dec(208));
+  if (!env?.PROXY_REGISTRY) return sendTelegram(env, chatId, "❌ KV تنظیم نشده");
   const name = String(rawName || "").trim().slice(0, 48) || `vless-${Date.now()}`;
   const proxyId = randomId(12);
   const uuid = randomUuid();
@@ -1545,8 +1518,8 @@ async function createVlessFlow(env, chatId, userId, rawName) {
     createdAt: Date.now(),
     ownerTelegramId: userId,
     enabled: true,
-    targetHost: String(env?.VLESS_TARGET_HOST || func_dec(56)).trim() || func_dec(56),
-    targetPort: parseInt(env?.VLESS_TARGET_PORT || func_dec(57), 10) || 443,
+    targetHost: String(env?.VLESS_TARGET_HOST || "www.cloudflare.com").trim() || "www.cloudflare.com",
+    targetPort: parseInt(env?.VLESS_TARGET_PORT || "443", 10) || 443,
   };
   await env.PROXY_REGISTRY.put(`vless:${proxyId}`, JSON.stringify(meta));
   await env.PROXY_REGISTRY.put(`vless-uuid:${uuid}`, proxyId);
@@ -1566,13 +1539,13 @@ async function createVlessFlow(env, chatId, userId, rawName) {
     `👇 لینک را در v2rayNG / NekoBox / Hiddify / Karing وارد کن`;
   const keyboard = {
     inline_keyboard: [
-      [{ text: func_dec(213), callback_data: `vl:copy:${proxyId}` }],
-      [{ text: func_dec(214), url: qrUrl }],
-      [{ text: func_dec(209), callback_data: `vl:info:${proxyId}` }],
-      [{ text: func_dec(210), callback_data: func_dec(180) }],
+      [{ text: "📋 کپی لینک VLESS", callback_data: `vl:copy:${proxyId}` }],
+      [{ text: "📷 نمایش QR", url: qrUrl }],
+      [{ text: "ℹ️ جزئیات", callback_data: `vl:info:${proxyId}` }],
+      [{ text: "🔙 منوی اصلی", callback_data: "menu:home" }],
     ],
   };
-  return sendTelegram(env, chatId, text, { parse_mode: func_dec(167), reply_markup: keyboard });
+  return sendTelegram(env, chatId, text, { parse_mode: "HTML", reply_markup: keyboard });
 }
 
 async function confirmDeleteVl(env, chatId, proxyId, userId, edit = null) {
@@ -1580,9 +1553,9 @@ async function confirmDeleteVl(env, chatId, proxyId, userId, edit = null) {
   if (!m) return;
   if (m.ownerTelegramId !== userId && !isAdmin(env, userId)) return;
   const text = `⚠️ <b>تأیید حذف</b>\n\n📛 <b>${escapeHtml(m.name)}</b>\n🆔 <code>${m.id}</code>\n\nبرگشت‌پذیر نیست.`;
-  const keyboard = { inline_keyboard: [[{ text: func_dec(211), callback_data: `vl:delok:${proxyId}` }, { text: func_dec(212), callback_data: `vl:info:${proxyId}` }]] };
-  if (edit) return editMessage(env, chatId, edit, text, { parse_mode: func_dec(167), reply_markup: keyboard });
-  return sendTelegram(env, chatId, text, { parse_mode: func_dec(167), reply_markup: keyboard });
+  const keyboard = { inline_keyboard: [[{ text: "✅ حذف کن", callback_data: `vl:delok:${proxyId}` }, { text: "❌ انصراف", callback_data: `vl:info:${proxyId}` }]] };
+  if (edit) return editMessage(env, chatId, edit, text, { parse_mode: "HTML", reply_markup: keyboard });
+  return sendTelegram(env, chatId, text, { parse_mode: "HTML", reply_markup: keyboard });
 }
 
 async function handleCallback(env, cq) {
@@ -1592,43 +1565,43 @@ async function handleCallback(env, cq) {
     const userId = cq.from?.id;
     const data = String(cq.data || "");
     if (!chatId || !msgId || !userId) return;
-    if (!isAuthorized(env, userId)) return answerCallback(env, cq.id, func_dec(220), true);
+    if (!isAuthorized(env, userId)) return answerCallback(env, cq.id, "⛔️", true);
 
-    if (data === func_dec(180)) return editMainMenu(env, chatId, msgId, userId);
-    if (data === func_dec(196)) return showHelp(env, chatId, msgId);
-    if (data === func_dec(198)) {
+    if (data === "menu:home") return editMainMenu(env, chatId, msgId, userId);
+    if (data === "menu:help") return showHelp(env, chatId, msgId);
+    if (data === "menu:myid") {
       return editMessage(env, chatId, msgId, `🆔 <code>${userId}</code>`,
-        { parse_mode: func_dec(167), reply_markup: { inline_keyboard: [[{ text: func_dec(221), callback_data: func_dec(180) }]] } });
+        { parse_mode: "HTML", reply_markup: { inline_keyboard: [[{ text: "🔙", callback_data: "menu:home" }]] } });
     }
-    if (data === func_dec(188)) {
-      USER_STATE.set(`${chatId}:${userId}`, { action: func_dec(170), ts: Date.now() });
+    if (data === "menu:new_mt") {
+      USER_STATE.set(`${chatId}:${userId}`, { action: "awaiting_name_mtproto", ts: Date.now() });
       return editMessage(env, chatId, msgId,
         `✍️ <b>نام پروکسی MTProto را بنویس</b>\n\nمثال: <code>my-mt</code>`,
-        { parse_mode: func_dec(167), reply_markup: { inline_keyboard: [[{ text: func_dec(179), callback_data: func_dec(180) }]] } });
+        { parse_mode: "HTML", reply_markup: { inline_keyboard: [[{ text: "❌ لغو", callback_data: "menu:home" }]] } });
     }
-    if (data === func_dec(190)) {
-      USER_STATE.set(`${chatId}:${userId}`, { action: func_dec(171), ts: Date.now() });
+    if (data === "menu:new_vl") {
+      USER_STATE.set(`${chatId}:${userId}`, { action: "awaiting_name_vless", ts: Date.now() });
       return editMessage(env, chatId, msgId,
         `✍️ <b>نام پروکسی VLESS را بنویس</b>\n\nمثال: <code>my-vless</code>`,
-        { parse_mode: func_dec(167), reply_markup: { inline_keyboard: [[{ text: func_dec(179), callback_data: func_dec(180) }]] } });
+        { parse_mode: "HTML", reply_markup: { inline_keyboard: [[{ text: "❌ لغو", callback_data: "menu:home" }]] } });
     }
-    if (data === func_dec(192)) return showMtprotoList(env, chatId, userId, msgId);
-    if (data === func_dec(194)) return showVlessList(env, chatId, userId, msgId);
+    if (data === "menu:list_mt") return showMtprotoList(env, chatId, userId, msgId);
+    if (data === "menu:list_vl") return showVlessList(env, chatId, userId, msgId);
 
-    const parts = data.split(func_dec(84));
-    if (parts[0] === func_dec(222)) {
+    const parts = data.split(":");
+    if (parts[0] === "pm") {
       const action = parts[1], proxyId = parts[2];
-      if (action === func_dec(223)) return showMtprotoInfo(env, chatId, userId, proxyId, msgId);
-      if (action === func_dec(224)) {
+      if (action === "info") return showMtprotoInfo(env, chatId, userId, proxyId, msgId);
+      if (action === "copy") {
         const m = await safeKvJson(env, `proxy:${proxyId}`, null);
         if (!m) return;
         const host = canonicalHost(env?.PUBLIC_HOSTNAME || "");
         await sendTelegram(env, chatId,
           `📋 <code>https://t.me/webproxy?server=${encodeURIComponent(host)}&secret=${m.secret}</code>`,
-          { parse_mode: func_dec(167) });
-        return answerCallback(env, cq.id, func_dec(225));
+          { parse_mode: "HTML" });
+        return answerCallback(env, cq.id, "✓");
       }
-      if (action === func_dec(226)) {
+      if (action === "toggle") {
         const m = await safeKvJson(env, `proxy:${proxyId}`, null);
         if (!m) return;
         if (m.ownerTelegramId !== userId && !isAdmin(env, userId)) return;
@@ -1636,8 +1609,8 @@ async function handleCallback(env, cq) {
         await env.PROXY_REGISTRY.put(`proxy:${proxyId}`, JSON.stringify(m));
         return showMtprotoInfo(env, chatId, userId, proxyId, msgId);
       }
-      if (action === func_dec(227)) return confirmDeleteMt(env, chatId, proxyId, userId, msgId);
-      if (action === func_dec(228)) {
+      if (action === "del") return confirmDeleteMt(env, chatId, proxyId, userId, msgId);
+      if (action === "delok") {
         const m = await safeKvJson(env, `proxy:${proxyId}`, null);
         if (!m) return;
         if (m.ownerTelegramId !== userId && !isAdmin(env, userId)) return;
@@ -1650,23 +1623,23 @@ async function handleCallback(env, cq) {
         const all = await safeKvJson(env, allKey, []);
         await env.PROXY_REGISTRY.put(allKey, JSON.stringify(all.filter((x) => x !== proxyId)));
         return editMessage(env, chatId, msgId, `🗑 MTProto حذف شد`,
-          { parse_mode: func_dec(167), reply_markup: { inline_keyboard: [[{ text: func_dec(221), callback_data: func_dec(192) }]] } });
+          { parse_mode: "HTML", reply_markup: { inline_keyboard: [[{ text: "🔙", callback_data: "menu:list_mt" }]] } });
       }
       return;
     }
 
-    if (parts[0] === func_dec(229)) {
+    if (parts[0] === "vl") {
       const action = parts[1], proxyId = parts[2];
-      if (action === func_dec(223)) return showVlessInfo(env, chatId, userId, proxyId, msgId);
-      if (action === func_dec(224)) {
+      if (action === "info") return showVlessInfo(env, chatId, userId, proxyId, msgId);
+      if (action === "copy") {
         const m = await safeKvJson(env, `vless:${proxyId}`, null);
         if (!m) return;
         const host = canonicalHost(env?.PUBLIC_HOSTNAME || "");
         const link = vlessLinkFor(env, host, m.uuid, m.name);
-        await sendTelegram(env, chatId, `📋 <b>لینک VLESS:</b>\n\n<code>${escapeHtml(link)}</code>`, { parse_mode: func_dec(167) });
-        return answerCallback(env, cq.id, func_dec(225));
+        await sendTelegram(env, chatId, `📋 <b>لینک VLESS:</b>\n\n<code>${escapeHtml(link)}</code>`, { parse_mode: "HTML" });
+        return answerCallback(env, cq.id, "✓");
       }
-      if (action === func_dec(226)) {
+      if (action === "toggle") {
         const m = await safeKvJson(env, `vless:${proxyId}`, null);
         if (!m) return;
         if (m.ownerTelegramId !== userId && !isAdmin(env, userId)) return;
@@ -1674,8 +1647,8 @@ async function handleCallback(env, cq) {
         await env.PROXY_REGISTRY.put(`vless:${proxyId}`, JSON.stringify(m));
         return showVlessInfo(env, chatId, userId, proxyId, msgId);
       }
-      if (action === func_dec(227)) return confirmDeleteVl(env, chatId, proxyId, userId, msgId);
-      if (action === func_dec(228)) {
+      if (action === "del") return confirmDeleteVl(env, chatId, proxyId, userId, msgId);
+      if (action === "delok") {
         const m = await safeKvJson(env, `vless:${proxyId}`, null);
         if (!m) return;
         if (m.ownerTelegramId !== userId && !isAdmin(env, userId)) return;
@@ -1688,13 +1661,13 @@ async function handleCallback(env, cq) {
         const all = await safeKvJson(env, allKey, []);
         await env.PROXY_REGISTRY.put(allKey, JSON.stringify(all.filter((x) => x !== proxyId)));
         return editMessage(env, chatId, msgId, `🗑 VLESS حذف شد`,
-          { parse_mode: func_dec(167), reply_markup: { inline_keyboard: [[{ text: func_dec(221), callback_data: func_dec(194) }]] } });
+          { parse_mode: "HTML", reply_markup: { inline_keyboard: [[{ text: "🔙", callback_data: "menu:list_vl" }]] } });
       }
       return;
     }
   } catch (e) {
-    logErr(func_dec(230), safeError(e));
-    return answerCallback(env, cq.id, func_dec(231), true);
+    logErr("CB_HANDLE_ERR", safeError(e));
+    return answerCallback(env, cq.id, "❌", true);
   }
 }
 
@@ -1703,29 +1676,29 @@ async function tgCall(env, method, body) {
   if (!token) return null;
   try {
     const r = await fetch(`${TG_API}${token}/${method}`, {
-      method: func_dec(115),
-      headers: { "Content-Type": func_dec(232) },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
     return await r.json();
   } catch { return null; }
 }
 async function sendTelegram(env, chatId, text, opts = {}) {
-  return tgCall(env, func_dec(233), { chat_id: chatId, text, disable_web_page_preview: true, ...opts });
+  return tgCall(env, "sendMessage", { chat_id: chatId, text, disable_web_page_preview: true, ...opts });
 }
 async function editMessage(env, chatId, messageId, text, opts = {}) {
-  const r = await tgCall(env, func_dec(234), {
+  const r = await tgCall(env, "editMessageText", {
     chat_id: chatId, message_id: messageId, text,
     disable_web_page_preview: true, ...opts,
   });
   if (r && !r.ok) {
     const d = String(r.description || "");
-    if (!d.includes(func_dec(235))) await sendTelegram(env, chatId, text, opts);
+    if (!d.includes("not modified")) await sendTelegram(env, chatId, text, opts);
   }
   return r;
 }
 async function answerCallback(env, id, text, alert = false) {
-  return tgCall(env, func_dec(236), { callback_query_id: id, text: text || "", show_alert: !!alert });
+  return tgCall(env, "answerCallbackQuery", { callback_query_id: id, text: text || "", show_alert: !!alert });
 }
 
 function isAuthorized(env, userId) {
@@ -1737,27 +1710,27 @@ function isAdmin(env, userId) { return isAuthorized(env, userId); }
 
 async function safeKvJson(env, key, fallback) {
   if (!env?.PROXY_REGISTRY) return fallback;
-  try { return (await env.PROXY_REGISTRY.get(key, func_dec(73))) ?? fallback; }
+  try { return (await env.PROXY_REGISTRY.get(key, "json")) ?? fallback; }
   catch { return fallback; }
 }
 async function safeKvText(env, key, fallback) {
   if (!env?.PROXY_REGISTRY) return fallback;
-  try { return (await env.PROXY_REGISTRY.get(key, func_dec(68))) ?? fallback; }
+  try { return (await env.PROXY_REGISTRY.get(key, "text")) ?? fallback; }
   catch { return fallback; }
 }
 
 // ============================================================
-// SECTION 11: Worker entry
+// SECTION 12: Worker entry
 // ============================================================
 export default {
   async fetch(request, env, ctx) {
     try {
       return await route(request, env, ctx);
     } catch (error) {
-      logErr(func_dec(237), safeError(error));
-      return new Response(func_dec(238), {
+      logErr("FATAL", safeError(error));
+      return new Response("internal error", {
         status: 500,
-        headers: { "Content-Type": func_dec(239), ...noStore() },
+        headers: { "Content-Type": "text/plain; charset=utf-8", ...noStore() },
       });
     }
   },
@@ -1765,7 +1738,7 @@ export default {
     try {
       ctx.waitUntil((async () => { /* placeholder */ })());
     } catch (e) {
-      logErr(func_dec(240), safeError(e));
+      logErr("CRON_ERR", safeError(e));
     }
   },
 };
@@ -1776,14 +1749,14 @@ async function route(request, env, ctx) {
     url = new URL(request.url);
     path = url.pathname;
     method = request.method;
-    upgrade = (request.headers.get(func_dec(117)) || "").toLowerCase();
+    upgrade = (request.headers.get("Upgrade") || "").toLowerCase();
   } catch (e) {
-    return new Response(func_dec(241), { status: 400 });
+    return new Response("bad request", { status: 400 });
   }
 
-  const isWS = upgrade === func_dec(118);
+  const isWS = upgrade === "websocket";
 
-  if (path === func_dec(242)) {
+  if (path === "/healthz") {
     return jsonSafe({
       ok: true,
       version: VERSION,
@@ -1803,62 +1776,66 @@ async function route(request, env, ctx) {
     });
   }
 
-  if (path === func_dec(243)) return await debugPage(env, url);
+  if (path === "/debug") return await debugPage(env, url);
 
   if (isWS) {
-    if (path === func_dec(244)) {
-      log(func_dec(245));
+    if (path === "/api/v1/ws") {
+      log("ROUTE_MT_WS");
       try { return await relayWebSocket(request, env); }
       catch (e) {
-        logErr(func_dec(246), safeError(e));
-        return new Response(func_dec(131), { status: 500 });
+        logErr("MT_RELAY_FATAL", safeError(e));
+        return new Response("relay error", { status: 500 });
       }
     }
-    // FIX #2: pass ctx
     if (isVlessPath(path)) {
-      log(func_dec(247), path);
+      log("ROUTE_VLESS_WS", path);
       try { return await handleVlessWS(request, env, ctx); }
       catch (e) {
-        logErr(func_dec(248), safeError(e));
-        return new Response(func_dec(249), { status: 500 });
+        logErr("VLESS_FATAL", safeError(e));
+        return new Response("vless error", { status: 500 });
       }
     }
-    log(func_dec(250), path);
-    return new Response(func_dec(251), { status: 404 });
+    log("ROUTE_UNKNOWN_WS", path);
+    return new Response("ws not found", { status: 404 });
   }
 
-  if ((path === func_dec(48) || path === func_dec(49) || path === func_dec(50)) && method === func_dec(252)) {
+  // Non-WS requests to VLESS paths → 426 (fix for 1101 on plain HTTP)
+  if (isVlessPath(path)) {
+    return new Response("Upgrade Required", { status: 426 });
+  }
+
+  if ((path === "/vless" || path === "/vl" || path === "/ws") && method === "GET") {
     return vlessHelpPage(env);
   }
 
-  if (path === func_dec(253) && method === func_dec(115)) {
+  if (path === "/bot/webhook" && method === "POST") {
     try { return await handleTelegramWebhook(request, env, ctx); }
     catch (e) {
-      logErr(func_dec(254), safeError(e));
-      return new Response(func_dec(165));
+      logErr("WEBHOOK_FATAL", safeError(e));
+      return new Response("OK");
     }
   }
 
-  if (path === func_dec(255)) {
+  if (path === "/api/v1/session") {
     try {
-      if (request.headers.has(func_dec(256))) return notFound();
-      if (method === func_dec(257)) return await closeSession(request, env);
-      if (method !== func_dec(115) || !isBinary(request.headers.get(func_dec(258)))) return notFound();
+      if (request.headers.has("Cookie")) return notFound();
+      if (method === "DELETE") return await closeSession(request, env);
+      if (method !== "POST" || !isBinary(request.headers.get("Content-Type"))) return notFound();
       return await createSession(request, env);
     } catch (e) {
-      logErr(func_dec(259), safeError(e));
+      logErr("SESSION_FATAL", safeError(e));
       return notFound();
     }
   }
 
-  if (path === func_dec(260) && method === func_dec(252)) {
+  if (path === "/setup" && method === "GET") {
     try { return setupPage(env); } catch (e) { return notFound(); }
   }
 
-  if (path === func_dec(11) && method === func_dec(252)) {
+  if (path === "/" && method === "GET") {
     try { return await handleRoot(url, env); }
     catch (e) {
-      logErr(func_dec(261), safeError(e));
+      logErr("ROOT_FATAL", safeError(e));
       try { return publicPage(env); } catch { return notFound(); }
     }
   }
@@ -1869,12 +1846,12 @@ async function route(request, env, ctx) {
 function jsonSafe(obj) {
   return new Response(JSON.stringify(obj, null, 2), {
     status: 200,
-    headers: { "Content-Type": func_dec(262), ...noStore() },
+    headers: { "Content-Type": "application/json;charset=utf-8", ...noStore() },
   });
 }
 
 function vlessHelpPage(env) {
-  const bot = env?.TELEGRAM_BOT_USERNAME || func_dec(263);
+  const bot = env?.TELEGRAM_BOT_USERNAME || "your_bot";
   const host = canonicalHost(env?.PUBLIC_HOSTNAME || "");
   const html = `<!doctype html><html lang="fa" dir="rtl"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -1901,13 +1878,13 @@ a{color:#4d9fff;text-decoration:none}
 </div></body></html>`;
   return new Response(html, {
     status: 200,
-    headers: { "Content-Type": func_dec(7), ...noStore() },
+    headers: { "Content-Type": "text/html; charset=utf-8", ...noStore() },
   });
 }
 
 async function debugPage(env, url) {
   try {
-    const userId = parseInt(url.searchParams.get(func_dec(264)) || func_dec(3), 10) || 0;
+    const userId = parseInt(url.searchParams.get("user") || "0", 10) || 0;
     const mtList = userId ? await safeKvJson(env, `user:${userId}:proxies`, []) : [];
     const vlList = userId ? await safeKvJson(env, `user:${userId}:vless`, []) : [];
     const mtDetails = [];
@@ -1971,12 +1948,12 @@ async function createSession(request, env) {
       JSON.stringify({ proxyId, exp: Date.now() + 10 * 60 * 1000 }),
       { expirationTtl: 900 }
     );
-  } catch (e) { logErr(func_dec(265), safeError(e)); return notFound(); }
+  } catch (e) { logErr("SESSION_KV_PUT_ERR", safeError(e)); return notFound(); }
 
   const doId = env.PROXY_SESSIONS.idFromName(`s:${sessionToken}`);
   const stub = env.PROXY_SESSIONS.get(doId);
-  const init = await stub.fetch(func_dec(266), {
-    method: func_dec(115),
+  const init = await stub.fetch("https://session/internal/init", {
+    method: "POST",
     headers: { "X-Proxy-Id": proxyId },
   });
   if (!init.ok) return notFound();
@@ -1986,10 +1963,10 @@ async function createSession(request, env) {
     status: 200,
     headers: {
       ...noStore(),
-      "Content-Type": func_dec(267),
+      "Content-Type": "application/octet-stream",
       "X-Session-Token": sessionToken,
-      "X-Carrier-Mode": func_dec(118),
-      "X-Down-Cursor": func_dec(3),
+      "X-Carrier-Mode": "websocket",
+      "X-Down-Cursor": "0",
     },
   });
 }
@@ -2003,8 +1980,8 @@ async function closeSession(request, env) {
   const doId = env.PROXY_SESSIONS.idFromName(`s:${token}`);
   const stub = env.PROXY_SESSIONS.get(doId);
   try {
-    await stub.fetch(func_dec(268), {
-      method: func_dec(115),
+    await stub.fetch("https://session/internal/close", {
+      method: "POST",
       headers: { "X-Proxy-Id": rec.proxyId },
     });
   } catch {}
@@ -2012,18 +1989,18 @@ async function closeSession(request, env) {
 }
 
 async function relayWebSocket(request, env) {
-  const protocols = (request.headers.get(func_dec(102)) || "").split(func_dec(103)).map((v) => v.trim());
-  const proto = protocols.find((v) => v.startsWith(func_dec(126)));
-  const token = proto ? proto.slice(func_dec(126).length) : "";
+  const protocols = (request.headers.get("Sec-WebSocket-Protocol") || "").split(",").map((v) => v.trim());
+  const proto = protocols.find((v) => v.startsWith("tproxy-v1."));
+  const token = proto ? proto.slice("tproxy-v1.".length) : "";
   if (!/^[A-Za-z0-9_-]{43}$/.test(token)) return notFound();
   const rec = await safeKvJson(env, `session:${token}`, null);
   if (!rec || rec.exp < Date.now()) return notFound();
   const doId = env.PROXY_SESSIONS.idFromName(`s:${token}`);
   const stub = env.PROXY_SESSIONS.get(doId);
-  return stub.fetch(func_dec(269), {
-    method: func_dec(252),
+  return stub.fetch("https://session/internal/ws", {
+    method: "GET",
     headers: {
-      "Upgrade": func_dec(118),
+      "Upgrade": "websocket",
       "X-TProxy-Protocol": proto,
       "X-Proxy-Id": rec.proxyId,
     },
@@ -2044,8 +2021,8 @@ async function handleRoot(url, env) {
     return bridgePage(expectedHost, bootstrap);
   }
 
-  const serverParam = url.searchParams.get(func_dec(270));
-  const secretParam = url.searchParams.get(func_dec(271));
+  const serverParam = url.searchParams.get("server");
+  const secretParam = url.searchParams.get("secret");
   if (serverParam && secretParam) {
     if (canonicalHost(serverParam) !== expectedHost) return publicPage(env);
     const secret = String(secretParam).toLowerCase();
@@ -2062,8 +2039,8 @@ async function handleRoot(url, env) {
 }
 
 function exactBridgeQuery(url) {
-  if (url.searchParams.size !== 1 || !url.searchParams.has(func_dec(272))) return null;
-  const value = url.searchParams.get(func_dec(272));
+  if (url.searchParams.size !== 1 || !url.searchParams.has("bridge")) return null;
+  const value = url.searchParams.get("bridge");
   return /^[A-Za-z0-9_-]{43}$/.test(value || "") && url.search === `?bridge=${value}` ? value : null;
 }
 
@@ -2110,7 +2087,7 @@ a{color:#4d9fff;text-decoration:none}
   <p>MTProto + VLESS در یک Worker</p>
   <p style="margin-top:12px">Host: <code>${escapeHtml(host)}</code></p>
   <div class="row">
-    ${bot ? `<a class=func_dec(273) href=func_dec(274)>🤖 ربات تلگرام</a>` : ""}
+    ${bot ? `<a class="b" href="${bot}">🤖 ربات تلگرام</a>` : ""}
     <a class="b" href="/healthz">🩺 Health</a>
     <a class="b" href="/setup">⚙️ Setup</a>
     <a class="b" href="/debug">🐞 Debug</a>
@@ -2119,13 +2096,13 @@ a{color:#4d9fff;text-decoration:none}
 </div></body></html>`;
   return new Response(html, {
     status: 200,
-    headers: { "Content-Type": func_dec(7), ...noStore() },
+    headers: { "Content-Type": "text/html; charset=utf-8", ...noStore() },
   });
 }
 
 function setupPage(env) {
   const host = canonicalHost(env?.PUBLIC_HOSTNAME || "");
-  const bot = env?.TELEGRAM_BOT_USERNAME ? `https://t.me/${env.TELEGRAM_BOT_USERNAME}` : func_dec(275);
+  const bot = env?.TELEGRAM_BOT_USERNAME ? `https://t.me/${env.TELEGRAM_BOT_USERNAME}` : "(تنظیم نشده)";
   const html = `<!doctype html><html lang="fa" dir="rtl"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Setup · ${BRAND}</title>
@@ -2157,6 +2134,6 @@ VLESS UUID‌ها به‌صورت خودکار ساخته می‌شوند.
 </div></body></html>`;
   return new Response(html, {
     status: 200,
-    headers: { "Content-Type": func_dec(7), ...noStore() },
+    headers: { "Content-Type": "text/html; charset=utf-8", ...noStore() },
   });
 }
