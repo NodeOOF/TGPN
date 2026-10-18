@@ -6,154 +6,381 @@
 <title>TGProxyNode — نصب خودکار</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌐</text></svg>">
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;900&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-body { font-family: 'Vazirmatn', sans-serif; }
-.mono { font-family: 'JetBrains Mono', monospace; direction: ltr; }
-.log-line { padding: 6px 12px; border-bottom: 1px solid #1a1f2e; font-size: 12px; }
-.log-ok { color: #4ade80; }
-.log-err { color: #f87171; }
-.log-info { color: #60a5fa; }
-.log-warn { color: #fbbf24; }
+  :root {
+    --bg: #05080e;
+    --panel: #0b1118;
+    --panel-2: #0f1720;
+    --border: #1c2530;
+    --border-2: #263241;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --accent: #6366f1;
+    --accent-2: #8b5cf6;
+    --ok: #4ade80;
+    --err: #f87171;
+    --warn: #fbbf24;
+    --info: #60a5fa;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Vazirmatn', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    margin: 0;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99,102,241,.15), transparent),
+      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(139,92,246,.08), transparent);
+  }
+  .mono { font-family: 'JetBrains Mono', monospace; direction: ltr; }
+  .panel {
+    background: linear-gradient(180deg, var(--panel), var(--panel-2));
+    border: 1px solid var(--border);
+    border-radius: 16px;
+  }
+  .panel-glow {
+    box-shadow: 0 0 0 1px rgba(99,102,241,.1), 0 20px 40px -20px rgba(0,0,0,.6);
+  }
+  .field {
+    background: #070b10;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 14px;
+    color: var(--text);
+    font-size: 13px;
+    width: 100%;
+    outline: none;
+    transition: all .15s;
+  }
+  .field:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(99,102,241,.12);
+  }
+  .field::placeholder { color: #3d4956; }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 15px 24px;
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+    width: 100%;
+    transition: all .2s;
+    box-shadow: 0 8px 24px -8px rgba(99,102,241,.6);
+  }
+  .btn-primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 28px -8px rgba(99,102,241,.8);
+  }
+  .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border-2);
+    color: var(--text);
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all .15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-ghost:hover { border-color: var(--accent); background: rgba(99,102,241,.06); }
+  .step-num {
+    width: 34px; height: 34px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 15px; color: #fff;
+    flex-shrink: 0;
+  }
+  .log-line {
+    padding: 5px 14px;
+    font-size: 11.5px;
+    border-bottom: 1px solid rgba(28,37,48,.5);
+    font-family: 'JetBrains Mono', monospace;
+    direction: ltr;
+    text-align: left;
+    line-height: 1.6;
+  }
+  .log-line:last-child { border-bottom: none; }
+  .log-ok { color: var(--ok); }
+  .log-err { color: var(--err); }
+  .log-info { color: var(--info); }
+  .log-warn { color: var(--warn); }
+  .log-sep { color: #334155; text-align: center; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 12px; border-radius: 20px;
+    font-size: 11px; font-weight: 700;
+  }
+  .badge-ok { background: rgba(74,222,128,.1); color: var(--ok); border: 1px solid rgba(74,222,128,.2); }
+  .badge-err { background: rgba(248,113,113,.1); color: var(--err); border: 1px solid rgba(248,113,113,.2); }
+  .dot-pulse {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--ok);
+    box-shadow: 0 0 0 0 rgba(74,222,128,.6);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(74,222,128,.6); }
+    70% { box-shadow: 0 0 0 8px rgba(74,222,128,0); }
+    100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); }
+  }
+  .modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.75);
+    backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000; padding: 20px;
+  }
+  .modal {
+    background: linear-gradient(180deg, #0d141c, #0a0f16);
+    border: 1px solid var(--border-2);
+    border-radius: 18px;
+    padding: 28px;
+    max-width: 420px; width: 100%;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,.8);
+  }
+  .spinner {
+    width: 14px; height: 14px;
+    border: 2px solid rgba(99,102,241,.3);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    display: inline-block;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .code-inline {
+    background: #070b10;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2px 7px;
+    font-size: 11px;
+    color: #a5b4fc;
+    font-family: 'JetBrains Mono', monospace;
+    direction: ltr;
+    display: inline-block;
+  }
+  .secure-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 10px; border-radius: 6px;
+    background: rgba(74,222,128,.08); color: var(--ok);
+    font-size: 10.5px; font-weight: 600;
+    border: 1px solid rgba(74,222,128,.15);
+  }
 </style>
 </head>
-<body class="bg-[#05080e] text-slate-200 min-h-screen">
+<body>
 
-<div class="max-w-3xl mx-auto px-4 py-12">
+<!-- ═══════════════════════════════════════════════════════════
+     LOCK MODAL — رمز عبور برای رمزگشایی داده‌های ذخیره‌شده
+═══════════════════════════════════════════════════════════ -->
+<div id="lockModal" class="modal-backdrop" style="display:none">
+  <div class="modal">
+    <div class="text-center mb-5">
+      <div class="text-4xl mb-2">🔐</div>
+      <h3 class="text-lg font-black mb-1">داده‌های ذخیره‌شده قفل است</h3>
+      <p class="text-xs" style="color:var(--muted)">
+        رمز عبوری که قبلاً تنظیم کردی را وارد کن
+      </p>
+    </div>
+    <input id="unlockPassword" type="password" class="field mono mb-3" placeholder="رمز عبور..." autocomplete="current-password">
+    <button id="unlockBtn" class="btn-primary mb-3">🔓 باز کردن</button>
+    <div class="text-center">
+      <button id="forgetDataBtn" class="text-xs" style="color:var(--err); background:none; border:none; cursor:pointer; text-decoration:underline">
+        فراموشی رمز — پاک کردن داده‌ها
+      </button>
+    </div>
+    <p id="unlockError" class="text-xs mt-3 text-center hidden" style="color:var(--err)"></p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SETUP PASSWORD MODAL — اولین بار
+═══════════════════════════════════════════════════════════ -->
+<div id="setupModal" class="modal-backdrop" style="display:none">
+  <div class="modal">
+    <div class="text-center mb-5">
+      <div class="text-4xl mb-2">🛡️</div>
+      <h3 class="text-lg font-black mb-1">یک رمز عبور تنظیم کن</h3>
+      <p class="text-xs leading-relaxed" style="color:var(--muted)">
+        اطلاعات حساس (توکن‌ها) با این رمز به صورت <b style="color:var(--ok)">AES-256-GCM</b> رمزنگاری می‌شن و توی مرورگر ذخیره می‌شن.
+        <br>هر بار که صفحه رو باز کنی، همین رمز رو می‌پرسه.
+      </p>
+    </div>
+    <input id="setupPassword" type="password" class="field mono mb-2" placeholder="رمز عبور (حداقل ۸ کاراکتر)" autocomplete="new-password">
+    <input id="setupPassword2" type="password" class="field mono mb-3" placeholder="تکرار رمز عبور" autocomplete="new-password">
+    <button id="setupBtn" class="btn-primary mb-2">🛡️ ذخیره و ادامه</button>
+    <button id="skipSetupBtn" class="btn-ghost w-full justify-center text-xs">
+      فعلاً نه، هر بار دستی وارد می‌کنم
+    </button>
+    <p id="setupError" class="text-xs mt-3 text-center hidden" style="color:var(--err)"></p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MAIN UI
+═══════════════════════════════════════════════════════════ -->
+<div class="max-w-3xl mx-auto px-4 py-10">
 
   <!-- Header -->
-  <div class="text-center mb-10">
-    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold mb-6">
-      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-      v8.0.0 · نصب از مرورگر
+  <div class="text-center mb-8">
+    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold mb-5"
+         style="background:rgba(74,222,128,.08); border:1px solid rgba(74,222,128,.2); color:var(--ok)">
+      <span class="dot-pulse"></span>
+      v9.0.0 · نصب از مرورگر
     </div>
-    <h1 class="text-4xl font-black mb-3">🌐 TGProxyNode</h1>
-    <p class="text-slate-400 text-sm">پروکسی تلگرام روی Cloudflare — همه چیز خودکار</p>
+    <h1 class="text-4xl font-black mb-2" style="background:linear-gradient(135deg,#a5b4fc,#c4b5fd); -webkit-background-clip:text; -webkit-text-fill-color:transparent">
+      🌐 TGProxyNode
+    </h1>
+    <p class="text-sm" style="color:var(--muted)">پروکسی تلگرام روی Cloudflare — همه چیز خودکار</p>
   </div>
 
-  <!-- Warning -->
-  <div class="bg-amber-900/20 border border-amber-800/50 rounded-xl p-4 mb-6 text-xs text-amber-300 leading-relaxed">
-    ⚠️ <strong>توجه:</strong> توکن فقط در مرورگر تو استفاده می‌شه، جایی ذخیره نمی‌شه، به هیچ سروری فرستاده نمی‌شه.
+  <!-- Session bar -->
+  <div id="sessionBar" class="panel panel-glow p-3 mb-5 flex items-center justify-between" style="display:none">
+    <div class="flex items-center gap-2 text-xs">
+      <span class="secure-badge">🔐 داده‌ها رمزنگاری‌شده</span>
+      <span id="sessionInfo" style="color:var(--muted)"></span>
+    </div>
+    <button id="lockNowBtn" class="btn-ghost text-xs" style="padding:6px 12px">
+      🔒 قفل کردن
+    </button>
   </div>
 
   <!-- Step 1 -->
-  <div id="step1" class="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 mb-6">
+  <div class="panel panel-glow p-5 mb-4">
     <div class="flex items-center gap-3 mb-4">
-      <div class="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-black">1</div>
-      <h2 class="font-bold text-lg">توکن Cloudflare</h2>
+      <div class="step-num">1</div>
+      <h2 class="font-bold text-base">توکن Cloudflare</h2>
     </div>
 
-    <p class="text-slate-400 text-sm mb-4">
-      روی دکمه زیر بزن، توکن رو بساز و کپی کن:
+    <p class="text-xs mb-3 leading-relaxed" style="color:var(--muted)">
+      روی دکمه زیر بزن — یک توکن با <b style="color:var(--info)">تمام مجوزهای لازم</b> (Workers Scripts، KV، Account Settings، Subdomain) از پیش انتخاب می‌شه:
     </p>
 
-    <a href="https://dash.cloudflare.com/profile/api-tokens?permissionGroupKeys=%5B%7B%22key%22%3A%22workers_scripts%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22workers_kv_storage%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22account_settings%22%2C%22type%22%3A%22read%22%7D%2C%7B%22key%22%3A%22workers_subdomain%22%2C%22type%22%3A%22edit%22%7D%5D&accountId=*&zoneId=all&name=TGProxyNode-Setup"
+    <a id="tokenLink" href="https://dash.cloudflare.com/profile/api-tokens?permissionGroupKeys=%5B%7B%22key%22%3A%22workers_scripts%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22workers_kv_storage%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22account_settings%22%2C%22type%22%3A%22read%22%7D%2C%7B%22key%22%3A%22workers_subdomain%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22user_details%22%2C%22type%22%3A%22read%22%7D%5D&accountId=*&zoneId=all&name=TGProxyNode-Setup"
        target="_blank"
-       class="inline-flex items-center gap-2 px-5 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-sm mb-4">
-      🔑 ساخت توکن
+       class="btn-ghost mb-3 w-full justify-center"
+       style="border-color:rgba(99,102,241,.4); color:#c7d2fe">
+      🔑 ساخت توکن با تمام مجوزها
     </a>
 
-    <input id="cfToken" type="password" placeholder="PASTE-TOKEN-HERE"
-           class="mono w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-sm text-slate-200 focus:border-indigo-500 outline-none">
+    <div class="relative">
+      <input id="cfToken" type="password" placeholder="توکن Cloudflare را اینجا جای‌گذاری کن..."
+             class="field mono" style="padding-left:44px">
+      <button type="button" id="toggleCfToken" class="absolute" style="left:10px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:var(--muted); font-size:15px" title="نمایش">👁</button>
+    </div>
+
+    <div class="mt-2 text-[10.5px]" style="color:var(--muted)">
+      💡 اگر قبلاً توکن ساختی، مستقیم جای‌گذاری کن. مجوزهای لازم:
+      <span class="code-inline">Workers Scripts:Edit</span>
+      <span class="code-inline">KV:Edit</span>
+      <span class="code-inline">Account:Read</span>
+    </div>
   </div>
 
   <!-- Step 2 -->
-  <div id="step2" class="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 mb-6">
+  <div class="panel panel-glow p-5 mb-4">
     <div class="flex items-center gap-3 mb-4">
-      <div class="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-black">2</div>
-      <h2 class="font-bold text-lg">اطلاعات پروژه</h2>
+      <div class="step-num">2</div>
+      <h2 class="font-bold text-base">اطلاعات پروژه</h2>
     </div>
 
-    <div class="space-y-4">
+    <div class="space-y-3">
       <div>
-        <label class="text-xs text-slate-400 mb-1 block">نام Worker</label>
-        <input id="workerName" type="text" value="tgproxynode"
-               class="mono w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm focus:border-indigo-500 outline-none">
+        <label class="text-[11px] mb-1.5 block font-semibold" style="color:var(--muted)">نام Worker</label>
+        <input id="workerName" type="text" value="tgproxynode" class="field mono">
       </div>
 
       <div>
-        <label class="text-xs text-slate-400 mb-1 block">یوزرنیم بات تلگرام (بدون @)</label>
-        <input id="botUsername" type="text" placeholder="myproxybot"
-               class="mono w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm focus:border-indigo-500 outline-none">
+        <label class="text-[11px] mb-1.5 block font-semibold" style="color:var(--muted)">یوزرنیم بات (بدون @)</label>
+        <input id="botUsername" type="text" placeholder="myproxybot" class="field mono">
       </div>
 
       <div>
-        <label class="text-xs text-slate-400 mb-1 block">
+        <label class="text-[11px] mb-1.5 block font-semibold" style="color:var(--muted)">
           آیدی عددی تلگرام
-          <a href="https://t.me/userinfobot" target="_blank" class="text-indigo-400 mr-2">(گرفتن از @userinfobot)</a>
+          <a href="https://t.me/userinfobot" target="_blank" style="color:#818cf8; margin-right:6px">(گرفتن از @userinfobot)</a>
         </label>
-        <input id="adminId" type="text" placeholder="123456789"
-               class="mono w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm focus:border-indigo-500 outline-none">
+        <input id="adminId" type="text" placeholder="123456789" class="field mono">
       </div>
 
       <div>
-        <label class="text-xs text-slate-400 mb-1 block">
+        <label class="text-[11px] mb-1.5 block font-semibold" style="color:var(--muted)">
           توکن بات
-          <a href="https://t.me/BotFather" target="_blank" class="text-indigo-400 mr-2">(از @BotFather)</a>
+          <a href="https://t.me/BotFather" target="_blank" style="color:#818cf8; margin-right:6px">(از @BotFather)</a>
         </label>
-        <input id="botToken" type="password" placeholder="123456:ABC-DEF..."
-               class="mono w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2.5 text-sm focus:border-indigo-500 outline-none">
+        <div class="relative">
+          <input id="botToken" type="password" placeholder="123456:ABC-DEF..." class="field mono" style="padding-left:44px">
+          <button type="button" id="toggleBotToken" class="absolute" style="left:10px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:var(--muted); font-size:15px" title="نمایش">👁</button>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Install button -->
-  <button id="installBtn"
-          class="w-full py-4 bg-gradient-to-l from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl font-black text-base mb-6 transition disabled:opacity-50 disabled:cursor-not-allowed">
+  <button id="installBtn" class="btn-primary mb-5">
     🚀 نصب و راه‌اندازی
   </button>
 
   <!-- Logs -->
-  <div id="logsWrap" class="hidden bg-slate-950 border border-slate-800 rounded-xl overflow-hidden mb-6">
-    <div class="bg-slate-900 px-4 py-2 border-b border-slate-800 flex items-center gap-2">
+  <div id="logsWrap" class="panel mb-5 overflow-hidden" style="display:none">
+    <div class="px-4 py-2.5 flex items-center gap-2.5" style="background:rgba(0,0,0,.25); border-bottom:1px solid var(--border)">
       <div class="flex gap-1.5">
-        <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
-        <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
-        <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+        <span style="width:10px;height:10px;border-radius:50%;background:#ef4444;display:inline-block"></span>
+        <span style="width:10px;height:10px;border-radius:50%;background:#f59e0b;display:inline-block"></span>
+        <span style="width:10px;height:10px;border-radius:50%;background:#22c55e;display:inline-block"></span>
       </div>
-      <span class="text-xs text-slate-500 mono mr-2">install.log</span>
+      <span class="mono text-[10.5px]" style="color:var(--muted)">install.log</span>
     </div>
     <div id="logs" class="max-h-96 overflow-y-auto"></div>
   </div>
 
   <!-- Result -->
-  <div id="result" class="hidden bg-emerald-900/20 border border-emerald-800/50 rounded-2xl p-6">
+  <div id="result" class="panel panel-glow p-5 mb-5" style="display:none; border-color:rgba(74,222,128,.25); background:linear-gradient(180deg, rgba(74,222,128,.04), var(--panel-2))">
     <div class="flex items-center gap-3 mb-4">
-      <div class="w-9 h-9 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-black">✓</div>
-      <h2 class="font-bold text-lg text-emerald-400">نصب موفق!</h2>
+      <div class="step-num" style="background:linear-gradient(135deg,#22c55e,#16a34a)">✓</div>
+      <h2 class="font-bold text-base" style="color:var(--ok)">نصب موفق!</h2>
     </div>
-    <div class="space-y-2 text-sm">
-      <div class="flex justify-between items-center py-2 border-b border-emerald-800/30">
-        <span class="text-slate-400">آدرس:</span>
-        <a id="resUrl" href="" target="_blank" class="mono text-emerald-400 text-xs"></a>
+    <div class="space-y-1 text-sm">
+      <div class="flex justify-between items-center py-2.5" style="border-bottom:1px solid rgba(74,222,128,.1)">
+        <span class="text-xs" style="color:var(--muted)">آدرس:</span>
+        <a id="resUrl" href="" target="_blank" class="mono text-xs" style="color:var(--ok)"></a>
       </div>
-      <div class="flex justify-between items-center py-2 border-b border-emerald-800/30">
-        <span class="text-slate-400">بات:</span>
-        <a id="resBot" href="" target="_blank" class="mono text-emerald-400 text-xs"></a>
+      <div class="flex justify-between items-center py-2.5" style="border-bottom:1px solid rgba(74,222,128,.1)">
+        <span class="text-xs" style="color:var(--muted)">بات:</span>
+        <a id="resBot" href="" target="_blank" class="mono text-xs" style="color:var(--ok)"></a>
       </div>
-      <div class="flex justify-between items-center py-2 border-b border-emerald-800/30">
-        <span class="text-slate-400">Webhook Secret:</span>
-        <code id="resSecret" class="mono text-emerald-400 text-[10px] select-all break-all"></code>
+      <div class="flex justify-between items-center py-2.5" style="border-bottom:1px solid rgba(74,222,128,.1)">
+        <span class="text-xs" style="color:var(--muted)">Webhook Secret:</span>
+        <code id="resSecret" class="mono text-[10px] select-all break-all" style="color:var(--ok)"></code>
       </div>
-      <div class="flex justify-between items-center py-2 border-b border-emerald-800/30">
-        <span class="text-slate-400">وضعیت Webhook:</span>
+      <div class="flex justify-between items-center py-2.5">
+        <span class="text-xs" style="color:var(--muted)">وضعیت Webhook:</span>
         <span id="resWebhookStatus" class="text-xs"></span>
       </div>
     </div>
 
-    <button id="retryWebhookBtn" class="hidden w-full mt-4 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold text-sm transition">
+    <button id="retryWebhookBtn" class="btn-primary mt-4" style="display:none; padding:12px; font-size:13px; background:linear-gradient(135deg,#22c55e,#16a34a)">
       🔄 تلاش مجدد برای ثبت Webhook
     </button>
 
-    <div class="mt-6 p-4 bg-slate-950 rounded-lg text-xs text-slate-400 leading-relaxed">
-      <strong class="text-emerald-400">مرحله بعد:</strong>
-      برو در بات، <code class="mono bg-slate-900 px-2 py-0.5 rounded text-indigo-400">/start</code> بزن، بعد <code class="mono bg-slate-900 px-2 py-0.5 rounded text-indigo-400">/new test</code> تا اولین پروکسی ساخته بشه.
+    <div class="mt-4 p-3.5 rounded-lg text-[11.5px] leading-relaxed" style="background:#070b10; border:1px solid var(--border); color:var(--muted)">
+      <strong style="color:var(--ok)">مرحله بعد:</strong>
+      برو در بات، <span class="code-inline">/start</span> بزن، بعد <span class="code-inline">/new test</span> تا اولین پروکسی ساخته بشه.
     </div>
   </div>
 
   <!-- Footer -->
-  <div class="text-center mt-12 text-xs text-slate-500">
-    <a href="https://github.com/NodeOOF/TGPN" class="hover:text-slate-300">GitHub</a>
+  <div class="text-center mt-10 text-[11px]" style="color:#334155">
+    <a href="https://github.com/NodeOOF/TGPN" style="color:#475569">GitHub</a>
     <span class="mx-2">·</span>
     <span>MIT</span>
   </div>
@@ -161,54 +388,268 @@ body { font-family: 'Vazirmatn', sans-serif; }
 </div>
 
 <script>
-// ══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 // CONFIG
-// ══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 const WORKER_JS_URL = "https://raw.githubusercontent.com/NodeOOF/TGPN/main/worker_decode.js";
-
-// ✅ FIXED: single slash (was "//cf" before)
 const CF_API = "https://sdfsdf.supernet3.workers.dev/cf";
 
-// ══════════════════════════════════════════════════════════
+const STORAGE_KEY = "tgpn_secure_vault_v1";
+const STORAGE_META = "tgpn_vault_meta_v1";
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let masterKey = null;       // CryptoKey — فقط در حافظه
+let decryptedVault = null;  // object — فقط در حافظه
+let sessionUnlocked = false;
+
+// ═══════════════════════════════════════════════════════════
 // LOGGER
-// ══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 function log(msg, type = "info") {
   const wrap = document.getElementById("logsWrap");
-  wrap.classList.remove("hidden");
+  wrap.style.display = "block";
   const logs = document.getElementById("logs");
   const div = document.createElement("div");
-  div.className = `log-line log-${type} mono`;
+  div.className = `log-line log-${type}`;
   div.textContent = msg;
   logs.appendChild(div);
   logs.scrollTop = logs.scrollHeight;
   console.log(`[${type}]`, msg);
 }
-
-// ══════════════════════════════════════════════════════════
-// HELPERS
-// ══════════════════════════════════════════════════════════
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
-function generateWebhookSecret() {
-  const bytes = crypto.getRandomValues(new Uint8Array(32));
-  return Array.from(bytes).map(b => b.toString(16).padStart(2, "0")).join("");
+// ═══════════════════════════════════════════════════════════
+// CRYPTO — PBKDF2 + AES-256-GCM
+// ═══════════════════════════════════════════════════════════
+const PBKDF2_ITERATIONS = 200000;
+
+function b64encode(buf) {
+  return btoa(String.fromCharCode(...new Uint8Array(buf)));
+}
+function b64decode(s) {
+  return Uint8Array.from(atob(s), c => c.charCodeAt(0));
 }
 
-function isTelegramSafe(s) {
-  return /^[A-Za-z0-9_-]{1,256}$/.test(s);
+async function deriveKey(password, salt) {
+  const enc = new TextEncoder();
+  const baseKey = await crypto.subtle.importKey(
+    "raw", enc.encode(password), { name: "PBKDF2" }, false, ["deriveKey"]
+  );
+  return crypto.subtle.deriveKey(
+    { name: "PBKDF2", salt, iterations: PBKDF2_ITERATIONS, hash: "SHA-256" },
+    baseKey,
+    { name: "AES-GCM", length: 256 },
+    false,
+    ["encrypt", "decrypt"]
+  );
 }
 
-// ══════════════════════════════════════════════════════════
-// CLOUDFLARE API HELPERS
-// ══════════════════════════════════════════════════════════
+async function encryptVault(vault, password) {
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const key = await deriveKey(password, salt);
+  const plaintext = new TextEncoder().encode(JSON.stringify(vault));
+  const ciphertext = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, plaintext);
+  return {
+    salt: b64encode(salt),
+    iv: b64encode(iv),
+    data: b64encode(ciphertext),
+  };
+}
+
+async function decryptVault(enc, password) {
+  const salt = b64decode(enc.salt);
+  const iv = b64decode(enc.iv);
+  const data = b64decode(enc.data);
+  const key = await deriveKey(password, salt);
+  const plaintext = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, data);
+  return JSON.parse(new TextDecoder().decode(plaintext));
+}
+
+// ═══════════════════════════════════════════════════════════
+// VAULT PERSISTENCE
+// ═══════════════════════════════════════════════════════════
+function saveEncrypted(enc) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(enc));
+  localStorage.setItem(STORAGE_META, JSON.stringify({ ts: Date.now(), v: 1 }));
+}
+function loadEncrypted() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return null;
+  try { return JSON.parse(raw); } catch { return null; }
+}
+function clearVault() {
+  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(STORAGE_META);
+  masterKey = null;
+  decryptedVault = null;
+  sessionUnlocked = false;
+  updateSessionBar();
+}
+function hasVault() { return !!loadEncrypted(); }
+
+// ═══════════════════════════════════════════════════════════
+// VAULT FIELD MAPPING
+// ═══════════════════════════════════════════════════════════
+const VAULT_FIELDS = ["cfToken", "workerName", "botUsername", "adminId", "botToken"];
+
+function collectVaultFromForm() {
+  const v = {};
+  for (const f of VAULT_FIELDS) {
+    const el = document.getElementById(f);
+    if (el && el.value) v[f] = el.value;
+  }
+  return v;
+}
+function fillFormFromVault(vault) {
+  if (!vault) return;
+  for (const f of VAULT_FIELDS) {
+    const el = document.getElementById(f);
+    if (el && vault[f]) el.value = vault[f];
+  }
+}
+async function persistVaultFromForm() {
+  if (!sessionUnlocked || !masterKey) return;
+  const vault = collectVaultFromForm();
+  if (Object.keys(vault).length === 0) return;
+  try {
+    // Re-encrypt with fresh salt/iv — we don't have the password in memory,
+    // so we store the password-derived key result by re-deriving from a "session password".
+    // Simpler: only save when user triggers save button. Auto-save skipped for security.
+  } catch (e) {}
+}
+
+// ═══════════════════════════════════════════════════════════
+// SESSION BAR
+// ═══════════════════════════════════════════════════════════
+function updateSessionBar() {
+  const bar = document.getElementById("sessionBar");
+  if (sessionUnlocked) {
+    bar.style.display = "flex";
+    const meta = localStorage.getItem(STORAGE_META);
+    let info = "فعال";
+    if (meta) {
+      try {
+        const m = JSON.parse(meta);
+        info = "ذخیره‌شده " + new Date(m.ts).toLocaleString("fa-IR");
+      } catch {}
+    }
+    document.getElementById("sessionInfo").textContent = "· " + info;
+  } else {
+    bar.style.display = "none";
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// LOCK / UNLOCK FLOW
+// ═══════════════════════════════════════════════════════════
+function showLockModal() {
+  document.getElementById("lockModal").style.display = "flex";
+  setTimeout(() => document.getElementById("unlockPassword").focus(), 100);
+}
+function hideLockModal() {
+  document.getElementById("lockModal").style.display = "none";
+}
+function showSetupModal() {
+  document.getElementById("setupModal").style.display = "flex";
+  setTimeout(() => document.getElementById("setupPassword").focus(), 100);
+}
+function hideSetupModal() {
+  document.getElementById("setupModal").style.display = "none";
+}
+
+async function handleUnlock() {
+  const pw = document.getElementById("unlockPassword").value;
+  const errEl = document.getElementById("unlockError");
+  errEl.classList.add("hidden");
+  if (!pw) {
+    errEl.textContent = "رمز عبور را وارد کن";
+    errEl.classList.remove("hidden");
+    return;
+  }
+  const btn = document.getElementById("unlockBtn");
+  btn.disabled = true;
+  btn.textContent = "⏳ در حال باز کردن...";
+  try {
+    const enc = loadEncrypted();
+    const vault = await decryptVault(enc, pw);
+    decryptedVault = vault;
+    sessionUnlocked = true;
+    fillFormFromVault(vault);
+    hideLockModal();
+    updateSessionBar();
+  } catch (e) {
+    errEl.textContent = "رمز عبور نادرست است";
+    errEl.classList.remove("hidden");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "🔓 باز کردن";
+  }
+}
+
+async function handleSetup() {
+  const pw = document.getElementById("setupPassword").value;
+  const pw2 = document.getElementById("setupPassword2").value;
+  const errEl = document.getElementById("setupError");
+  errEl.classList.add("hidden");
+  if (pw.length < 8) {
+    errEl.textContent = "رمز عبور باید حداقل ۸ کاراکتر باشد";
+    errEl.classList.remove("hidden");
+    return;
+  }
+  if (pw !== pw2) {
+    errEl.textContent = "رمز عبور و تکرار آن یکسان نیست";
+    errEl.classList.remove("hidden");
+    return;
+  }
+  const btn = document.getElementById("setupBtn");
+  btn.disabled = true;
+  btn.textContent = "⏳ در حال رمزنگاری...";
+  try {
+    const vault = collectVaultFromForm();
+    const enc = await encryptVault(vault, pw);
+    saveEncrypted(enc);
+    sessionUnlocked = true;
+    decryptedVault = vault;
+    hideSetupModal();
+    updateSessionBar();
+  } catch (e) {
+    errEl.textContent = "خطا: " + e.message;
+    errEl.classList.remove("hidden");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "🛡️ ذخیره و ادامه";
+  }
+}
+
+async function handleSaveVault() {
+  // Save/update vault with existing password (we ask again to be safe)
+  const pw = prompt("برای ذخیره‌سازی، رمز عبور را دوباره وارد کن:");
+  if (!pw) return;
+  try {
+    const vault = collectVaultFromForm();
+    const enc = await encryptVault(vault, pw);
+    saveEncrypted(enc);
+    decryptedVault = vault;
+    sessionUnlocked = true;
+    updateSessionBar();
+    alert("✅ اطلاعات رمزنگاری و ذخیره شد");
+  } catch (e) {
+    alert("❌ خطا: " + e.message);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// CLOUDFLARE API
+// ═══════════════════════════════════════════════════════════
 async function cf(path, method = "GET", body = null, token = null, isFormData = false) {
   const t = token || document.getElementById("cfToken").value.trim();
   const headers = { "Authorization": `Bearer ${t}` };
   if (!isFormData) headers["Content-Type"] = "application/json";
-
   const opts = { method, headers };
   if (body) opts.body = isFormData ? body : JSON.stringify(body);
-
   const res = await fetch(CF_API + path, opts);
   const data = await res.json();
   if (!data.success) {
@@ -217,9 +658,14 @@ async function cf(path, method = "GET", body = null, token = null, isFormData = 
   return data.result;
 }
 
-// ══════════════════════════════════════════════════════════
-// WEBHOOK REGISTRATION (with retry)
-// ══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+// WEBHOOK
+// ═══════════════════════════════════════════════════════════
+function generateWebhookSecret() {
+  const bytes = crypto.getRandomValues(new Uint8Array(32));
+  return Array.from(bytes).map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
 async function registerWebhook(botToken, publicHost, webhookSecret, maxAttempts = 6) {
   const url = `https://api.telegram.org/bot${botToken}/setWebhook` +
     `?url=https://${publicHost}/bot/webhook` +
@@ -238,7 +684,6 @@ async function registerWebhook(botToken, publicHost, webhookSecret, maxAttempts 
       }
       lastErr = data.description || "خطای نامعلوم";
       log(`! تلاش ${attempt} ناموفق: ${lastErr}`, "warn");
-
       if (/resolve host|name resolution|Temporary failure/i.test(lastErr)) {
         if (attempt < maxAttempts) {
           log(`! دامنه هنوز آماده نیست. صبر ۱۵ ثانیه...`, "warn");
@@ -256,9 +701,9 @@ async function registerWebhook(botToken, publicHost, webhookSecret, maxAttempts 
   return { ok: false, url, error: lastErr };
 }
 
-// ══════════════════════════════════════════════════════════
-// MAIN INSTALL
-// ══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+// INSTALL
+// ═══════════════════════════════════════════════════════════
 async function install() {
   const btn = document.getElementById("installBtn");
   const resultDiv = document.getElementById("result");
@@ -267,9 +712,9 @@ async function install() {
   const retryBtn = document.getElementById("retryWebhookBtn");
 
   logs.innerHTML = "";
-  resultDiv.classList.add("hidden");
-  retryBtn.classList.add("hidden");
-  logsWrap.classList.remove("hidden");
+  resultDiv.style.display = "none";
+  retryBtn.style.display = "none";
+  logsWrap.style.display = "block";
   btn.disabled = true;
 
   try {
@@ -289,20 +734,20 @@ async function install() {
     log(`› Bot: @${botUsername}`, "info");
     log("", "info");
 
-    // Step 1: Verify token
+    // 1. Verify token
     log("› بررسی توکن Cloudflare...", "info");
     const verify = await cf("/user/tokens/verify", "GET", null, token);
     if (verify.status !== "active") throw new Error("توکن غیرفعاله");
     log("✓ توکن معتبره", "ok");
 
-    // Step 2: Get account
+    // 2. Account
     log("› دریافت اطلاعات اکانت...", "info");
     const accounts = await cf("/accounts", "GET", null, token);
     const accountId = accounts[0]?.id;
     if (!accountId) throw new Error("اکانت پیدا نشد");
     log(`✓ اکانت: ${accounts[0].name}`, "ok");
 
-    // Step 3: Create KV
+    // 3. KV
     log("› ساخت KV Namespace...", "info");
     let kvId;
     try {
@@ -324,15 +769,13 @@ async function install() {
       }
     }
 
-    // Step 4: Get/Create subdomain
+    // 4. Subdomain
     log("› بررسی workers.dev subdomain...", "info");
     let subdomain = null;
     try {
       const sd = await cf(`/accounts/${accountId}/workers/subdomain`, "GET", null, token);
       subdomain = sd.subdomain;
-    } catch (e) {
-      subdomain = null;
-    }
+    } catch (e) { subdomain = null; }
 
     if (!subdomain) {
       const randomSub = "tgpn-" + Math.random().toString(36).slice(2, 10);
@@ -342,33 +785,27 @@ async function install() {
         await sleep(3000);
         const sd = await cf(`/accounts/${accountId}/workers/subdomain`, "GET", null, token);
         subdomain = sd.subdomain || randomSub;
-      } catch (e) {
-        subdomain = randomSub;
-      }
+      } catch (e) { subdomain = randomSub; }
     }
     log(`✓ Subdomain: ${subdomain}.workers.dev`, "ok");
 
     const publicHost = `${workerName}.${subdomain}.workers.dev`;
     log(`✓ آدرس نهایی: https://${publicHost}`, "ok");
 
-    // Step 5: Download worker.js
+    // 5. Download worker
     log("› دانلود worker.js...", "info");
     const workerRes = await fetch(WORKER_JS_URL);
     if (!workerRes.ok) throw new Error(`دانلود worker.js ناموفق (HTTP ${workerRes.status})`);
     const workerCode = await workerRes.text();
-    if (workerCode.length < 5000) throw new Error("worker.js خیلی کوتاهه، احتمالاً دانلود ناقصه");
+    if (workerCode.length < 5000) throw new Error("worker.js خیلی کوتاهه");
     log(`✓ worker.js دانلود شد (${(workerCode.length / 1024).toFixed(1)} KB)`, "ok");
 
-    // Step 6: Generate webhook secret
+    // 6. Secret
     const webhookSecret = generateWebhookSecret();
-    if (!isTelegramSafe(webhookSecret)) {
-      throw new Error("Webhook secret نامعتبر تولید شد");
-    }
-    log(`✓ Webhook Secret تولید شد (${webhookSecret.length} کاراکتر hex)`, "ok");
+    log(`✓ Webhook Secret تولید شد (${webhookSecret.length} کاراکتر)`, "ok");
 
-    // Step 7: Deploy worker with bindings
+    // 7. Deploy
     log("› Deploy Worker به Cloudflare...", "info");
-
     const metadata = {
       main_module: "worker.js",
       compatibility_date: "2025-10-01",
@@ -382,9 +819,7 @@ async function install() {
         { type: "secret_text", name: "TELEGRAM_WEBHOOK_SECRET", text: webhookSecret },
         { type: "durable_object_namespace", name: "PROXY_SESSIONS", class_name: "ProxySession" },
       ],
-      migrations: {
-        new_sqlite_classes: ["ProxySession"],
-      },
+      migrations: { new_sqlite_classes: ["ProxySession"] },
     };
 
     const formData = new FormData();
@@ -393,29 +828,20 @@ async function install() {
 
     const uploadRes = await fetch(
       `${CF_API}/accounts/${accountId}/workers/scripts/${workerName}`,
-      {
-        method: "PUT",
-        headers: { "Authorization": `Bearer ${token}` },
-        body: formData,
-      }
+      { method: "PUT", headers: { "Authorization": `Bearer ${token}` }, body: formData }
     );
     const uploadData = await uploadRes.json();
-    if (!uploadData.success) {
-      throw new Error(uploadData.errors?.[0]?.message || "Deploy ناموفق");
-    }
+    if (!uploadData.success) throw new Error(uploadData.errors?.[0]?.message || "Deploy ناموفق");
     log("✓ Worker آپلود شد", "ok");
 
-    // Step 8: Enable workers.dev
+    // 8. Enable
     log("› فعال‌سازی workers.dev subdomain...", "info");
     try {
       await fetch(
         `${CF_API}/accounts/${accountId}/workers/scripts/${workerName}/subdomain`,
         {
           method: "POST",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
+          headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
           body: JSON.stringify({ enabled: true, previews_enabled: false }),
         }
       );
@@ -424,11 +850,10 @@ async function install() {
       log(`! فعال‌سازی خودکار ناموفق: ${e.message}`, "warn");
     }
 
-    // Step 9: Register Telegram webhook
+    // 9. Webhook
     log("", "info");
     log("› صبر برای propagate شدن دامنه (۵ ثانیه)...", "info");
     await sleep(5000);
-
     log("› ثبت Webhook تلگرام...", "info");
     const whResult = await registerWebhook(botToken, publicHost, webhookSecret);
 
@@ -442,7 +867,7 @@ async function install() {
       log("⚠️ نصب انجام شد ولی webhook ثبت نشد", "warn");
       log("═══════════════════════════════", "warn");
       log(`› آخرین خطا: ${whResult.error}`, "err");
-      log("› روی دکمه «تلاش مجدد» بزن یا ۲ دقیقه صبر کن و دوباره تلاش کن", "warn");
+      log("› روی دکمه «تلاش مجدد» بزن", "warn");
     }
 
     document.getElementById("resUrl").textContent = `https://${publicHost}`;
@@ -454,15 +879,14 @@ async function install() {
     const whStatus = document.getElementById("resWebhookStatus");
     if (whResult.ok) {
       whStatus.textContent = "✅ ثبت شد";
-      whStatus.className = "text-xs text-emerald-400";
+      whStatus.style.color = "var(--ok)";
     } else {
       whStatus.textContent = "❌ ثبت نشد";
-      whStatus.className = "text-xs text-red-400";
-      retryBtn.classList.remove("hidden");
+      whStatus.style.color = "var(--err)";
+      retryBtn.style.display = "block";
     }
 
-    resultDiv.classList.remove("hidden");
-
+    resultDiv.style.display = "block";
     btn.disabled = false;
     btn.textContent = "✅ نصب شد";
 
@@ -475,40 +899,116 @@ async function install() {
   }
 }
 
-// ══════════════════════════════════════════════════════════
-// RETRY WEBHOOK BUTTON
-// ══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+// EVENT WIRING
+// ═══════════════════════════════════════════════════════════
+document.getElementById("installBtn").addEventListener("click", install);
+
 document.getElementById("retryWebhookBtn").addEventListener("click", async () => {
   const btn = document.getElementById("retryWebhookBtn");
   const botToken = document.getElementById("botToken").value.trim();
   const publicHost = document.getElementById("resUrl").textContent.replace("https://", "");
   const webhookSecret = document.getElementById("resSecret").textContent;
-
-  if (!botToken || !publicHost || !webhookSecret) {
-    alert("اطلاعات ناقصه");
-    return;
-  }
-
+  if (!botToken || !publicHost || !webhookSecret) { alert("اطلاعات ناقصه"); return; }
   btn.disabled = true;
   btn.textContent = "⏳ در حال تلاش...";
-
   const res = await registerWebhook(botToken, publicHost, webhookSecret, 8);
-
   const whStatus = document.getElementById("resWebhookStatus");
   if (res.ok) {
     whStatus.textContent = "✅ ثبت شد";
-    whStatus.className = "text-xs text-emerald-400";
-    btn.classList.add("hidden");
+    whStatus.style.color = "var(--ok)";
+    btn.style.display = "none";
   } else {
     whStatus.textContent = "❌ ثبت نشد";
-    whStatus.className = "text-xs text-red-400";
+    whStatus.style.color = "var(--err)";
     btn.disabled = false;
     btn.textContent = "🔄 تلاش مجدد";
   }
 });
 
-// ══════════════════════════════════════════════════════════
-document.getElementById("installBtn").addEventListener("click", install);
+document.getElementById("toggleCfToken").addEventListener("click", (e) => {
+  const el = document.getElementById("cfToken");
+  el.type = el.type === "password" ? "text" : "password";
+  e.target.textContent = el.type === "password" ? "👁" : "🙈";
+});
+document.getElementById("toggleBotToken").addEventListener("click", (e) => {
+  const el = document.getElementById("botToken");
+  el.type = el.type === "password" ? "text" : "password";
+  e.target.textContent = el.type === "password" ? "👁" : "🙈";
+});
+
+document.getElementById("unlockBtn").addEventListener("click", handleUnlock);
+document.getElementById("unlockPassword").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") handleUnlock();
+});
+document.getElementById("setupBtn").addEventListener("click", handleSetup);
+document.getElementById("setupPassword2").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") handleSetup();
+});
+document.getElementById("skipSetupBtn").addEventListener("click", () => {
+  hideSetupModal();
+});
+
+document.getElementById("forgetDataBtn").addEventListener("click", () => {
+  if (confirm("همه داده‌های ذخیره‌شده پاک بشن؟")) {
+    clearVault();
+    hideLockModal();
+  }
+});
+
+document.getElementById("lockNowBtn").addEventListener("click", async () => {
+  // ذخیره با رمز فعلی قبل از قفل
+  const pw = prompt("برای ذخیره‌سازی تغییرات قبل از قفل، رمز عبور را وارد کن (یا Cancel برای قفل بدون ذخیره):");
+  if (pw) {
+    try {
+      const vault = collectVaultFromForm();
+      const enc = await encryptVault(vault, pw);
+      saveEncrypted(enc);
+      decryptedVault = vault;
+    } catch (e) {
+      alert("خطا در ذخیره: " + e.message);
+      return;
+    }
+  }
+  masterKey = null;
+  decryptedVault = null;
+  sessionUnlocked = false;
+  updateSessionBar();
+  // پاک کردن فرم
+  for (const f of VAULT_FIELDS) {
+    const el = document.getElementById(f);
+    if (el) el.value = "";
+  }
+  showLockModal();
+});
+
+// ═══════════════════════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════════════════════
+(async function boot() {
+  updateSessionBar();
+  if (hasVault()) {
+    showLockModal();
+  } else {
+    // اولین بار — بعد از پر کردن فرم، دکمه ذخیره ظاهر بشه؟
+    // پیشنهاد می‌کنیم بعد از نصب یا کلیک روی install، اگر vault نداشت، ازش بپرسیم.
+    // اینجا فعلاً مدال setup رو نشون نمی‌دیم تا اذیت نشه.
+  }
+})();
+
+// Hook: بعد از اولین install موفق، پیشنهاد ذخیره
+const origInstall = install;
+window.install = async function() {
+  await origInstall();
+  if (!hasVault() && !sessionUnlocked) {
+    // اگه هنوز vault نداره، بعد از نصب موفق پیشنهاد بده
+    const shouldSave = confirm("می‌خوای اطلاعات رو رمزنگاری‌شده ذخیره کنی تا دفعه بعد دوباره وارد نکنی؟");
+    if (shouldSave) showSetupModal();
+  }
+};
+// override the click handler
+document.getElementById("installBtn").removeEventListener("click", install);
+document.getElementById("installBtn").addEventListener("click", window.install);
 </script>
 
 </body>
