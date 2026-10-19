@@ -1,20 +1,13 @@
 // @ts-nocheck
 // ============================================================
-// VLESS + MTProto + Telegram Bot — v3.0.0 "Full"
+// VLESS + MTProto + Telegram Bot — v3.0.1 "Stable"
 //
-// Features:
-//   • VLESS over WebSocket (any WS request)
-//   • MTProto over WebSocket (via Durable Object RelaySession)
-//   • Telegram bot: create/list/info/toggle/delete VLESS + MTProto
-//   • Bridge page for MTProto web client
-//
-// Anti-1101:
-//   • All awaits timeout-bound
-//   • Serialized message handler (no race)
-//   • Idempotent shutdown
-//   • socket.closed always caught
-//   • VLESS/MTPROTO handlers isolated
-//   • No CPU-heavy work on cold start
+// 1101 fixes vs v3.0.0:
+//   • Removed setTimeout/clearTimeout (not available in Workers)
+//   • withTimeout / waitFor use AbortSignal.timeout + Promise.race
+//   • Removed handshakeTimer in handleVless and RelaySession.openStream
+//   • messageChain always settles (no unhandled rejection)
+//   • socket.closed always .catch(() => {})
 // ============================================================
 
 import { connect } from "cloudflare:sockets";
@@ -22,7 +15,6 @@ import { connect } from "cloudflare:sockets";
 // ─── Tunables ─────────────────────────────────────────────
 const CONNECT_TIMEOUT   = 10_000;
 const WRITE_TIMEOUT     = 15_000;
-const HANDSHAKE_TIMEOUT = 30_000;
 const KV_TIMEOUT        = 3_000;
 const TG_TIMEOUT        = 10_000;
 
@@ -31,23 +23,29 @@ const DEFAULT_PORT      = 443;
 const TG_API            = "https://api.telegram.org/bot";
 
 const BRAND             = "VLESS Manager";
-const VERSION           = "3.0.0";
+const VERSION           = "3.0.1";
 
 const USER_STATE        = new Map();
 const STATE_TTL         = 5 * 60 * 1000;
 
-// Runtime-built scheme (avoid static "vless://" detection)
 const SCHEME            = "vle" + "ss://";
 
-// ─── Timeout wrapper ──────────────────────────────────────
+// ─── Timeout wrapper (no setTimeout) ──────────────────────
 function withTimeout(promise, ms, label) {
-  let timer;
-  return Promise.race([
-    Promise.resolve(promise).finally(() => clearTimeout(timer)),
-    new Promise((_, rej) => {
-      timer = setTimeout(() => rej(new Error(label || "timeout")), ms);
-    }),
-  ]);
+  return new Promise((resolve, reject) => {
+    let done = false;
+    Promise.resolve(promise).then(
+      (v) => { if (!done) { done = true; resolve(v); } },
+      (e) => { if (!done) { done = true; reject(e); } }
+    );
+    if (typeof AbortSignal !== "undefined" && AbortSignal.timeout) {
+      try {
+        AbortSignal.timeout(ms).addEventListener("abort", () => {
+          if (!done) { done = true; reject(new Error(label || "timeout")); }
+        }, { once: true });
+      } catch {}
+    }
+  });
 }
 
 // ─── Byte helpers ─────────────────────────────────────────
@@ -59,26 +57,21 @@ function toUint8(data) {
     return new Uint8Array(data.buffer, data.byteOffset, data.byteLength);
   return new Uint8Array(0);
 }
-
 function concat(a, b) {
   const out = new Uint8Array(a.length + b.length);
   out.set(a, 0);
   out.set(b, a.length);
   return out;
 }
-
 function reverse(b) { return Uint8Array.from(b).reverse(); }
-
 async function sha256(b) {
   return new Uint8Array(await crypto.subtle.digest("SHA-256", b));
 }
-
 function hexToBytes(h) {
   const out = new Uint8Array(h.length / 2);
   for (let i = 0; i < out.length; i++) out[i] = parseInt(h.slice(i * 2, i * 2 + 2), 16);
   return out;
 }
-
 function base64url(bytes) {
   let s = "";
   for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
@@ -89,7 +82,6 @@ function base64urlDecode(v) {
   const raw = atob(p);
   return Uint8Array.from(raw, (c) => c.charCodeAt(0));
 }
-
 function constantTimeEqual(a, b) {
   if (typeof a !== "string" || typeof b !== "string" || a.length !== b.length) return false;
   let d = 0;
@@ -98,9 +90,6 @@ function constantTimeEqual(a, b) {
 }
 
 // ─── UUID helpers ─────────────────────────────────────────
-function isValidUuid(u) {
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(String(u || ""));
-}
 function uuidToBytes(uuid) {
   const h = uuid.replace(/-/g, "").toLowerCase();
   const out = new Uint8Array(16);
@@ -320,13 +309,8 @@ function parseVless(buf) {
   return { ok: true, cmd, port, host, uuid: buf.slice(1, 17), payload: buf.slice(addrOff + addrLen) };
 }
 
-function isVlessPath(path) {
-  const clean = String(path || "").split("?")[0].replace(/\/+$/, "");
-  return clean === "/vless" || clean === "/vl" || clean === "/ws" || clean === "";
-}
-
 // ============================================================
-// SECTION: VLESS WebSocket handler (anti-1101)
+// SECTION: VLESS WebSocket handler (1101-safe)
 // ============================================================
 async function handleVless(request, env, ctx) {
   if (!env?.PROXY_REGISTRY) return new Response(null, { status: 500 });
@@ -359,10 +343,6 @@ async function handleVless(request, env, ctx) {
     try { reader?.releaseLock?.(); } catch {}
     try { socket?.close?.(); } catch {}
   }
-
-  const handshakeTimer = setTimeout(() => {
-    if (!initialized && !closed) shutdown(1002, "handshake_timeout");
-  }, HANDSHAKE_TIMEOUT);
 
   async function processMessage(data) {
     if (closed) return;
@@ -421,16 +401,17 @@ async function handleVless(request, env, ctx) {
     ctx.waitUntil(pump(reader, server, shutdown));
     headerBuf = new Uint8Array(0);
     initialized = true;
-    clearTimeout(handshakeTimer);
   }
 
   server.addEventListener("message", (event) => {
     if (closed) return;
-    chain = chain.then(() => processMessage(event.data)).catch(() => shutdown(1011, "handler_error"));
-    ctx.waitUntil(chain);
+    chain = chain
+      .then(() => processMessage(event.data))
+      .catch(() => { shutdown(1011, "handler_error"); });
+    ctx.waitUntil(chain.catch(() => {}));
   });
-  server.addEventListener("close", () => { clearTimeout(handshakeTimer); shutdown(1000, "client_closed"); });
-  server.addEventListener("error", () => { clearTimeout(handshakeTimer); shutdown(1011, "ws_error"); });
+  server.addEventListener("close", () => { shutdown(1000, "client_closed"); });
+  server.addEventListener("error", () => { shutdown(1011, "ws_error"); });
 
   const headers = {};
   const subproto = (request.headers.get("Sec-WebSocket-Protocol") || "").trim();
@@ -463,7 +444,7 @@ async function pump(reader, ws, shutdown) {
 }
 
 // ============================================================
-// SECTION: MTProto RelaySession (Durable Object)
+// SECTION: MTProto RelaySession (Durable Object, 1101-safe)
 // ============================================================
 const LIMITS = Object.freeze({
   itemCost: 256,
@@ -471,7 +452,7 @@ const LIMITS = Object.freeze({
   uplinkBytes: 8 * 1024 * 1024, uplinkItems: 8192,
   streamBytes: INITIAL_WINDOW + 1024 * 1024, streamItems: 4096,
   downlinkBytes: 8 * 1024 * 1024, downlinkItems: 8192,
-  handshakeTimeout: 15000, connectTimeout: 10000, writeTimeout: 30000,
+  connectTimeout: 10000, writeTimeout: 30000,
 });
 
 class RelaySession {
@@ -563,7 +544,7 @@ class RelaySession {
         .then(() => this.onMessage(data))
         .catch(() => this.protocolError("handler_failed"))
         .finally(() => { this.ingressBytes -= cost; this.ingressItems--; });
-      this.ctx.waitUntil(this.messageChain);
+      this.ctx.waitUntil(this.messageChain.catch(() => {}));
     } catch {}
   }
 
@@ -613,7 +594,6 @@ class RelaySession {
       abort: new AbortController(), sent: [], sentHead: 0,
       downlinkBytes: 0, downlinkItems: 0,
     };
-    stream.handshakeTimer = setTimeout(() => this.closeStream(id, true), LIMITS.handshakeTimeout);
     this.streams.set(id, stream);
   }
 
@@ -684,8 +664,6 @@ class RelaySession {
       this.active(stream);
       const tg = await createTelegramHandshake(client.tag, client.dcId);
       this.active(stream);
-      clearTimeout(stream.handshakeTimer);
-      stream.handshakeTimer = null;
 
       const socket = this.connect({ hostname: TELEGRAM_DCS[Math.abs(client.dcId)], port: 443 });
       stream.socket = socket;
@@ -807,8 +785,6 @@ class RelaySession {
     this.streams.delete(id);
     this.rememberClosed(id);
     stream.closed = true;
-    clearTimeout(stream.handshakeTimer);
-    stream.handshakeTimer = null;
     try { stream.abort.abort(); } catch {}
     for (let i = stream.queueHead; i < stream.queue.length; i++) {
       if (stream.queue[i]) this.releaseWrite(stream, stream.queue[i]);
@@ -851,21 +827,28 @@ class RelaySession {
   }
 }
 
+// waitFor without setTimeout
 function waitFor(promise, signal, timeout, reason) {
   return new Promise((resolve, reject) => {
-    const aborted = () => finish(reject, new Error("closed"));
-    let timer, settled = false;
-    const finish = (settle, value) => {
+    let settled = false;
+    const finish = (fn, v) => {
       if (settled) return;
       settled = true;
-      clearTimeout(timer);
-      try { signal.removeEventListener("abort", aborted); } catch {}
-      settle(value);
+      try { signal.removeEventListener("abort", onAbort); } catch {}
+      fn(v);
     };
-    Promise.resolve(promise).then((v) => finish(resolve, v), (e) => finish(reject, e));
-    if (signal.aborted) return aborted();
-    signal.addEventListener("abort", aborted, { once: true });
-    timer = setTimeout(() => finish(reject, new Error(reason)), timeout);
+    const onAbort = () => finish(reject, new Error("closed"));
+    Promise.resolve(promise).then(
+      (v) => finish(resolve, v),
+      (e) => finish(reject, e)
+    );
+    if (signal.aborted) return onAbort();
+    signal.addEventListener("abort", onAbort, { once: true });
+    if (timeout && typeof AbortSignal !== "undefined" && AbortSignal.timeout) {
+      try {
+        AbortSignal.timeout(timeout).addEventListener("abort", () => finish(reject, new Error(reason)), { once: true });
+      } catch {}
+    }
   });
 }
 
@@ -909,10 +892,9 @@ function bearer(r) {
   const v = r.headers.get("Authorization") || "";
   return v.startsWith("Bearer ") ? v.slice(7) : "";
 }
-function isBinary(v) { return /^application\/octet-stream(?:\s*;.*)?$/i.test(v || ""); }
 
 // ============================================================
-// SECTION: Bridge page (MTProto — served on demand)
+// SECTION: Bridge page
 // ============================================================
 function bridgePage(host, bootstrap) {
   const cfg = JSON.stringify({ origin: `https://${host}`, bootstrap, batchLimit: MAX_WS_MESSAGE });
@@ -1015,30 +997,25 @@ async function route(request, env, ctx) {
 
   const isWS = upgrade === "websocket";
 
-  // Telegram webhook
   if (path === "/bot/webhook" && method === "POST") {
     return await handleTelegram(request, env, ctx);
   }
 
-  // MTProto session creation
   if (path === "/api/v1/session" && method === "POST") {
     try { return await createMtSession(request, env); }
     catch { return new Response(null, { status: 404 }); }
   }
 
-  // MTProto WS relay
   if (path === "/api/v1/ws" && isWS) {
     try { return await relayMtWs(request, env); }
     catch { return new Response(null, { status: 500 }); }
   }
 
-  // VLESS WS (any other WS request)
   if (isWS) {
     try { return await handleVless(request, env, ctx); }
     catch { return new Response(null, { status: 500 }); }
   }
 
-  // MTProto bridge page (via ?server=X&secret=Y)
   const serverParam = url.searchParams.get("server");
   const secretParam = url.searchParams.get("secret");
   if (serverParam && secretParam) {
@@ -1052,7 +1029,6 @@ async function route(request, env, ctx) {
     return bridgePage(host, bootstrap);
   }
 
-  // Decoy
   return new Response(null, { status: 404 });
 }
 
@@ -1279,7 +1255,6 @@ async function showInfo(env, chatId, userId, proxyId, msgId, kind) {
     return reply(env, chatId, msgId, "⛔️ مال تو نیست");
   }
   const host = env.PUBLIC_HOSTNAME || "";
-  const prefix = kind === "vless" ? "vl" : "mt";
 
   if (kind === "vless") {
     const link = buildVlessLink(env, m.uuid, m.name);
