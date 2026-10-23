@@ -9,27 +9,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #05080e;
-    --panel: #0b1118;
-    --panel-2: #0f1720;
-    --border: #1c2530;
-    --border-2: #263241;
-    --text: #e2e8f0;
-    --muted: #64748b;
-    --accent: #6366f1;
-    --accent-2: #8b5cf6;
-    --ok: #4ade80;
-    --err: #f87171;
-    --warn: #fbbf24;
-    --info: #60a5fa;
+    --bg: #05080e; --panel: #0b1118; --panel-2: #0f1720;
+    --border: #1c2530; --border-2: #263241; --text: #e2e8f0;
+    --muted: #64748b; --accent: #6366f1; --accent-2: #8b5cf6;
+    --ok: #4ade80; --err: #f87171; --warn: #fbbf24; --info: #60a5fa;
   }
   * { box-sizing: border-box; }
   body {
     font-family: 'Vazirmatn', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    margin: 0;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh; margin: 0;
     background-image:
       radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99,102,241,.15), transparent),
       radial-gradient(ellipse 60% 40% at 80% 100%, rgba(139,92,246,.08), transparent);
@@ -37,80 +26,45 @@
   .mono { font-family: 'JetBrains Mono', monospace; direction: ltr; }
   .panel {
     background: linear-gradient(180deg, var(--panel), var(--panel-2));
-    border: 1px solid var(--border);
-    border-radius: 16px;
+    border: 1px solid var(--border); border-radius: 16px;
   }
-  .panel-glow {
-    box-shadow: 0 0 0 1px rgba(99,102,241,.1), 0 20px 40px -20px rgba(0,0,0,.6);
-  }
+  .panel-glow { box-shadow: 0 0 0 1px rgba(99,102,241,.1), 0 20px 40px -20px rgba(0,0,0,.6); }
   .field {
-    background: #070b10;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 11px 14px;
-    color: var(--text);
-    font-size: 13px;
-    width: 100%;
-    outline: none;
-    transition: all .15s;
+    background: #070b10; border: 1px solid var(--border); border-radius: 10px;
+    padding: 11px 14px; color: var(--text); font-size: 13px; width: 100%;
+    outline: none; transition: all .15s;
   }
-  .field:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(99,102,241,.12);
-  }
+  .field:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(99,102,241,.12); }
   .field::placeholder { color: #3d4956; }
   .btn-primary {
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    color: #fff;
-    border: none;
-    border-radius: 12px;
-    padding: 15px 24px;
-    font-weight: 800;
-    font-size: 15px;
-    cursor: pointer;
-    width: 100%;
-    transition: all .2s;
+    color: #fff; border: none; border-radius: 12px;
+    padding: 15px 24px; font-weight: 800; font-size: 15px;
+    cursor: pointer; width: 100%; transition: all .2s;
     box-shadow: 0 8px 24px -8px rgba(99,102,241,.6);
   }
-  .btn-primary:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 12px 28px -8px rgba(99,102,241,.8);
-  }
+  .btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 12px 28px -8px rgba(99,102,241,.8); }
   .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
   .btn-ghost {
-    background: transparent;
-    border: 1px solid var(--border-2);
-    color: var(--text);
-    border-radius: 10px;
-    padding: 10px 16px;
-    font-weight: 600;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all .15s;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
+    background: transparent; border: 1px solid var(--border-2);
+    color: var(--text); border-radius: 10px; padding: 10px 16px;
+    font-weight: 600; font-size: 13px; cursor: pointer;
+    transition: all .15s; display: inline-flex; align-items: center;
+    justify-content: center; gap: 6px;
   }
   .btn-ghost:hover { border-color: var(--accent); background: rgba(99,102,241,.06); }
   .step-num {
-    width: 34px; height: 34px;
-    border-radius: 9px;
+    width: 34px; height: 34px; border-radius: 9px;
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
     display: flex; align-items: center; justify-content: center;
-    font-weight: 900; font-size: 15px; color: #fff;
-    flex-shrink: 0;
+    font-weight: 900; font-size: 15px; color: #fff; flex-shrink: 0;
   }
   .log-line {
-    padding: 5px 14px;
-    font-size: 11.5px;
+    padding: 5px 14px; font-size: 11.5px;
     border-bottom: 1px solid rgba(28,37,48,.5);
     font-family: 'JetBrains Mono', monospace;
-    direction: ltr;
-    text-align: left;
-    line-height: 1.6;
-    white-space: pre-wrap;
-    word-break: break-all;
+    direction: ltr; text-align: left; line-height: 1.6;
+    white-space: pre-wrap; word-break: break-all;
   }
   .log-line:last-child { border-bottom: none; }
   .log-ok { color: var(--ok); }
@@ -123,10 +77,8 @@
     font-size: 11px; font-weight: 700;
   }
   .dot-pulse {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: var(--ok);
-    box-shadow: 0 0 0 0 rgba(74,222,128,.6);
-    animation: pulse 2s infinite;
+    width: 7px; height: 7px; border-radius: 50%; background: var(--ok);
+    box-shadow: 0 0 0 0 rgba(74,222,128,.6); animation: pulse 2s infinite;
   }
   @keyframes pulse {
     0% { box-shadow: 0 0 0 0 rgba(74,222,128,.6); }
@@ -134,30 +86,21 @@
     100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); }
   }
   .modal-backdrop {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,.75);
-    backdrop-filter: blur(6px);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 1000; padding: 20px;
+    position: fixed; inset: 0; background: rgba(0,0,0,.75);
+    backdrop-filter: blur(6px); display: flex; align-items: center;
+    justify-content: center; z-index: 1000; padding: 20px;
   }
   .modal {
     background: linear-gradient(180deg, #0d141c, #0a0f16);
-    border: 1px solid var(--border-2);
-    border-radius: 18px;
-    padding: 28px;
-    max-width: 420px; width: 100%;
+    border: 1px solid var(--border-2); border-radius: 18px;
+    padding: 28px; max-width: 420px; width: 100%;
     box-shadow: 0 25px 50px -12px rgba(0,0,0,.8);
   }
   .code-inline {
-    background: #070b10;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 2px 7px;
-    font-size: 11px;
-    color: #a5b4fc;
-    font-family: 'JetBrains Mono', monospace;
-    direction: ltr;
-    display: inline-block;
+    background: #070b10; border: 1px solid var(--border);
+    border-radius: 6px; padding: 2px 7px; font-size: 11px;
+    color: #a5b4fc; font-family: 'JetBrains Mono', monospace;
+    direction: ltr; display: inline-block;
   }
   .secure-badge {
     display: inline-flex; align-items: center; gap: 5px;
@@ -213,7 +156,7 @@
   <div class="text-center mb-8">
     <div class="badge mb-5" style="background:rgba(74,222,128,.08); border:1px solid rgba(74,222,128,.2); color:var(--ok)">
       <span class="dot-pulse"></span>
-      v9.1.0 · نصب از مرورگر
+      v9.2.0 · نصب از مرورگر
     </div>
     <h1 class="text-4xl font-black mb-2" style="background:linear-gradient(135deg,#a5b4fc,#c4b5fd); -webkit-background-clip:text; -webkit-text-fill-color:transparent">
       🌐 TGProxyNode
@@ -235,24 +178,19 @@
       <div class="step-num">1</div>
       <h2 class="font-bold text-base">توکن Cloudflare</h2>
     </div>
-
     <p class="text-xs mb-3 leading-relaxed" style="color:var(--muted)">
       روی دکمه زیر بزن — یک توکن با <b style="color:var(--info)">تمام مجوزهای لازم</b> از پیش انتخاب می‌شه:
     </p>
-
     <a id="tokenLink" href="https://dash.cloudflare.com/profile/api-tokens?permissionGroupKeys=%5B%7B%22key%22%3A%22workers_scripts%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22workers_kv_storage%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22account_settings%22%2C%22type%22%3A%22read%22%7D%2C%7B%22key%22%3A%22workers_subdomain%22%2C%22type%22%3A%22edit%22%7D%2C%7B%22key%22%3A%22user_details%22%2C%22type%22%3A%22read%22%7D%5D&accountId=*&zoneId=all&name=TGProxyNode-Setup"
        target="_blank"
        class="btn-ghost mb-3 w-full"
        style="border-color:rgba(99,102,241,.4); color:#c7d2fe">
       🔑 ساخت توکن با تمام مجوزها
     </a>
-
     <div class="relative">
-      <input id="cfToken" type="password" placeholder="توکن Cloudflare را اینجا جای‌گذاری کن..."
-             class="field mono" style="padding-left:44px">
+      <input id="cfToken" type="password" placeholder="توکن Cloudflare را اینجا جای‌گذاری کن..." class="field mono" style="padding-left:44px">
       <button type="button" id="toggleCfToken" class="absolute" style="left:10px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:var(--muted); font-size:15px" title="نمایش">👁</button>
     </div>
-
     <div class="mt-2 text-[10.5px]" style="color:var(--muted)">
       مجوزهای لازم:
       <span class="code-inline">Workers Scripts:Edit</span>
@@ -267,18 +205,15 @@
       <div class="step-num">2</div>
       <h2 class="font-bold text-base">اطلاعات پروژه</h2>
     </div>
-
     <div class="space-y-3">
       <div>
         <label class="text-[11px] mb-1.5 block font-semibold" style="color:var(--muted)">نام Worker</label>
         <input id="workerName" type="text" value="tgproxynode" class="field mono">
       </div>
-
       <div>
         <label class="text-[11px] mb-1.5 block font-semibold" style="color:var(--muted)">یوزرنیم بات (بدون @)</label>
         <input id="botUsername" type="text" placeholder="myproxybot" class="field mono">
       </div>
-
       <div>
         <label class="text-[11px] mb-1.5 block font-semibold" style="color:var(--muted)">
           آیدی عددی تلگرام
@@ -286,7 +221,6 @@
         </label>
         <input id="adminId" type="text" placeholder="123456789" class="field mono">
       </div>
-
       <div>
         <label class="text-[11px] mb-1.5 block font-semibold" style="color:var(--muted)">
           توکن بات
@@ -300,9 +234,7 @@
     </div>
   </div>
 
-  <button id="installBtn" class="btn-primary mb-5">
-    🚀 نصب و راه‌اندازی
-  </button>
+  <button id="installBtn" class="btn-primary mb-5">🚀 نصب و راه‌اندازی</button>
 
   <div id="logsWrap" class="panel mb-5 overflow-hidden" style="display:none">
     <div class="px-4 py-2.5 flex items-center gap-2.5" style="background:rgba(0,0,0,.25); border-bottom:1px solid var(--border)">
@@ -339,11 +271,9 @@
         <span id="resWebhookStatus" class="text-xs"></span>
       </div>
     </div>
-
     <button id="retryWebhookBtn" class="btn-primary mt-4" style="display:none; padding:12px; font-size:13px; background:linear-gradient(135deg,#22c55e,#16a34a)">
       🔄 تلاش مجدد برای ثبت Webhook
     </button>
-
     <div class="mt-4 p-3.5 rounded-lg text-[11.5px] leading-relaxed" style="background:#070b10; border:1px solid var(--border); color:var(--muted)">
       <strong style="color:var(--ok)">مرحله بعد:</strong>
       برو در بات، <span class="code-inline">/start</span> بزن، بعد <span class="code-inline">/new test</span> تا اولین پروکسی ساخته بشه.
@@ -374,7 +304,7 @@ const STORAGE_META = "tgpn_vault_meta_v1";
 let masterKey = null;
 let decryptedVault = null;
 let sessionUnlocked = false;
-let isInstalling = false;  // FIX: prevent double-install
+let isInstalling = false;
 
 // ═══════════════════════════════════════════════════════════
 // LOGGER
@@ -412,7 +342,6 @@ async function deriveKey(password, salt) {
     ["encrypt", "decrypt"]
   );
 }
-
 async function encryptVault(vault, password) {
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const iv = crypto.getRandomValues(new Uint8Array(12));
@@ -421,7 +350,6 @@ async function encryptVault(vault, password) {
   const ciphertext = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, plaintext);
   return { salt: b64encode(salt), iv: b64encode(iv), data: b64encode(ciphertext) };
 }
-
 async function decryptVault(enc, password) {
   const salt = b64decode(enc.salt);
   const iv = b64decode(enc.iv);
@@ -446,9 +374,7 @@ function loadEncrypted() {
 function clearVault() {
   localStorage.removeItem(STORAGE_KEY);
   localStorage.removeItem(STORAGE_META);
-  masterKey = null;
-  decryptedVault = null;
-  sessionUnlocked = false;
+  masterKey = null; decryptedVault = null; sessionUnlocked = false;
   updateSessionBar();
 }
 function hasVault() { return !!loadEncrypted(); }
@@ -510,28 +436,20 @@ async function handleUnlock() {
   const pw = document.getElementById("unlockPassword").value;
   const errEl = document.getElementById("unlockError");
   errEl.classList.add("hidden");
-  if (!pw) {
-    errEl.textContent = "رمز عبور را وارد کن";
-    errEl.classList.remove("hidden");
-    return;
-  }
+  if (!pw) { errEl.textContent = "رمز عبور را وارد کن"; errEl.classList.remove("hidden"); return; }
   const btn = document.getElementById("unlockBtn");
-  btn.disabled = true;
-  btn.textContent = "⏳ در حال باز کردن...";
+  btn.disabled = true; btn.textContent = "⏳ در حال باز کردن...";
   try {
     const enc = loadEncrypted();
     const vault = await decryptVault(enc, pw);
-    decryptedVault = vault;
-    sessionUnlocked = true;
+    decryptedVault = vault; sessionUnlocked = true;
     fillFormFromVault(vault);
-    hideLockModal();
-    updateSessionBar();
+    hideLockModal(); updateSessionBar();
   } catch (e) {
     errEl.textContent = "رمز عبور نادرست است";
     errEl.classList.remove("hidden");
   } finally {
-    btn.disabled = false;
-    btn.textContent = "🔓 باز کردن";
+    btn.disabled = false; btn.textContent = "🔓 باز کردن";
   }
 }
 
@@ -540,33 +458,20 @@ async function handleSetup() {
   const pw2 = document.getElementById("setupPassword2").value;
   const errEl = document.getElementById("setupError");
   errEl.classList.add("hidden");
-  if (pw.length < 8) {
-    errEl.textContent = "رمز عبور باید حداقل ۸ کاراکتر باشد";
-    errEl.classList.remove("hidden");
-    return;
-  }
-  if (pw !== pw2) {
-    errEl.textContent = "رمز عبور و تکرار آن یکسان نیست";
-    errEl.classList.remove("hidden");
-    return;
-  }
+  if (pw.length < 8) { errEl.textContent = "رمز عبور باید حداقل ۸ کاراکتر باشد"; errEl.classList.remove("hidden"); return; }
+  if (pw !== pw2) { errEl.textContent = "رمز عبور و تکرار آن یکسان نیست"; errEl.classList.remove("hidden"); return; }
   const btn = document.getElementById("setupBtn");
-  btn.disabled = true;
-  btn.textContent = "⏳ در حال رمزنگاری...";
+  btn.disabled = true; btn.textContent = "⏳ در حال رمزنگاری...";
   try {
     const vault = collectVaultFromForm();
     const enc = await encryptVault(vault, pw);
-    saveEncrypted(enc);
-    sessionUnlocked = true;
-    decryptedVault = vault;
-    hideSetupModal();
-    updateSessionBar();
+    saveEncrypted(enc); sessionUnlocked = true; decryptedVault = vault;
+    hideSetupModal(); updateSessionBar();
   } catch (e) {
     errEl.textContent = "خطا: " + e.message;
     errEl.classList.remove("hidden");
   } finally {
-    btn.disabled = false;
-    btn.textContent = "🛡️ ذخیره و ادامه";
+    btn.disabled = false; btn.textContent = "🛡️ ذخیره و ادامه";
   }
 }
 
@@ -600,7 +505,6 @@ async function registerWebhook(botToken, publicHost, webhookSecret, maxAttempts 
     `?url=https://${publicHost}/bot/webhook` +
     `&secret_token=${encodeURIComponent(webhookSecret)}` +
     `&allowed_updates=%5B%22message%22%2C%22edited_message%22%2C%22callback_query%22%5D`;
-
   let lastErr = "";
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     log(`› تلاش ${attempt}/${maxAttempts} برای ثبت webhook...`, "info");
@@ -631,14 +535,11 @@ async function registerWebhook(botToken, publicHost, webhookSecret, maxAttempts 
 }
 
 // ═══════════════════════════════════════════════════════════
-// INSTALL (FIXED)
+// INSTALL (v9.2.0 — module worker fixes)
 // ═══════════════════════════════════════════════════════════
 async function install() {
-  // FIX #1: prevent concurrent installs
-  if (isInstalling) {
-    console.warn("Install already running, ignoring duplicate click");
-    return;
-  }
+  if (isInstalling) return;
+  isInstalling = true;
 
   const btn = document.getElementById("installBtn");
   const resultDiv = document.getElementById("result");
@@ -651,7 +552,6 @@ async function install() {
   retryBtn.style.display = "none";
   logsWrap.style.display = "block";
   btn.disabled = true;
-  isInstalling = true;
 
   try {
     const token = document.getElementById("cfToken").value.trim();
@@ -734,33 +634,40 @@ async function install() {
     if (!workerRes.ok) throw new Error(`دانلود worker.js ناموفق (HTTP ${workerRes.status})`);
     const workerCode = await workerRes.text();
     if (workerCode.length < 5000) throw new Error("worker.js خیلی کوتاهه");
-    log(`✓ worker.js دانلود شد (${(workerCode.length / 1024).toFixed(1)} KB)`, "ok");
+
+    // Pre-flight validation
+    if (!/export\s+default/.test(workerCode)) {
+      throw new Error("worker.js معتبر نیست — export default پیدا نشد. منبع را بررسی کنید.");
+    }
+    if (!/cloudflare:sockets/.test(workerCode)) {
+      throw new Error("worker.js معتبر نیست — cloudflare:sockets پیدا نشد.");
+    }
+    log(`✓ worker.js دانلود و اعتبارسنجی شد (${(workerCode.length / 1024).toFixed(1)} KB)`, "ok");
 
     // 6. Secret
     const webhookSecret = generateWebhookSecret();
     log(`✓ Webhook Secret تولید شد (${webhookSecret.length} کاراکتر)`, "ok");
 
-    // FIX #2: Check if worker exists BEFORE deciding migrations
+    // 7. Check worker exists
     log("› بررسی وجود Worker...", "info");
     let workerExists = false;
     try {
       const scripts = await cf(`/accounts/${accountId}/workers/scripts`, "GET", null, token);
       workerExists = Array.isArray(scripts) && scripts.some(s => s.id === workerName);
       if (workerExists) {
-        log("› Worker از قبل وجود دارد — migration حذف می‌شود", "warn");
+        log("› Worker از قبل وجود دارد — بدون migration", "warn");
       } else {
-        log("✓ Worker جدید — migration اضافه می‌شود", "ok");
+        log("✓ Worker جدید — با migration", "ok");
       }
     } catch (e) {
       log(`! بررسی Worker ناموفق: ${e.message}`, "warn");
     }
 
-    // 7. Deploy
+    // 8. Deploy — MODULE WORKER, no nodejs_compat
     log("› Deploy Worker به Cloudflare...", "info");
     const metadata = {
       main_module: "worker.js",
-      compatibility_date: "2025-10-01",
-      compatibility_flags: ["nodejs_compat"],
+      compatibility_date: "2024-06-01",
       bindings: [
         { type: "kv_namespace", name: "PROXY_REGISTRY", namespace_id: kvId },
         { type: "plain_text", name: "PUBLIC_HOSTNAME", text: publicHost },
@@ -772,14 +679,21 @@ async function install() {
       ],
     };
 
-    // FIX #2: Only include migrations for fresh workers
     if (!workerExists) {
       metadata.migrations = { new_sqlite_classes: ["ProxySession"] };
     }
 
     const formData = new FormData();
-    formData.append("metadata", new Blob([JSON.stringify(metadata)], { type: "application/json" }));
-    formData.append("worker.js", new Blob([workerCode], { type: "application/javascript+module" }), "worker.js");
+    formData.append(
+      "metadata",
+      new Blob([JSON.stringify(metadata)], { type: "application/json" }),
+      "metadata.json"
+    );
+    formData.append(
+      "worker.js",
+      new Blob([workerCode], { type: "application/javascript+module" }),
+      "worker.js"
+    );
 
     const uploadRes = await fetch(
       `${CF_API}/accounts/${accountId}/workers/scripts/${workerName}`,
@@ -787,20 +701,22 @@ async function install() {
     );
     const uploadData = await uploadRes.json();
 
-    // FIX #2b: Handle migration error gracefully
     if (!uploadData.success) {
       const errMsg = uploadData.errors?.[0]?.message || "Deploy ناموفق";
+      // Migration already applied
       if (/already depended on|new-sqlite-class migration/i.test(errMsg)) {
         log("! migration رد شد (Worker قبلاً deploy شده بود)", "warn");
         log("✓ Worker از قبل deploy شده — ادامه می‌دهیم", "ok");
       } else {
+        log("✗ خطای کامل Cloudflare:", "err");
+        log(JSON.stringify(uploadData.errors || uploadData, null, 2), "err");
         throw new Error(errMsg);
       }
     } else {
       log("✓ Worker آپلود شد", "ok");
     }
 
-    // 8. Enable subdomain
+    // 9. Enable subdomain
     log("› فعال‌سازی workers.dev subdomain...", "info");
     try {
       await fetch(
@@ -816,7 +732,7 @@ async function install() {
       log(`! فعال‌سازی خودکار ناموفق: ${e.message}`, "warn");
     }
 
-    // 9. Webhook
+    // 10. Webhook
     log("", "info");
     log("› صبر برای propagate شدن دامنه (۵ ثانیه)...", "info");
     await sleep(5000);
@@ -856,7 +772,6 @@ async function install() {
     btn.disabled = false;
     btn.textContent = "✅ نصب شد";
 
-    // Offer to save vault
     if (!hasVault() && !sessionUnlocked) {
       const shouldSave = confirm("می‌خوای اطلاعات رو رمزنگاری‌شده ذخیره کنی تا دفعه بعد دوباره وارد نکنی؟");
       if (shouldSave) showSetupModal();
@@ -884,19 +799,15 @@ document.getElementById("retryWebhookBtn").addEventListener("click", async () =>
   const publicHost = document.getElementById("resUrl").textContent.replace("https://", "");
   const webhookSecret = document.getElementById("resSecret").textContent;
   if (!botToken || !publicHost || !webhookSecret) { alert("اطلاعات ناقصه"); return; }
-  btn.disabled = true;
-  btn.textContent = "⏳ در حال تلاش...";
+  btn.disabled = true; btn.textContent = "⏳ در حال تلاش...";
   const res = await registerWebhook(botToken, publicHost, webhookSecret, 8);
   const whStatus = document.getElementById("resWebhookStatus");
   if (res.ok) {
-    whStatus.textContent = "✅ ثبت شد";
-    whStatus.style.color = "var(--ok)";
+    whStatus.textContent = "✅ ثبت شد"; whStatus.style.color = "var(--ok)";
     btn.style.display = "none";
   } else {
-    whStatus.textContent = "❌ ثبت نشد";
-    whStatus.style.color = "var(--err)";
-    btn.disabled = false;
-    btn.textContent = "🔄 تلاش مجدد";
+    whStatus.textContent = "❌ ثبت نشد"; whStatus.style.color = "var(--err)";
+    btn.disabled = false; btn.textContent = "🔄 تلاش مجدد";
   }
 });
 
@@ -923,8 +834,7 @@ document.getElementById("skipSetupBtn").addEventListener("click", () => hideSetu
 
 document.getElementById("forgetDataBtn").addEventListener("click", () => {
   if (confirm("همه داده‌های ذخیره‌شده پاک بشن؟")) {
-    clearVault();
-    hideLockModal();
+    clearVault(); hideLockModal();
   }
 });
 
@@ -934,16 +844,12 @@ document.getElementById("lockNowBtn").addEventListener("click", async () => {
     try {
       const vault = collectVaultFromForm();
       const enc = await encryptVault(vault, pw);
-      saveEncrypted(enc);
-      decryptedVault = vault;
+      saveEncrypted(enc); decryptedVault = vault;
     } catch (e) {
-      alert("خطا در ذخیره: " + e.message);
-      return;
+      alert("خطا در ذخیره: " + e.message); return;
     }
   }
-  masterKey = null;
-  decryptedVault = null;
-  sessionUnlocked = false;
+  masterKey = null; decryptedVault = null; sessionUnlocked = false;
   updateSessionBar();
   for (const f of VAULT_FIELDS) {
     const el = document.getElementById(f);
