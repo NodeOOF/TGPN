@@ -4,3 +4,5 @@ wrangler.toml
 tgpn-proxy
 .opencode
 .gitignore
+obfuscate.js
+worker.obf.js
