@@ -6,3 +6,4 @@ tgpn-proxy
 .gitignore
 obfuscate.js
 worker.obf.js
+zeus-build.js
